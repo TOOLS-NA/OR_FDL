@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0F2A48">
+<title>Contrôle Atelier — Narbonne Accessoires</title>
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Contrôle Atelier">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAEcElEQVR42u3dzW0TURQFYM9T1qQDJLaRaAOlDXpAiBJQRA+0YdEGkrdIdGAaCGsnSuKf8cy7531nB1KIfd/HyR3HP9Omg9ze3T9upHz2u+209m2YAJYk4BPEkoR7gliScE8gSxLsBrMkPRgwgSxJbd1glqS2nkCWpLZuMEtSWzeYJQl1g1mSUDeYJQl1g1mSUDeYJQl1g1mSUDdjkqQ07SxJLd1gliTUVg7JXzm0s1Rt6QazJKG2ckjuyqGdpXpLa2jJvygUKQ/auiEJa4eGlqjcGMF8effl49lf++/HbwOcIZN1Y3m8kF8n+9120tAdAX7rewJu5SiH+NjbAzfQZSG/dhvBfrJD259rQbZvAx0NGWygIyGDPTDoZMijw24wu79AO1z328rhQK0gGhpm8wAa5nHn0hwa1EA7LHMC2iGZF9Awm9uYoGE2vxjQMJtjDGiYzTMGNMzmGn1RKFIWtHY23xjQMJtzDGiYzdsOLcOk1POhtfPr+fv54eDP739+ne3frvI8ag0divmlv0tPGdDa+TTMc6OuMn8NHYx5xKYuAVo7OwcNLUOme9Da2XloaPvzQeZ8+E5Da+c4zD2fi4YWDS1WDaCtG1GYez0fDQ2zhhYBWrTzqKDtzzUw93hOGjokozcz0GHtLEBbNYAWmIF2QRic3s5LQ2tnDS0wAy0wL5AbiB5g0dC5jbjW477aGeirAVoaNcxAXx1Qb7+hgxnoxZqz9+8BtCwCzqoBdAxqmIFedR+1GgANtXYGOh01zEDHoIZ5QNBrfPSBnbrWeWnoDlpROwPdPepjkcIMdBxqmIGOQG3XBrqLC405UKevGj1+dqGGvhJqezPQEbFiAB3V0toZ6O73s2vAq46518/+1tArANTMQMc2tQwEuscfa5eiTvhP0eu6oaEXRqnhge62DUbF2XM7a2ioNbRWOA+13RnomKbW5Mtlur27f6xyYyu8GXrqmz9WaOfNxruP2qvt0FpitFSaux1aNLS20M5AQ23OQENtvnZosUNrEcmYazN8SZpncwiSNMfmMCRpfs2hSNLcmsOBOSnNIcEMtMMyH6AdmrkA7fDM46SUesXKpanwiheQNbRDdb/HBD0i6tHu71Arx0gryKg/jYYGnQh79ItgoENgezQH6AjYIAMdARtkoMvjhhjo0sABBroscniBFnkWb2MgQIsALQK0CNAycCLfwf/Xtz9O9sh8+v5BQ8NsXkA7HHMDGmbzOxH0fredHKckZL/bTh7lEDu0CNAiS4FO2KPTHk81v9P357iGhtrcmsOBOSkHq4Yn+0vldcNFoWReFIpEgvZbQ6m8bmhoyV85tLRUbecXGxpqqYjZyiH5K4eWlqrt/GZDQy2VMFs5ZJyVQ0tLtXY+uqGhlgqYT1o5oJbeMZ+8Q0MtPWM+66IQaukV81mgoZZeMZ8NGmrpEfNm8+QVK+fGK11kbcgXN7S2lt4wz9bQ2lp6KcPW+w0UmFdtaG0ta5beYm0KN8RLfJ9V1gO4IY4CDTjA18p/ZepYaDYAPZQAAAAASUVORK5CYII=">
+<style>
+:root{
+  --navy:#0F2A48;
+  --navy-2:#173a5e;
+  --teal:#1D9E75;
+  --gold:#C9A227;
+  --ink:#1b2733;
+  --muted:#6a7a8a;
+  --line:#e2e8ee;
+  --bg:#eef2f6;
+  --card:#ffffff;
+  --e0:#D64545;
+  --e1:#E8833A;
+  --e2:#E3B505;
+  --e3:#7FB93E;
+  --e4:#1D9E75;
+  --radius:14px;
+  --shadow:0 1px 2px rgba(15,42,72,.06),0 8px 24px rgba(15,42,72,.06);
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--font);
+  color:var(--ink);
+  background:var(--bg);
+  line-height:1.45;
+  padding-bottom:96px;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- HEADER ---------- */
+.appbar{
+  position:sticky;top:0;z-index:40;
+  background:linear-gradient(180deg,var(--navy),var(--navy-2));
+  color:#fff;
+  padding:calc(env(safe-area-inset-top) + 14px) 18px 14px;
+  box-shadow:0 4px 20px rgba(15,42,72,.25);
+}
+.appbar-row{display:flex;align-items:center;gap:12px}
+.brand{display:flex;flex-direction:column;line-height:1.05}
+.brand .logo{font-weight:800;letter-spacing:.5px;font-size:17px}
+.brand .logo b{color:var(--gold)}
+.brand .sub{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:#9db4cc;font-weight:600;margin-top:3px}
+.badge-pts{
+  margin-left:auto;text-align:center;background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:6px 12px;
+}
+.badge-pts .n{font-size:20px;font-weight:800;color:var(--teal);display:block;line-height:1}
+.badge-pts .l{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#9db4cc}
+.progress{height:5px;background:rgba(255,255,255,.14);border-radius:99px;margin-top:14px;overflow:hidden}.progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--gold));transition:width .35s ease}
+.savechip{
+  position:absolute;right:16px;top:calc(env(safe-area-inset-top) + 12px);
+  font-size:10px;color:#9db4cc;display:flex;align-items:center;gap:5px;opacity:0;transition:opacity .3s
+}
+.savechip.on{opacity:1}
+.savechip::before{content:"";width:7px;height:7px;border-radius:99px;background:var(--teal)}
+.iconbtn{
+  flex:0 0 auto;width:38px;height:38px;margin-left:10px;border-radius:10px;
+  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);color:#fff;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s;
+}
+.iconbtn:active{background:rgba(255,255,255,.22)}
+.modal{
+  position:fixed;inset:0;background:rgba(15,42,72,.55);backdrop-filter:blur(3px);
+  display:none;align-items:flex-end;justify-content:center;z-index:80;
+}
+.modal.show{display:flex}
+.sheet{
+  background:#fff;width:100%;max-width:760px;border-radius:18px 18px 0 0;
+  padding:20px 18px calc(env(safe-area-inset-bottom) + 20px);box-shadow:0 -12px 40px rgba(15,42,72,.32);
+}
+.sheet h3{margin:0 0 4px;color:var(--navy);font-size:18px}
+.sheet .sub{color:var(--muted);font-size:12.5px;margin-bottom:18px;line-height:1.4}
+.sheet .field{margin-bottom:14px}
+.sheet-actions{display:flex;gap:10px;margin-top:8px}
+@media(min-width:600px){ .modal{align-items:center} .sheet{border-radius:18px;margin:0 16px} }
+
+/* ---------- INSTALL BAR ---------- */
+.installbar{
+  display:none;align-items:center;gap:12px;
+  max-width:760px;margin:12px auto 0;padding:12px 14px;
+  background:#fff;border:1.5px solid var(--line);border-left:4px solid var(--gold);
+  border-radius:12px;box-shadow:var(--shadow);
+}
+.installbar.show{display:flex}
+.installbar .ib-txt{flex:1;min-width:0}
+.installbar .ib-txt b{display:block;font-size:14px;color:var(--navy)}
+.installbar .ib-txt span{font-size:12px;color:var(--muted)}
+.installbar .ib-go{
+  border:0;background:var(--navy);color:#fff;font-family:var(--font);font-weight:700;font-size:13px;
+  padding:10px 16px;border-radius:10px;cursor:pointer;white-space:nowrap;
+}
+.installbar .ib-x{border:0;background:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;padding:0 4px}
+
+/* ---------- LAYOUT ---------- */
+.wrap{max-width:760px;margin:0 auto;padding:18px 14px 0}
+
+/* ---------- INFO CARD ---------- */
+.info{
+  background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:16px;margin-bottom:18px;
+}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field.full{grid-column:1 / -1}
+.field label{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
+.field input,.field select{
+  font-family:var(--font);font-size:15px;color:var(--ink);
+  padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fbfcfd;
+  width:100%;transition:border-color .15s,box-shadow .15s;
+}
+.field input:focus,.field select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(29,158,117,.14)}
+
+/* ---------- SECTION ---------- */
+.section{margin-bottom:16px}
+.section-head{
+  display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;
+  background:var(--navy);color:#fff;border-radius:12px;padding:13px 16px;
+  box-shadow:var(--shadow);
+}
+.section-head h2{margin:0;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700}
+.section-head .count{margin-left:auto;font-size:12px;color:#9db4cc;font-weight:600}
+.section-head .chev{transition:transform .25s;color:#9db4cc}
+.section.collapsed .chev{transform:rotate(-90deg)}
+.section-body{padding-top:12px;display:grid;gap:10px}
+.section.collapsed .section-body{display:none}
+
+/* ---------- ITEM CARD ---------- */
+.item{
+  background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:14px 14px 12px;border:1.5px solid transparent;transition:border-color .2s,opacity .2s;
+}
+.item.off{opacity:.5}
+.item-top{display:flex;align-items:center;gap:12px}
+.item-ic{
+  flex:0 0 auto;width:36px;height:36px;border-radius:10px;
+  background:rgba(15,42,72,.06);color:var(--navy);
+  display:flex;align-items:center;justify-content:center;
+}
+.item-name{font-weight:700;font-size:15.5px;flex:1;min-width:0}
+.item.done{border-color:rgba(29,158,117,.35)}
+.item.done .item-ic{background:rgba(29,158,117,.12);color:var(--teal)}
+
+/* options (type de batterie…) */
+.opts{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin-top:12px}
+.opts.hide{display:none}
+.opts-lbl{font-size:10.5px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-right:2px}
+.opt{
+  border:1.5px solid var(--line);background:#fbfcfd;border-radius:99px;
+  font-family:var(--font);font-weight:700;font-size:12.5px;color:var(--muted);
+  padding:7px 14px;cursor:pointer;transition:all .13s;
+}
+.opt:active{transform:scale(.96)}
+.opt.sel{background:var(--navy);border-color:var(--navy);color:#fff}
+
+/* photos du véhicule */
+.photos-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:18px}
+.pc-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.pc-title{font-weight:700;color:var(--navy);font-size:14px;letter-spacing:.3px}
+.pc-count{margin-left:auto;background:rgba(15,42,72,.06);color:var(--navy);font-weight:700;font-size:12px;border-radius:99px;padding:2px 10px}
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;margin-bottom:12px}
+.photo-grid:empty{display:none}
+.photo-thumb{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;background:#eef2f6}
+.photo-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-del{position:absolute;top:4px;right:4px;width:23px;height:23px;border:0;border-radius:99px;background:rgba(15,42,72,.78);color:#fff;font-size:15px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.photo-add{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:1.5px dashed #cdd6df;background:#fbfcfd;color:var(--navy);font-family:var(--font);font-weight:700;font-size:13.5px;padding:13px;border-radius:10px;cursor:pointer}
+.photo-add:active{background:#eef2f6}
+
+/* onglets */
+.tabbar{display:flex;gap:10px;padding:12px 14px 4px;background:var(--bg)}
+.tab{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;border:1.5px solid var(--line);background:#fff;color:var(--muted);font-family:var(--font);font-weight:800;font-size:13px;letter-spacing:.2px;padding:13px 8px;border-radius:12px;cursor:pointer;box-shadow:var(--shadow);transition:all .15s}
+.tab svg{width:19px;height:19px;flex:0 0 auto}
+.tab span{line-height:1.1}
+.tab.active{background:var(--navy);border-color:var(--navy);color:#fff}
+.tab.active svg{color:var(--teal)}
+.tab:not(.active):active{background:#eef2f6}
+.pane.hide{display:none}
+
+/* mini titres de sections OR */
+.section-title-mini{font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--teal);margin-bottom:12px}
+.mini-lbl{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
+.field textarea{font-family:var(--font);font-size:15px;color:var(--ink);padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fbfcfd;width:100%;resize:vertical}
+.field textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(29,158,117,.14)}
+
+/* boutons type véhicule / carburant */
+.veh-type{margin-top:2px}
+.vtbtns{display:flex;gap:8px;flex-wrap:wrap}
+.vt{flex:1;min-width:80px;border:1.5px solid var(--line);background:#fbfcfd;border-radius:10px;font-family:var(--font);font-weight:700;font-size:13.5px;color:var(--muted);padding:11px 8px;cursor:pointer;transition:all .13s}
+.vt:active{transform:scale(.97)}
+.vt.sel{background:var(--navy);border-color:var(--navy);color:#fff}
+.vtbtns.fuel .vt{min-width:44px}
+
+/* case CG + signature */
+.cg-check{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--ink);line-height:1.4;cursor:pointer;margin-bottom:14px}
+.cg-check input{margin-top:2px;width:18px;height:18px;flex:0 0 auto;accent-color:var(--teal)}
+.sigpad-wrap{position:relative;border:1.5px dashed #cdd6df;border-radius:12px;background:#fff;overflow:hidden}
+.sigpad{width:100%;height:170px;display:block;touch-action:none;cursor:crosshair}
+.sig-clear{position:absolute;top:8px;right:8px;border:0;background:#eef2f6;color:var(--navy);font-family:var(--font);font-weight:700;font-size:12px;padding:6px 12px;border-radius:8px;cursor:pointer}
+.sig-hint{text-align:center;font-size:11px;color:var(--muted);margin-top:6px}
+.cg-view{display:inline-flex;align-items:center;gap:7px;background:none;border:0;color:var(--navy);font-family:var(--font);font-weight:700;font-size:13px;cursor:pointer;padding:2px 0 14px;text-decoration:underline}
+/* modale CG */
+.cg-modal{position:fixed;inset:0;background:rgba(15,42,72,.55);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:85;padding:16px}
+.cg-modal.show{display:flex}
+.cg-sheet{background:#fff;width:100%;max-width:720px;max-height:86vh;border-radius:16px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(15,42,72,.4)}
+.cg-sheet-head{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid var(--line)}
+.cg-sheet-head h3{margin:0;color:var(--navy);font-size:15px;flex:1}
+.cg-sheet-head .cg-close{border:0;background:#eef2f6;color:var(--navy);width:30px;height:30px;border-radius:8px;font-size:18px;cursor:pointer}
+.cg-body{overflow-y:auto;padding:16px 18px}
+.cg-body h4{color:var(--teal);font-size:12.5px;margin:14px 0 5px;letter-spacing:.3px}
+.cg-body h4:first-child{margin-top:0}
+.cg-body p{font-size:12.5px;color:#3a4048;line-height:1.5;margin:0 0 7px}
+
+/* schéma carrosserie */
+.dz-hint{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.4}
+.dzmap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;max-width:420px;margin:0 auto}
+.dz{border:1.5px solid var(--line);background:#f6f8fa;border-radius:10px;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;padding:6px 4px;transition:all .12s;text-align:center}
+.dz:active{transform:scale(.96)}
+.dz-name{font-size:10.5px;font-weight:700;color:var(--ink);line-height:1.1}
+.dz-state{font-size:9.5px;font-weight:700;min-height:11px}
+.dz-legend{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:14px;font-size:10.5px;color:var(--muted)}
+.dz-legend span{display:flex;align-items:center;gap:5px}
+.dz-legend i{width:12px;height:12px;border-radius:4px;display:inline-block}
+.dz-clear{display:block;margin:14px auto 0;border:1.5px solid var(--line);background:#fbfcfd;color:var(--navy);font-family:var(--font);font-weight:700;font-size:12.5px;padding:9px 18px;border-radius:10px;cursor:pointer}
+
+/* champ date de fin de validité */
+.datev{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:12px}
+.datev.hide{display:none}
+.datev-lbl{font-size:10.5px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);font-weight:700}
+.datev-input{
+  font-family:var(--font);font-size:14px;color:var(--ink);
+  border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fbfcfd;
+}
+.datev-input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(29,158,117,.14)}
+
+/* toggle oui/non */
+.toggle{display:inline-flex;background:#eef2f6;border-radius:99px;padding:3px;gap:2px}
+.toggle button{
+  border:0;background:transparent;font-family:var(--font);font-weight:700;font-size:12.5px;
+  color:var(--muted);padding:6px 13px;border-radius:99px;cursor:pointer;transition:all .15s;letter-spacing:.3px;
+}
+.toggle button[data-on="oui"].active{background:var(--teal);color:#fff;box-shadow:0 2px 6px rgba(29,158,117,.35)}
+.toggle button[data-on="non"].active{background:#8494a4;color:#fff}
+
+/* état gauge */
+.gauge-wrap{margin-top:12px}
+.gauge-label{font-size:10.5px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:7px;display:flex;justify-content:space-between}
+.gauge-label span:last-child{color:var(--ink);font-weight:800}
+.gauge{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.gauge button{
+  border:1.5px solid var(--line);background:#fbfcfd;border-radius:9px;height:42px;
+  font-family:var(--font);font-weight:800;font-size:15px;color:#b6c1cc;cursor:pointer;
+  transition:all .13s;position:relative;
+}
+.gauge button:active{transform:scale(.94)}
+.gauge button.sel[data-v="0"]{background:var(--e0);border-color:var(--e0);color:#fff}
+.gauge button.sel[data-v="1"]{background:var(--e1);border-color:var(--e1);color:#fff}
+.gauge button.sel[data-v="2"]{background:var(--e2);border-color:var(--e2);color:#4a3c00}
+.gauge button.sel[data-v="3"]{background:var(--e3);border-color:var(--e3);color:#1f3d00}
+.gauge button.sel[data-v="4"]{background:var(--e4);border-color:var(--e4);color:#fff}
+
+/* comment */
+.cmt-btn{
+  margin-top:10px;display:inline-flex;align-items:center;gap:6px;background:none;border:0;
+  color:var(--navy);font-family:var(--font);font-weight:700;font-size:12.5px;cursor:pointer;padding:4px 0;
+}
+.cmt-btn .dot{width:6px;height:6px;border-radius:99px;background:var(--gold);opacity:0;transition:opacity .2s}
+.cmt-btn.has .dot{opacity:1}
+.cmt{margin-top:8px;display:none}
+.cmt.open{display:block}
+.cmt textarea{
+  width:100%;font-family:var(--font);font-size:14px;color:var(--ink);
+  border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;resize:vertical;min-height:60px;background:#fbfcfd;
+}
+.cmt textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(29,158,117,.14)}
+
+.hide{display:none !important}
+
+/* ---------- ACTION BAR ---------- */
+.actionbar{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);
+  padding:10px 14px calc(env(safe-area-inset-bottom) + 10px);
+  display:flex;gap:10px;max-width:760px;margin:0 auto;
+}
+.btn{
+  flex:1;border:0;border-radius:12px;font-family:var(--font);font-weight:700;font-size:14px;
+  padding:14px 8px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:transform .1s,filter .15s;letter-spacing:.2px;
+}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:#eef2f6;color:var(--navy);flex:0 0 auto;padding:14px 16px}
+.btn.primary{background:var(--teal);color:#fff;box-shadow:0 6px 16px rgba(29,158,117,.35)}
+.btn.primary:disabled{background:#a9c9bd;box-shadow:none;cursor:progress}
+.btn svg{width:18px;height:18px}
+
+/* ---------- TOAST + OVERLAY ---------- */
+.toast{
+  position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);
+  background:var(--navy);color:#fff;padding:12px 18px;border-radius:12px;font-size:13.5px;font-weight:600;
+  box-shadow:0 10px 30px rgba(15,42,72,.35);opacity:0;pointer-events:none;transition:all .3s;z-index:60;max-width:90vw;text-align:center;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.err{background:var(--e0)}
+.toast.ok{background:var(--teal)}
+.overlay{
+  position:fixed;inset:0;background:rgba(15,42,72,.55);backdrop-filter:blur(3px);
+  display:none;align-items:center;justify-content:center;z-index:70;
+}
+.overlay.show{display:flex}
+.spinner{width:44px;height:44px;border:4px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:99px;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* legend */
+.legend{display:flex;gap:6px;flex-wrap:wrap;font-size:10px;color:var(--muted);margin:2px 2px 16px;align-items:center}
+.legend b{color:var(--ink)}
+.legend .sw{width:11px;height:11px;border-radius:4px;display:inline-block;margin-right:3px;vertical-align:-1px}
+
+@media print{ body{display:none} }
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <div class="savechip" id="savechip">Enregistré</div>
+  <div class="appbar-row">
+    <div class="brand">
+      <div class="logo">NARB<b>O</b>NNE ACCESS<b>O</b>IRES</div>
+      <div class="sub">Contrôle Atelier</div>
+    </div>
+    <div class="badge-pts"><span class="n" id="ptsDone">0</span><span class="l">/ <span id="ptsTotal">18</span> points</span></div>
+    <button class="iconbtn" id="btnReset" aria-label="Nouvelle fiche" title="Nouvelle fiche">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+    </button>
+    <button class="iconbtn" id="btnSettings" aria-label="Réglages" title="Réglages">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+  </div>
+  <div class="progress"><i id="progbar"></i></div>
+</header>
+
+<div class="installbar" id="installbar">
+  <div class="ib-txt"><b>Installer l'application</b><span id="ibHint">Ajouter l'icône sur cet appareil</span></div>
+  <button class="ib-go" id="ibGo">Installer</button>
+  <button class="ib-x" id="ibX" aria-label="Fermer">×</button>
+</div>
+
+<div class="tabbar">
+  <button class="tab active" data-tab="or">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+    <span>Ordre de réparation</span>
+  </button>
+  <button class="tab" data-tab="controle">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+    <span>Contrôle atelier</span>
+  </button>
+</div>
+
+<div class="wrap">
+
+  <!-- ============ PANE OR ============ -->
+  <div class="pane" id="paneOR">
+    <div class="info">
+      <div class="section-title-mini">Informations</div>
+      <div class="info-grid">
+        <div class="field"><label>Magasin</label><select id="or_magasin"><option value="">— Choisir —</option></select></div>
+        <div class="field"><label>Date</label><input type="date" id="or_date"></div>
+        <div class="field"><label>Technicien</label><input type="text" id="or_tech" placeholder="Nom du technicien" autocomplete="off"></div>
+        <div class="field"><label>Vendeur</label><input type="text" id="or_vendeur" placeholder="Nom du vendeur" autocomplete="off"></div>
+        <div class="field"><label>Véhicule</label><input type="text" id="or_modele" placeholder="Marque / modèle" autocomplete="off"></div>
+        <div class="field"><label>Immatriculation</label><input type="text" id="or_immat" style="text-transform:uppercase" placeholder="AA-123-AA" autocomplete="off"></div>
+        <div class="field full"><label>Client</label><input type="text" id="or_client" placeholder="Nom du client" autocomplete="off"></div>
+        <div class="field full"><label>E-mail client</label><input type="email" id="or_email" inputmode="email" placeholder="pour l'envoi des documents" autocomplete="off"></div>
+      </div>
+    </div>
+
+    <div class="info">
+      <div class="section-title-mini">Détails véhicule</div>
+      <div class="info-grid">
+        <div class="field"><label>N° client</label><input type="text" id="or_numclient" autocomplete="off"></div>
+        <div class="field"><label>Téléphone</label><input type="tel" id="or_tel" inputmode="tel" autocomplete="off"></div>
+        <div class="field full"><label>Kilométrage</label><input type="text" id="or_km" inputmode="numeric" autocomplete="off"></div>
+      </div>
+      <div class="veh-type" style="margin-top:14px">
+        <span class="mini-lbl">Type de véhicule</span>
+        <div class="vtbtns" id="or_vtype">
+          <button class="vt" data-vt="Camping-car">Camping-car</button>
+          <button class="vt" data-vt="Fourgon">Fourgon</button>
+          <button class="vt" data-vt="Caravane">Caravane</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="info">
+      <div class="section-title-mini">Intervention</div>
+      <div class="info-grid">
+        <div class="field full"><label>Forfait</label><input type="text" id="or_forfait" autocomplete="off"></div>
+        <div class="field full"><label>Description / commentaires</label><textarea id="or_desc" rows="3"></textarea></div>
+        <div class="field"><label>Livraison prévue</label><input type="date" id="or_livraison"></div>
+      </div>
+    </div>
+
+    <div class="info">
+      <div class="section-title-mini">État à la réception</div>
+      <div class="veh-type">
+        <span class="mini-lbl">Impact pare-brise</span>
+        <div class="toggle" id="or_impact">
+          <button data-on="oui">Oui</button><button data-on="non">Non</button>
+        </div>
+      </div>
+      <div class="opts" id="or_impactType" style="margin-top:12px">
+        <span class="opts-lbl">Type</span>
+        <button class="opt" data-imp="Rayé">Rayé</button>
+        <button class="opt" data-imp="Ébréché">Ébréché</button>
+        <button class="opt" data-imp="Cassé">Cassé</button>
+      </div>
+      <div class="veh-type" style="margin-top:16px">
+        <span class="mini-lbl">Niveau carburant</span>
+        <div class="vtbtns fuel" id="or_fuel">
+          <button class="vt" data-fuel="0">0</button>
+          <button class="vt" data-fuel="1/4">¼</button>
+          <button class="vt" data-fuel="1/2">½</button>
+          <button class="vt" data-fuel="3/4">¾</button>
+          <button class="vt" data-fuel="1/1">1/1</button>
+        </div>
+      </div>
+      <div class="field full" style="margin-top:16px"><label>Observations technicien</label><textarea id="or_obs" rows="2"></textarea></div>
+    </div>
+
+    <div class="info">
+      <div class="section-title-mini">État carrosserie — schéma</div>
+      <div class="dz-hint">Tapez sur une zone pour marquer un dommage (chaque appui change l'état).</div>
+      <div class="dzmap" id="dzMap"></div>
+      <div class="dz-legend" id="dzLegend"></div>
+      <button class="dz-clear" id="dzClear">Effacer les marques</button>
+      <div class="field full" style="margin-top:16px"><label>Commentaires carrosserie</label><textarea id="or_carrosserie_cmt" rows="2"></textarea></div>
+    </div>
+
+    <div class="photos-card">
+      <div class="pc-head">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F2A48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <span class="pc-title">Photos du véhicule (réception)</span>
+        <span class="pc-count" id="orPhotoCount">0</span>
+      </div>
+      <div class="photo-grid" id="orPhotoGrid"></div>
+      <button class="photo-add" id="orPhotoAdd">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Ajouter une photo
+      </button>
+      <input type="file" id="orPhotoInput" accept="image/*" capture="environment" multiple hidden>
+    </div>
+
+    <div class="info">
+      <div class="section-title-mini">Signature du client</div>
+      <label class="cg-check"><input type="checkbox" id="or_cg"> Le client reconnaît avoir pris connaissance des Conditions Générales de Réparations (jointes) et les accepte sans réserve.</label>
+      <button class="cg-view" id="btnViewCG">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+        Consulter les conditions générales
+      </button>
+      <div class="sigpad-wrap">
+        <canvas id="or_sig" class="sigpad"></canvas>
+        <button class="sig-clear" id="or_sigClear">Effacer</button>
+      </div>
+      <div class="sig-hint">Faire signer le client dans le cadre ci-dessus</div>
+    </div>
+  </div>
+
+  <!-- ============ PANE CONTRÔLE ============ -->
+  <div class="pane hide" id="paneControle">
+
+  <!-- INFOS -->
+  <div class="info">
+    <div class="info-grid">
+      <div class="field">
+        <label>Magasin</label>
+        <select id="f_magasin">
+          <option value="">— Choisir —</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Date</label>
+        <input type="date" id="f_date">
+      </div>
+      <div class="field">
+        <label>Technicien</label>
+        <input type="text" id="f_tech" placeholder="Nom du technicien" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Vendeur</label>
+        <input type="text" id="f_vendeur" placeholder="Nom du vendeur" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Véhicule</label>
+        <input type="text" id="f_vehicule" placeholder="Marque / modèle" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Immatriculation</label>
+        <input type="text" id="f_immat" placeholder="AA-123-AA" autocomplete="off" style="text-transform:uppercase">
+      </div>
+      <div class="field full">
+        <label>Client</label>
+        <input type="text" id="f_client" placeholder="Nom du client" autocomplete="off">
+      </div>
+    </div>
+  </div>
+
+  <div class="photos-card">
+    <div class="pc-head">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F2A48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      <span class="pc-title">Photos du véhicule</span>
+      <span class="pc-count" id="photoCount">0</span>
+    </div>
+    <div class="photo-grid" id="photoGrid"></div>
+    <button class="photo-add" id="photoAdd">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      Ajouter une photo
+    </button>
+    <input type="file" id="photoInput" accept="image/*" capture="environment" multiple hidden>
+  </div>
+
+  <div class="legend">
+    État&nbsp;:
+    <span><i class="sw" style="background:var(--e0)"></i>0 Critique</span>
+    <span><i class="sw" style="background:var(--e1)"></i>1 Mauvais</span>
+    <span><i class="sw" style="background:var(--e2)"></i>2 Moyen</span>
+    <span><i class="sw" style="background:var(--e3)"></i>3 Bon</span>
+    <span><i class="sw" style="background:var(--e4)"></i>4 Excellent</span>
+  </div>
+
+  <div id="sections"></div>
+
+  </div><!-- /paneControle -->
+
+</div>
+
+<!-- ACTION BAR -->
+<div class="actionbar">
+  <button class="btn ghost" id="btnPrint" title="Imprimer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+  </button>
+  <button class="btn ghost" id="btnPdf" title="Aperçu PDF">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+  </button>
+  <button class="btn primary" id="btnSend">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    Envoyer
+  </button>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="overlay" id="overlay"><div class="spinner"></div></div>
+
+<div class="cg-modal" id="cgModal">
+  <div class="cg-sheet">
+    <div class="cg-sheet-head">
+      <h3>Conditions Générales de Réparations Atelier</h3>
+      <button class="cg-close" id="cgClose" aria-label="Fermer">×</button>
+    </div>
+    <div class="cg-body" id="cgBody"></div>
+  </div>
+</div>
+
+<div class="modal" id="settingsModal">
+  <div class="sheet">
+    <h3>Réglages de l'appareil</h3>
+    <div class="sub">À renseigner une fois par magasin. Ces informations restent sur cet appareil.</div>
+    <div class="field">
+      <label>Adresse e-mail DM (destinataire)</label>
+      <input type="email" id="s_dm" placeholder="dm.magasin@narbonne-accessoires.fr" autocomplete="off" inputmode="email">
+    </div>
+    <div class="field">
+      <label>Magasin par défaut</label>
+      <select id="s_magasin"><option value="">— Aucun —</option></select>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn ghost" id="s_cancel" style="flex:1">Annuler</button>
+      <button class="btn primary" id="s_save" style="flex:1">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- jsPDF pour la génération du PDF (dessin vectoriel, fiable) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+/* ================= CONFIGURATION ================= */
+const CONFIG = {
+  // ▼▼▼ URL du déploiement Apps Script (Web App) ▼▼▼
+  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbzUq0dhs7Bt5SoQfzg2brdNFMCZqkaeI4qIp85Xl93ciL45zz5lKR2lXN5saQ7D1m3a/exec",
+  STORES: ["Angoulême", "Annecy", "Arpajon", "Aubagne", "Auch", "Béziers", "Bordeaux Nord", "Bordeaux Sud", "Caen", "Coignières", "Dax", "Dijon", "Grenoble", "La Rochelle", "Les Pennes-Mirabeau", "Lyon", "Lyon Outdoor", "Mâcon", "Mandelieu", "Montpellier", "Nantes", "Narbonne", "Pau", "Périgueux", "Perpignan", "Rennes", "Roncq", "Saint-Étienne", "Seclin", "Sens", "Sorgues", "St Alban", "Toulon", "Valence", "Valenciennes"]
+};
+
+const EQUIPEMENT = [
+  "État lyres gaz","Détendeur","Suspension pneumatique","Alarme","Batterie / Type","Vérins","Antenne","Climatisation",
+  "Panneau solaire","MPPT / PWM","Porte-vélo","Store","Serrure sécurité",
+  "Détecteur de gaz","GPL"
+];
+const ENTRETIEN = [
+  "Révision circuit gaz","Révision frigo","État suspension origine",
+  "État batterie"
+];
+const TOTAL_PTS = EQUIPEMENT.length + ENTRETIEN.length;
+const ETAT_LABELS = ["Critique","Mauvais","Moyen","Bon","Excellent"];
+const LS_KEY = "controle_atelier_narbonne_v1";
+
+/* ================= ICÔNES ================= */
+const ICONS = {
+  alarme:'<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/>',
+  batterie_type:'<rect x="2" y="7" width="16" height="10" rx="2"/><line x1="22" y1="10.5" x2="22" y2="13.5"/><line x1="6" y1="10.5" x2="6" y2="13.5"/><line x1="10" y1="10.5" x2="10" y2="13.5"/><line x1="14" y1="10.5" x2="14" y2="13.5"/>',
+  suspensions:'<path d="M12 2v3"/><path d="M12 19v3"/><rect x="8" y="5" width="8" height="14" rx="1.5"/><path d="M8 8.5h8M8 12h8M8 15.5h8"/>',
+  suspension_pneumatique:'<path d="M12 2v3"/><path d="M12 19v3"/><rect x="8" y="5" width="8" height="14" rx="1.5"/><path d="M8 8.5h8M8 12h8M8 15.5h8"/>',
+  verins:'<path d="M12 3v18"/><path d="M7 8l5-5 5 5"/><path d="M7 16l5 5 5-5"/>',
+  antenne:'<path d="M4 12a8 8 0 0 1 8-8"/><path d="M7.5 12A4.5 4.5 0 0 1 12 7.5"/><circle cx="12" cy="12" r="1.6"/><path d="M12 13.5V21"/>',
+  climatisation:'<line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M19 15l-3-3 3-3M5 9l3 3-3 3M15 5l-3 3-3-3M9 19l3-3 3 3"/>',
+  panneau_solaire:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6L19 19M19 5l-1.4 1.4M6.4 17.6L5 19"/>',
+  mppt_pwm:'<line x1="5" y1="21" x2="5" y2="14"/><line x1="5" y1="10" x2="5" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="19" y1="21" x2="19" y2="16"/><line x1="19" y1="12" x2="19" y2="3"/><line x1="2" y1="14" x2="8" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="16" y1="16" x2="22" y2="16"/>',
+  porte_velo:'<circle cx="6" cy="17" r="3.2"/><circle cx="18" cy="17" r="3.2"/><path d="M6 17l4-8h5M9 9l2.5 5H14l3-5h2"/>',
+  store:'<path d="M2 8h20l-2-4H4z"/><path d="M4 8l1.5 3M9 8l1.5 3M14 8l1.5 3M19 8l1.5 3"/><path d="M4 11v8"/>',
+  gps:'<path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.4"/>',
+  serrure_securite:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  detecteur_de_gaz:'<path d="M12 22a6 6 0 0 0 6-6c0-4-4-6-4-10 0 0-3 2.5-3 6.5 0 2-2 1.2-2-.5 0 0-3 2-3 4a6 6 0 0 0 6 6z"/>',
+  gpl:'<path d="M9 3h6v1.6a2 2 0 0 1-.6 1.4L14 7v1h1a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3v-7a3 3 0 0 1 3-3h1V7l-.4-1A2 2 0 0 1 9 4.6z"/>',
+  revision_circuit_gaz:'<path d="M12 22a6 6 0 0 0 6-6c0-4-4-6-4-10 0 0-3 2.5-3 6.5 0 2-2 1.2-2-.5 0 0-3 2-3 4a6 6 0 0 0 6 6z"/>',
+  revision_frigo:'<rect x="6" y="2" width="12" height="20" rx="2"/><line x1="6" y1="10" x2="18" y2="10"/><line x1="9" y1="5" x2="9" y2="7.5"/><line x1="9" y1="13" x2="9" y2="16"/>',
+  etat_suspension_origine:'<path d="M12 2v3"/><path d="M12 19v3"/><rect x="8" y="5" width="8" height="14" rx="1.5"/><path d="M8 8.5h8M8 12h8M8 15.5h8"/>',
+  etat_baies_lanterneaux:'<rect x="4" y="4" width="16" height="16" rx="1.5"/><line x1="12" y1="4" x2="12" y2="20"/><line x1="4" y1="12" x2="20" y2="12"/>',
+  etat_batterie:'<rect x="2" y="7" width="16" height="10" rx="2"/><line x1="22" y1="10.5" x2="22" y2="13.5"/><line x1="6" y1="10.5" x2="6" y2="13.5"/><line x1="10" y1="10.5" x2="10" y2="13.5"/>',
+  etat_panneau_solaire:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6L19 19M19 5l-1.4 1.4M6.4 17.6L5 19"/>',
+  etat_lyres_gaz:'<path d="M2 12h4M18 12h4"/><rect x="8" y="8" width="8" height="8" rx="1.5"/><path d="M12 8V4M12 20v-4"/>',
+  detendeur:'<circle cx="12" cy="13" r="6"/><path d="M12 13l3-2.2"/><path d="M12 4v3M9 4h6"/><path d="M6.5 8.5l1.5 1.5"/>',
+  _default:'<circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/>'
+};
+function iconSvg(id, size, color){
+  const inner = ICONS[id] || ICONS._default;
+  return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="${color||'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
+}
+function iconImg(id, size, color){
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="${color||'#0F2A48'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[id]||ICONS._default}</svg>`;
+  const uri = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+  return `<img src="${uri}" width="${size}" height="${size}" style="vertical-align:middle;margin-right:7px"/>`;
+}
+
+/* Options complémentaires par ligne (ex : type de batterie) */
+const ITEM_OPTIONS = {
+  batterie_type: ["Acide","AGM","Gel","Lithium"],
+  mppt_pwm: ["MPPT","PWM"],
+  etat_lyres_gaz: ["Standard","TRUMA"],
+  detendeur: ["Classique","TRUMA CS mono/Duo"]
+};
+
+/* Lignes qui gardent le libellé "Conforme" quelle que soit leur section */
+const ITEM_CONFORME = new Set(["etat_lyres_gaz","detendeur"]);
+/* Lignes sans note d'état 0→4 */
+const ITEM_NO_ETAT = new Set(["etat_lyres_gaz","detendeur"]);
+/* Lignes avec un champ "Date de fin de validité" */
+const ITEM_DATE = new Set(["etat_lyres_gaz","detendeur"]);
+
+/* ================= CONDITIONS GÉNÉRALES ================= */
+const CG_CONTENT = [
+  { t:"1. DOCUMENTS CONTRACTUELS", b:[
+    "Le devis signé par le Client, ou le Bon de travaux accompagné du devis signés par le Client, vaut bon de commande de prestation de service de réparation et d'achat de pièces. Le Bon de travaux, au recto, intègre un état des lieux complet du véhicule décrivant son état au moment de sa prise en charge, avant intervention.",
+    "Tout devis est valable UN mois (hors période promotionnelle) dans l'établissement qui l'a délivré. S'il a été établi sans démontage ou examen approfondi du véhicule, il n'inclura pas les fournitures éventuelles supplémentaires qui pourraient apparaître à l'occasion de l'exécution de la prestation ; dans ce cas, un complément sera présenté avant intervention en vue de son acceptation. En cas de demande de devis, les frais d'établissement de ce dernier seront à la charge du Client."
+  ]},
+  { t:"2. ENGAGEMENTS JURIDIQUES DES PARTIES", b:[
+    "La signature du Bon de travaux par le Client vaut consentement de celui-ci à l'application des présentes conditions générales de réparation. Le Client s'engage à respecter la date fixée pour prendre livraison de son véhicule et à acquitter le montant de la facture résultant des travaux réalisés."
+  ]},
+  { t:"3. DÉCHARGE DE RESPONSABILITÉ", b:[
+    "Le Réparateur peut être amené, pour des raisons de sécurité, à proposer au Client des réparations complémentaires. Le Réparateur informera par écrit le Client des risques encourus. À défaut par le Client d'accepter les réparations proposées, le Réparateur ne pourra voir sa responsabilité engagée."
+  ]},
+  { t:"4. ACCESSOIRES ET CARBURANT", b:[
+    "Le Réparateur n'est responsable que des appareils et accessoires fixés sur le véhicule ou des objets confiés à son atelier après inventaire et indiqués sur l'état des lieux. Il est également responsable de la quantité de carburant notée lors de la réception du véhicule.",
+    "En tout état de cause, le Client devra retirer tous ses objets personnels. À défaut, le Réparateur est déchargé par le Client de toute responsabilité en cas de vol ou dégradation desdits objets."
+  ]},
+  { t:"5. ESSAIS", b:[
+    "Le Client autorise le Réparateur à utiliser le véhicule en vue des essais nécessaires à la bonne exécution des travaux, ainsi qu'à leur transfert éventuel vers un sous-traitant, ce qui est dûment accepté par le Client."
+  ]},
+  { t:"6. PIÈCES REMPLACÉES", b:[
+    "À défaut de demande expresse préalable du Client avant établissement du Bon de travaux, les pièces remplacées sont détruites. Le Client ne pourra en aucun cas réclamer les pièces changées dans le cadre de la garantie contractuelle ou faisant l'objet d'un échange-standard.",
+    "Le Réparateur est libre d'accepter ou de refuser de monter les pièces fournies par le Client. Lorsqu'il l'accepte et qu'une avarie est provoquée par la défectuosité de l'une des pièces fournies, la responsabilité du Réparateur ne saurait être engagée à ce titre."
+  ]},
+  { t:"7. GARANTIES LÉGALES", b:[
+    "Les pièces utilisées pour la réparation du véhicule bénéficient, conformément aux dispositions légales, de la garantie légale de conformité (articles L.217-3 et suivants du Code de la consommation) et de la garantie légale contre les vices cachés (article 1641 du Code civil). Ces garanties s'appliquent indépendamment de la garantie commerciale éventuellement due.",
+    "7.1 Garantie légale de conformité — Le bien doit être conforme au contrat et propre à l'usage habituellement attendu d'un bien semblable. Il doit présenter les caractéristiques convenues et être propre à tout usage spécial recherché par le Client, porté à la connaissance du vendeur et accepté. Le consommateur dispose d'un délai de 2 ans à compter de la livraison du bien pour agir. Il peut choisir entre la réparation ou le remplacement du bien, sous réserve des conditions de coût prévues par l'article L.217-12 du Code de la consommation.",
+    "7.2 Garantie des vices cachés — Conformément à l'article 1641 du Code civil, le vendeur est tenu des défauts cachés rendant le bien impropre à l'usage auquel il est destiné, ou diminuant tellement cet usage que le Client ne l'aurait pas acquis, ou n'en aurait donné qu'un moindre prix. Le Client dispose d'un délai de 2 ans à compter de la découverte du vice et peut choisir entre la résolution de la vente ou une réduction du prix (article 1644 du Code civil)."
+  ]},
+  { t:"8. GARANTIE COMMERCIALE ET EXTENSION DE GARANTIE", b:[
+    "8.1 Garantie commerciale — Le Réparateur s'engage à assurer le service après-vente des pièces installées. Le Client peut bénéficier, en plus des garanties légales, d'une garantie commerciale de 24 mois, qui pourra être prolongée par une extension de garantie ; elle comprend les pièces et la main-d'œuvre à compter de la date d'achat. Pour en bénéficier, il conviendra impérativement de conserver la facture d'achat du produit.",
+    "Cette garantie ne couvre pas : les consommables quels qu'ils soient ; l'utilisation anormale ou non conforme du produit ; le montage incorrect effectué par le Client ; les défauts et leurs conséquences liés à une utilisation non conforme à l'usage auquel le produit est destiné ; les défauts liés à toute cause extérieure au Réparateur ; les interventions et réparations réalisées par le Client ou par des tiers ; les pièces d'usure ou celles dont le remplacement est prévu dans le cadre de l'entretien périodique.",
+    "La garantie commerciale ne couvre pas les frais de déplacement ni les frais éventuels d'immobilisation ou de privation de jouissance de quelque nature que ce soit. Les échanges et remises en état au titre de la présente garantie prolongent sa durée pour une nouvelle période de 24 mois.",
+    "8.2 Extension de garantie — Le Réparateur peut proposer au Client, au moment de l'achat, de souscrire une extension payante de la garantie contractuelle d'une durée de 12 ou 24 mois selon les produits. Cette prestation prolonge la garantie commerciale visée à l'article 8.1 ; les exclusions de l'article 8.1 y sont également applicables. Elle n'est proposée que pour les familles de produits suivantes : kit panneau solaire et régulateur (exclusion : casse du panneau et infiltration d'eau par mauvaise pose) ; TV LCD (exclusion : inversion de polarité et variation de tension hors plage d'environ 6 à 30 V) ; antennes satellites automatiques ; vidéos de recul (exclusion : lavage au nettoyeur haute pression) ; groupes électrogènes portables (exclusion : carburateur non vidangé avant hivernage et trop-plein d'huile) ; rafraîchisseurs ; moovers pour caravanes."
+  ]},
+  { t:"9. PAIEMENT", b:[
+    "Les factures sont établies conformément à la commande acceptée. Les factures de réparation sont payables à l'enlèvement du véhicule. Toute somme payée d'avance est considérée comme un acompte sur le prix de la réparation.",
+    "En cas de réparation consécutive à un accident couvert par une compagnie d'assurance, et sauf accord de règlement direct entre le Réparateur et la société concernée, le Client reste seul responsable du paiement des travaux effectués. En cas de règlement anticipé, aucun escompte ne sera accordé.",
+    "En cas de retard de paiement, à compter d'une mise en demeure, des pénalités égales à trois fois le taux d'intérêt légal en vigueur seront appliquées. En cas de réserve de propriété, le Réparateur se réserve le droit de différer le transfert de propriété des pièces jusqu'au complet paiement de la facture. Si le dépôt du véhicule a été effectué par un mandataire, le Client et son mandataire sont solidairement responsables du paiement."
+  ]},
+  { t:"10. LIVRAISON DU VÉHICULE", b:[
+    "Conformément à l'article L.216-1 du Code de la consommation, le professionnel livre le bien ou fournit le service à la date ou dans le délai indiqué au consommateur, sauf si les parties en ont convenu autrement. À défaut d'indication ou d'accord, la prestation est exécutée sans retard injustifié et au plus tard trente jours après la conclusion du contrat.",
+    "Le Réparateur s'engage à effectuer les travaux et à respecter les délais mentionnés sur le Bon de travaux, sauf circonstances indépendantes de sa volonté légitimement justifiées (force majeure, défaut ou retard d'approvisionnement en pièces, difficultés particulières décelées sur le véhicule). Tous les travaux confiés sont réputés réceptionnés du seul fait de la remise du véhicule à la disposition du Client ou de son mandataire.",
+    "En cas de refus de la réparation par le Client, il pourra lui être demandé de signer une décharge de responsabilité. Le Réparateur décline toute responsabilité au cas où le Client refuserait de lui commander les travaux correspondants."
+  ]},
+  { t:"11. INFORMATIQUE ET LIBERTÉS – DONNÉES À CARACTÈRE PERSONNEL", b:[
+    "Dans le cadre de la relation commerciale, le Réparateur est amené à demander au Client un certain nombre de données à caractère personnel et lui indique celles qui sont facultatives. Ces données sont utilisées par les services internes et les prestataires du Réparateur pour l'exécution de la prestation, le traitement des demandes du Client et la personnalisation de la communication et de l'offre. Elles peuvent être communiquées aux partenaires commerciaux.",
+    "Conformément à la législation en vigueur, le Client dispose d'un droit à la portabilité, la rectification, l'effacement et l'opposition des données le concernant, en écrivant à : SODEV / NARBONNE ACCESSOIRES, Service Base de Données, BP 70441, 11104 NARBONNE CEDEX, ou par mail à dap@sodev.fr / dap@narbonneaccessoires.fr."
+  ]},
+  { t:"12. INDEMNITÉ D'ENCOMBREMENT – VENTES AUX ENCHÈRES PUBLIQUES", b:[
+    "Si le Client n'a pas retiré son véhicule dans les 15 jours suivant sa mise à disposition, une mise en demeure lui sera adressée. En cas de non-enlèvement, une indemnité d'encombrement sera facturée au tarif de gardiennage affiché dans l'entreprise. Le Réparateur pourra en outre faire procéder, après mise en demeure par lettre recommandée, à la vente aux enchères publiques du véhicule conformément à la loi du 31 décembre 1903 (modifiée par la loi du 20 juin 2016) si le véhicule n'a pas été retiré dans un délai de 6 mois."
+  ]},
+  { t:"13. DROIT DE RÉTENTION", b:[
+    "En application de l'article 1948 du Code civil, le Réparateur peut retenir le véhicule jusqu'à l'entier paiement des réparations."
+  ]},
+  { t:"14. RELATIONS COMPAGNIES D'ASSURANCE", b:[
+    "Aucune relation directe n'existe entre une compagnie d'assurance et son assuré portant sur les réparations à effectuer sur un véhicule accidenté. En tout état de cause, seul le Client est tenu vis-à-vis du Réparateur au paiement intégral des réparations."
+  ]},
+  { t:"15. DIFFÉREND – DROIT APPLICABLE – LITIGES", b:[
+    "Les présentes Conditions Générales sont soumises à la loi française. La nullité éventuelle d'une clause n'affecte pas la validité des autres. Toute réclamation sera adressée au Réparateur par lettre recommandée avec accusé de réception à l'adresse figurant sur le bon de commande.",
+    "Conformément à l'article L.612-1 du Code de la consommation, le Client a le droit de recourir gratuitement à un médiateur de la consommation. À défaut de résolution amiable, il peut saisir : CM2C – Centre de médiation, 14 rue Saint-Jean, 75017 Paris – www.cm2c.net.",
+    "À défaut d'accord amiable, en cas de litige avec un commerçant, le tribunal compétent sera le tribunal de commerce de NARBONNE (11100). En cas de litige avec un consommateur, le tribunal compétent sera celui du lieu de domicile du consommateur."
+  ]}
+];
+
+/* ================= ÉTAT ================= */
+let state = { infos:{}, items:{} };
+
+function slug(s){ return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,""); }
+
+/* ================= CONSTRUCTION UI ================= */
+function buildSelect(){
+  const sel = document.getElementById("f_magasin");
+  CONFIG.STORES.forEach(s=>{ const o=document.createElement("option"); o.value=s; o.textContent=s; sel.appendChild(o); });
+}
+
+function buildSection(title, items, oktoggleLabel){
+  const sec = document.createElement("section");
+  sec.className = "section";
+  const head = document.createElement("div");
+  head.className = "section-head";
+  head.innerHTML = `<h2>${title}</h2><span class="count"></span>
+    <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`;
+  const body = document.createElement("div");
+  body.className = "section-body";
+
+  items.forEach(name=>{
+    const id = slug(name);
+    state.items[id] = state.items[id] || { name, equipe:null, etat:null, cmt:"", type:null, dateValid:"" };
+    const card = document.createElement("div");
+    card.className = "item";
+    card.dataset.id = id;
+    const optsLbl = (id==="batterie_type"||id==="mppt_pwm") ? "Type" : "Modèle";
+    const optsHtml = ITEM_OPTIONS[id]
+      ? `<div class="opts"><span class="opts-lbl">${optsLbl}</span>${ITEM_OPTIONS[id].map(o=>`<button class="opt" data-opt="${o}">${o}</button>`).join("")}</div>`
+      : "";
+    const gaugeHtml = ITEM_NO_ETAT.has(id) ? "" : `
+      <div class="gauge-wrap">
+        <div class="gauge-label"><span>État</span><span class="etat-txt">—</span></div>
+        <div class="gauge">
+          ${[0,1,2,3,4].map(v=>`<button data-v="${v}">${v}</button>`).join("")}
+        </div>
+      </div>`;
+    const dateHtml = ITEM_DATE.has(id)
+      ? `<div class="datev"><span class="datev-lbl">Date fin de validité</span><input type="date" class="datev-input"></div>`
+      : "";
+    card.innerHTML = `
+      <div class="item-top">
+        <div class="item-ic">${iconSvg(id,20)}</div>
+        <div class="item-name">${name}</div>
+        <div class="toggle">
+          <button data-on="oui">${(oktoggleLabel==="conforme"||ITEM_CONFORME.has(id))?"Conf.":"Oui"}</button>
+          <button data-on="non">Non</button>
+        </div>
+      </div>
+      ${optsHtml}
+      ${dateHtml}
+      ${gaugeHtml}
+      <button class="cmt-btn"><span class="dot"></span>+ Commentaire</button>
+      <div class="cmt"><textarea placeholder="Commentaire technicien…" rows="2"></textarea></div>
+    `;
+    body.appendChild(card);
+    wireCard(card, id);
+  });
+
+  head.addEventListener("click", ()=> sec.classList.toggle("collapsed"));
+  sec.appendChild(head); sec.appendChild(body);
+  sec._count = head.querySelector(".count");
+  sec._items = items.map(slug);
+  return sec;
+}
+
+function wireCard(card, id){
+  const st = state.items[id];
+  const toggle = card.querySelector(".toggle");
+  const gaugeWrap = card.querySelector(".gauge-wrap");
+  const cmtBtn = card.querySelector(".cmt-btn");
+  const cmtBox = card.querySelector(".cmt");
+  const cmtArea = card.querySelector("textarea");
+  const etatTxt = card.querySelector(".etat-txt");
+
+  toggle.querySelectorAll("button").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const v = b.dataset.on;
+      st.equipe = (st.equipe===v) ? null : v;
+      renderCard(card, id);
+      persist();
+    });
+  });
+  card.querySelectorAll(".gauge button").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const v = +b.dataset.v;
+      st.etat = (st.etat===v) ? null : v;
+      renderCard(card, id);
+      persist();
+    });
+  });
+  cmtBtn.addEventListener("click", ()=> cmtBox.classList.toggle("open"));
+  cmtArea.addEventListener("input", ()=>{ st.cmt = cmtArea.value; cmtBtn.classList.toggle("has", !!st.cmt.trim()); persist(); });
+
+  const optsRow = card.querySelector(".opts");
+  if(optsRow){
+    optsRow.querySelectorAll(".opt").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        const v = b.dataset.opt;
+        st.type = (st.type===v) ? null : v;
+        renderCard(card, id);
+        persist();
+      });
+    });
+  }
+
+  const dateRow = card.querySelector(".datev");
+  const dateInput = card.querySelector(".datev-input");
+  if(dateInput){
+    dateInput.addEventListener("input", ()=>{ st.dateValid = dateInput.value; persist(); });
+    dateInput.addEventListener("change", ()=>{ st.dateValid = dateInput.value; persist(); });
+  }
+
+  card._render = ()=>{
+    toggle.querySelectorAll("button").forEach(b=> b.classList.toggle("active", b.dataset.on===st.equipe));
+    const isNon = st.equipe === "non";
+    if(gaugeWrap) gaugeWrap.classList.toggle("hide", isNon);
+    if(optsRow) optsRow.classList.toggle("hide", isNon);
+    if(dateRow) dateRow.classList.toggle("hide", isNon);
+    card.classList.toggle("off", isNon);
+    card.querySelectorAll(".gauge button").forEach(b=> b.classList.toggle("sel", st.etat!==null && +b.dataset.v===st.etat));
+    if(optsRow) optsRow.querySelectorAll(".opt").forEach(b=> b.classList.toggle("sel", st.type===b.dataset.opt));
+    if(dateInput) dateInput.value = st.dateValid || "";
+    if(etatTxt) etatTxt.textContent = (st.etat===null) ? "—" : `${st.etat} · ${ETAT_LABELS[st.etat]}`;
+    cmtArea.value = st.cmt || "";
+    cmtBtn.classList.toggle("has", !!(st.cmt||"").trim());
+    card.classList.toggle("done", itemDone(id, st));
+  };
+}
+function itemDone(id, st){
+  if(st.equipe==null) return false;
+  if(st.equipe==="non") return true;
+  if(ITEM_NO_ETAT.has(id)) return true;
+  return st.etat!==null;
+}
+function renderCard(card,id){ card._render(); updateProgress(); }
+
+/* ================= PROGRESSION ================= */
+let sectionsEls = [];
+function updateProgress(){
+  let done=0;
+  Object.keys(state.items).forEach(id=>{ if(itemDone(id, state.items[id])) done++; });
+  document.getElementById("ptsDone").textContent = done;
+  document.getElementById("ptsTotal").textContent = TOTAL_PTS;
+  document.getElementById("progbar").style.width = Math.round(done/TOTAL_PTS*100)+"%";
+  sectionsEls.forEach(sec=>{
+    const d = sec._items.filter(id=> itemDone(id, state.items[id])).length;
+    sec._count.textContent = `${d}/${sec._items.length}`;
+  });
+}
+
+/* ================= PERSISTANCE ================= */
+let saveTimer=null;
+function collectInfos(){
+  state.infos = {
+    magasin:val("f_magasin"), date:val("f_date"), tech:val("f_tech"), vendeur:val("f_vendeur"),
+    vehicule:val("f_vehicule"), immat:val("f_immat"), client:val("f_client")
+  };
+}
+function val(id){ return document.getElementById(id).value.trim(); }
+function persist(){
+  collectInfos();
+  localStorage.setItem(LS_KEY, JSON.stringify(state));
+  const chip = document.getElementById("savechip");
+  chip.classList.add("on");
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=> chip.classList.remove("on"), 1200);
+}
+function restore(){
+  const raw = localStorage.getItem(LS_KEY);
+  if(!raw) return;
+  try{
+    const saved = JSON.parse(raw);
+    if(saved.infos){
+      const i=saved.infos;
+      set("f_magasin",i.magasin);set("f_date",i.date);set("f_tech",i.tech);set("f_vendeur",i.vendeur);
+      set("f_vehicule",i.vehicule);set("f_immat",i.immat);set("f_client",i.client);
+    }
+    if(saved.items){
+      Object.keys(saved.items).forEach(id=>{ if(state.items[id]) Object.assign(state.items[id], saved.items[id]); });
+    }
+  }catch(e){}
+}
+function set(id,v){ if(v!=null) document.getElementById(id).value=v; }
+
+/* ================= PDF (archivable / imprimable) ================= */
+function etatCell(v){
+  const cols=["#D64545","#E8833A","#E3B505","#7FB93E","#1D9E75"];
+  let cells="";
+  for(let i=0;i<5;i++){
+    const on = v===i;
+    cells+=`<td style="width:26px;text-align:center;padding:3px 0">
+      <span style="display:inline-block;width:18px;height:18px;border-radius:50%;
+      ${on?`background:${cols[i]};color:#fff;font-weight:700`:`background:#f0f3f6;color:#c2ccd6`};
+      font-size:11px;line-height:18px">${i}</span></td>`;
+  }
+  return cells;
+}
+function tableRows(ids, okLabel){
+  return ids.map(id=>{
+    const s=state.items[id];
+    const okYes = s.equipe==="oui", okNo = s.equipe==="non";
+    const typeTxt = s.type ? ` <span style="color:#1D9E75;font-weight:700">(${s.type})</span>` : "";
+    return `<tr>
+      <td style="padding:6px 8px;border-bottom:1px solid #e6ebf0;font-size:11px;font-weight:600">
+        ${iconImg(id,15,'#0F2A48')}${s.name}${typeTxt}
+      </td>
+      <td style="text-align:center;border-bottom:1px solid #e6ebf0;font-size:10px">
+        <span style="color:${okYes?'#1D9E75':'#c2ccd6'};font-weight:700">${okLabel} ${okYes?'✓':''}</span>
+        &nbsp;/&nbsp;<span style="color:${okNo?'#8494a4':'#c2ccd6'};font-weight:700">Non ${okNo?'✓':''}</span>
+      </td>
+      ${etatCell(s.etat)}
+      <td style="padding:6px 8px;border-bottom:1px solid #e6ebf0;font-size:10px;color:#333">${(s.cmt||'').replace(/</g,'&lt;')}</td>
+    </tr>`;
+  }).join("");
+}
+function buildPdfHtml(){
+  const i=state.infos;
+  const head = `<tr style="background:#0F2A48;color:#fff">
+      <th style="padding:6px 8px;text-align:left;font-size:9.5px;letter-spacing:.5px">DÉSIGNATION</th>
+      <th style="padding:6px 4px;font-size:9.5px;width:120px">ÉQUIPÉ</th>
+      <th colspan="5" style="padding:6px 4px;font-size:9.5px">ÉTAT (0 → 4)</th>
+      <th style="padding:6px 8px;text-align:left;font-size:9.5px">COMMENTAIRES</th>
+    </tr>`;
+  const headEnt = head.replace("ÉQUIPÉ","CONFORME");
+  return `<div style="font-family:Arial,Helvetica,sans-serif;color:#1b2733;width:760px;padding:26px 30px;background:#fff">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;border-bottom:3px solid #0F2A48;padding-bottom:12px;margin-bottom:16px">
+      <div>
+        <div style="font-size:22px;font-weight:800;color:#0F2A48;letter-spacing:.5px">NARB<span style="color:#C9A227">O</span>NNE ACCESS<span style="color:#C9A227">O</span>IRES</div>
+        <div style="font-size:11px;letter-spacing:3px;color:#1D9E75;font-weight:700;text-transform:uppercase;margin-top:2px">Fiche de contrôle atelier · 18 points</div>
+      </div>
+      <div style="text-align:right;font-size:11px;color:#6a7a8a">Édité le ${new Date().toLocaleDateString('fr-FR')}</div>
+    </div>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:18px;font-size:11px">
+      <tr>
+        <td style="padding:4px 8px"><b>Magasin :</b> ${i.magasin||'—'}</td>
+        <td style="padding:4px 8px"><b>Date :</b> ${i.date? new Date(i.date).toLocaleDateString('fr-FR'):'—'}</td>
+        <td style="padding:4px 8px"><b>Technicien :</b> ${i.tech||'—'}</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px"><b>Véhicule :</b> ${i.vehicule||'—'}</td>
+        <td style="padding:4px 8px"><b>Immat. :</b> ${(i.immat||'—').toUpperCase()}</td>
+        <td style="padding:4px 8px"><b>Client :</b> ${i.client||'—'}</td>
+      </tr>
+    </table>
+
+    <div style="background:#1D9E75;color:#fff;padding:6px 12px;font-size:12px;font-weight:700;letter-spacing:1px;border-radius:4px 4px 0 0">ÉQUIPEMENT</div>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:18px;border:1px solid #e6ebf0">
+      ${head}${tableRows(EQUIPEMENT.map(slug),"Oui")}
+    </table>
+
+    <div style="background:#1D9E75;color:#fff;padding:6px 12px;font-size:12px;font-weight:700;letter-spacing:1px;border-radius:4px 4px 0 0">ENTRETIEN / RÉVISION / ÉTAT</div>
+    <table style="width:100%;border-collapse:collapse;border:1px solid #e6ebf0">
+      ${headEnt}${tableRows(ENTRETIEN.map(slug),"Conf.")}
+    </table>
+
+    <div style="margin-top:26px;display:flex;justify-content:space-between;font-size:10px;color:#6a7a8a">
+      <div>Signature technicien : ______________________</div>
+      <div>Narbonne Accessoires — Document interne</div>
+    </div>
+  </div>`;
+}
+function pdfFilename(){
+  const i=state.infos;
+  const d=(i.date||new Date().toISOString().slice(0,10)).replace(/-/g,"");
+  const immat=(i.immat||"vehicule").replace(/[^a-zA-Z0-9]/g,"").toUpperCase();
+  return `Controle_${d}_${immat}.pdf`;
+}
+/* Convertit une icône SVG en PNG dataURL pour l'insérer dans le PDF */
+function svgToPng(id, px, color){
+  return new Promise(resolve=>{
+    try{
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="${px}" height="${px}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[id]||ICONS._default}</svg>`;
+      const img = new Image();
+      img.onload = ()=>{ try{ const c=document.createElement("canvas"); c.width=px; c.height=px; c.getContext("2d").drawImage(img,0,0,px,px); resolve(c.toDataURL("image/png")); }catch(e){ resolve(null); } };
+      img.onerror = ()=> resolve(null);
+      img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svg)));
+    }catch(e){ resolve(null); }
+  });
+}
+
+const ETATC = [[214,69,69],[232,131,58],[227,181,5],[127,185,62],[29,158,117]];
+
+async function makePdfBlob(){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit:"mm", format:"a4", orientation:"portrait" });
+  const i = state.infos;
+
+  // pré-rendu des icônes
+  const allIds = [...EQUIPEMENT.map(slug), ...ENTRETIEN.map(slug)];
+  const ic = {};
+  await Promise.all(allIds.map(async id=>{ ic[id] = await svgToPng(id, 28, "#0F2A48"); }));
+
+  const L=12, R=198, W=R-L;
+  const nameX=L+6, equipX=90, cx0=118, step=5.6, cmtX=146, cmtW=R-cmtX;
+  let y=16, curHeader=null;
+
+  let curEtatHdr="ETAT 0-4";
+  function ensureSpace(h){ if(y+h > 285){ doc.addPage(); y=16; if(curHeader) drawColHeader(curHeader, curEtatHdr); } }
+  function drawColHeader(label, etatHdr){
+    doc.setFillColor(15,42,72); doc.rect(L,y,W,6,"F");
+    doc.setFont("helvetica","bold"); doc.setFontSize(7.5); doc.setTextColor(255,255,255);
+    doc.text("DESIGNATION", nameX, y+4);
+    doc.text(label, equipX, y+4);
+    doc.text(etatHdr||"ETAT 0-4", cx0-2, y+4);
+    doc.text("COMMENTAIRES", cmtX, y+4);
+    y+=6; curHeader=label; curEtatHdr=etatHdr||"ETAT 0-4";
+  }
+  function drawRow(id, okLabel){
+    const s = state.items[id];
+    if(ITEM_CONFORME.has(id)) okLabel = "Conf.";
+    doc.setFont("helvetica","normal"); doc.setFontSize(8);
+    const cmtLines = (s.cmt||"").trim() ? doc.splitTextToSize(s.cmt.trim(), cmtW).slice(0,2) : [];
+    const rowH = cmtLines.length>1 ? 10.5 : 8;
+    ensureSpace(rowH);
+    const cy = y + rowH/2, ty = cy + 1;
+
+    // icône
+    if(ic[id]) doc.addImage(ic[id],"PNG", L+1, cy-2.2, 4.4, 4.4);
+    // désignation (+ type éventuel)
+    doc.setFont("helvetica","bold"); doc.setFontSize(9); doc.setTextColor(30,40,50);
+    let name = doc.splitTextToSize(s.name, 66)[0];
+    doc.text(name, nameX, ty);
+    if(s.type){
+      const nw = doc.getTextWidth(name);
+      doc.setTextColor(29,158,117); doc.setFontSize(8);
+      doc.text("("+s.type+")", nameX+nw+2, ty);
+    }
+    // équipé / conforme
+    doc.setFontSize(8);
+    const oui=s.equipe==="oui", non=s.equipe==="non";
+    let ex=equipX;
+    doc.setFont("helvetica", oui?"bold":"normal"); doc.setTextColor(oui?29:190, oui?158:196, oui?117:204);
+    doc.text(okLabel, ex, ty); ex += doc.getTextWidth(okLabel)+1.5;
+    doc.setFont("helvetica","normal"); doc.setTextColor(190,196,204); doc.text("/", ex, ty); ex += doc.getTextWidth("/")+1.5;
+    doc.setFont("helvetica", non?"bold":"normal"); doc.setTextColor(non?130:190, non?140:196, non?150:204);
+    doc.text("Non", ex, ty);
+    // état : 5 pastilles, ou date de validité pour les lignes sans état
+    if(ITEM_NO_ETAT.has(id)){
+      if(s.dateValid){
+        doc.setFont("helvetica","normal"); doc.setFontSize(7.5); doc.setTextColor(90,100,110);
+        doc.text("Fin val. "+new Date(s.dateValid).toLocaleDateString("fr-FR"), cx0-2, ty);
+      }
+    } else {
+      for(let k=0;k<5;k++){
+        const cx = cx0 + k*step, sel = s.etat===k;
+        if(sel){ const c=ETATC[k]; doc.setFillColor(c[0],c[1],c[2]); doc.circle(cx,cy,2.0,"F"); doc.setTextColor((k===2||k===3)?60:255,(k===2||k===3)?60:255,(k===2||k===3)?60:255); }
+        else { doc.setFillColor(240,243,246); doc.circle(cx,cy,2.0,"F"); doc.setTextColor(194,204,214); }
+        doc.setFont("helvetica","bold"); doc.setFontSize(6.5);
+        doc.text(String(k), cx, cy+0.9, {align:"center"});
+      }
+    }
+    // commentaires
+    if(cmtLines.length){
+      doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor(70,70,70);
+      const startY = y + (rowH - cmtLines.length*3.2)/2 + 2.6;
+      cmtLines.forEach((ln,li)=> doc.text(ln, cmtX, startY+li*3.2));
+    }
+    // séparateur
+    doc.setDrawColor(228,232,238); doc.setLineWidth(0.2); doc.line(L, y+rowH, R, y+rowH);
+    y += rowH;
+  }
+  function drawSection(title, ids, okLabel){
+    ensureSpace(14);
+    doc.setFillColor(29,158,117); doc.rect(L,y,W,7,"F");
+    doc.setFont("helvetica","bold"); doc.setFontSize(10); doc.setTextColor(255,255,255);
+    doc.text(title, L+3, y+4.8); y+=7;
+    const etatHdr = ids.every(id=> ITEM_NO_ETAT.has(id)) ? "VALIDITÉ" : "ETAT 0-4";
+    drawColHeader(okLabel, etatHdr);
+    ids.forEach(id=> drawRow(id, okLabel));
+    curHeader=null; y+=5;
+  }
+
+  // ---- EN-TÊTE ----
+  doc.setFont("helvetica","bold"); doc.setFontSize(19); doc.setTextColor(15,42,72);
+  doc.text("NARBONNE ACCESSOIRES", L, y); y+=5.5;
+  doc.setFont("helvetica","bold"); doc.setFontSize(9); doc.setTextColor(29,158,117);
+  doc.text("FICHE DE CONTRÔLE ATELIER - 18 POINTS", L, y);
+  doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor(130,140,150);
+  doc.text("Édité le "+new Date().toLocaleDateString("fr-FR"), R, y, {align:"right"});
+  y+=2.5;
+  doc.setDrawColor(15,42,72); doc.setLineWidth(0.6); doc.line(L,y,R,y); y+=7;
+
+  // ---- INFOS ----
+  doc.setFontSize(9);
+  const grid=[
+    [["Magasin", i.magasin], ["Date", i.date? new Date(i.date).toLocaleDateString("fr-FR"):""], ["Technicien", i.tech]],
+    [["Véhicule", i.vehicule], ["Immat.", (i.immat||"").toUpperCase()], ["Vendeur", i.vendeur]],
+    [["Client", i.client]]
+  ];
+  const gx=[L, L+64, L+124];
+  grid.forEach(row=>{
+    row.forEach((c,ci)=>{
+      doc.setFont("helvetica","bold"); doc.setTextColor(15,42,72);
+      doc.text(c[0]+" :", gx[ci], y);
+      const lw=doc.getTextWidth(c[0]+" : ");
+      doc.setFont("helvetica","normal"); doc.setTextColor(60,60,60);
+      doc.text(c[1]||"-", gx[ci]+lw, y);
+    });
+    y+=6;
+  });
+  y+=3;
+
+  // ---- SECTIONS ----
+  drawSection("ÉQUIPEMENT", EQUIPEMENT.map(slug), "Oui");
+  drawSection("ENTRETIEN / RÉVISION / ÉTAT", ENTRETIEN.map(slug), "Conf.");
+
+  // ---- PHOTOS ----
+  const ctrlPhotos = photosCtrl.get();
+  if(ctrlPhotos.length){
+    const gap=6, colW=(W-gap)/2, maxH=62;
+    ensureSpace(14 + maxH);
+    doc.setFillColor(29,158,117); doc.rect(L,y,W,7,"F");
+    doc.setFont("helvetica","bold"); doc.setFontSize(10); doc.setTextColor(255,255,255);
+    doc.text("PHOTOS DU VÉHICULE", L+3, y+4.8); y+=7+4;
+    let col=0, rowY=y, rowMaxH=0;
+    ctrlPhotos.forEach(p=>{
+      let w=colW, h=colW*(p.h/p.w);
+      if(h>maxH){ h=maxH; w=maxH*(p.w/p.h); }
+      if(col===0){ ensureSpace(maxH+4); rowY=y; }
+      const x = L + col*(colW+gap) + (colW-w)/2;
+      try{ doc.addImage(p.dataUrl,"JPEG", x, rowY, w, h); }catch(e){}
+      rowMaxH=Math.max(rowMaxH,h);
+      col++;
+      if(col===2){ y=rowY+rowMaxH+gap; col=0; rowMaxH=0; }
+    });
+    if(col===1){ y=rowY+rowMaxH+gap; }
+  }
+
+  // ---- PIED ----
+  ensureSpace(14); y+=4;
+  doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor(110,120,130);
+  doc.text("Signature technicien : ______________________", L, y);
+  doc.text("Narbonne Accessoires - Document interne", R, y, {align:"right"});
+
+  return doc.output("blob");
+}
+
+/* ================= ACTIONS ================= */
+function toast(msg,type){ const t=document.getElementById("toast"); t.textContent=msg; t.className="toast show "+(type||""); setTimeout(()=>t.classList.remove("show"),3200); }
+function overlay(on){ document.getElementById("overlay").classList.toggle("show",on); }
+
+/* ================= PHOTOS DU VÉHICULE ================= */
+const MAX_PHOTOS = 10;
+function compressImage(file, maxDim, quality){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      const img = new Image();
+      img.onload = ()=>{
+        let w=img.width, h=img.height;
+        if(w>h){ if(w>maxDim){ h=Math.round(h*maxDim/w); w=maxDim; } }
+        else { if(h>maxDim){ w=Math.round(w*maxDim/h); h=maxDim; } }
+        const c=document.createElement("canvas"); c.width=w; c.height=h;
+        c.getContext("2d").drawImage(img,0,0,w,h);
+        resolve({ dataUrl:c.toDataURL("image/jpeg",quality), w, h });
+      };
+      img.onerror=reject; img.src=reader.result;
+    };
+    reader.onerror=reject; reader.readAsDataURL(file);
+  });
+}
+function makePhotoManager(lsKey, gridId, countId, addBtnId, inputId){
+  let arr = [];
+  function load(){ try{ arr = JSON.parse(localStorage.getItem(lsKey)) || []; }catch(e){ arr = []; } }
+  function save(){ try{ localStorage.setItem(lsKey, JSON.stringify(arr)); }catch(e){ toast("Stockage plein — supprimez des photos","err"); } }
+  function render(){
+    const grid = document.getElementById(gridId);
+    grid.innerHTML = arr.map((p,idx)=>`<div class="photo-thumb"><img src="${p.dataUrl}" alt="Photo ${idx+1}"><button class="photo-del" data-idx="${idx}" aria-label="Supprimer">×</button></div>`).join("");
+    grid.querySelectorAll(".photo-del").forEach(b=> b.addEventListener("click", ()=>{ arr.splice(+b.dataset.idx,1); save(); render(); }));
+    document.getElementById(countId).textContent = arr.length;
+  }
+  async function add(files){
+    for(const file of files){
+      if(arr.length>=MAX_PHOTOS){ toast("Maximum "+MAX_PHOTOS+" photos","err"); break; }
+      if(!file.type || !file.type.startsWith("image/")) continue;
+      try{ arr.push(await compressImage(file, 1280, 0.6)); }catch(e){}
+    }
+    save(); render();
+  }
+  function init(){
+    load(); render();
+    document.getElementById(addBtnId).addEventListener("click", ()=> document.getElementById(inputId).click());
+    document.getElementById(inputId).addEventListener("change", async (e)=>{
+      const files=[...e.target.files]; e.target.value="";
+      if(!files.length) return;
+      overlay(true); await add(files); overlay(false);
+    });
+  }
+  return { init, render, reset:()=>{ arr=[]; save(); render(); }, get:()=>arr };
+}
+const photosCtrl = makePhotoManager("controle_atelier_photos_v1", "photoGrid", "photoCount", "photoAdd", "photoInput");
+const photosOR   = makePhotoManager("controle_atelier_photos_or_v1", "orPhotoGrid", "orPhotoCount", "orPhotoAdd", "orPhotoInput");
+
+/* ================= ONGLETS ================= */
+let activeTab = "or";
+function switchTab(name){
+  activeTab = name;
+  document.querySelectorAll(".tab").forEach(t=> t.classList.toggle("active", t.dataset.tab===name));
+  document.getElementById("paneOR").classList.toggle("hide", name!=="or");
+  document.getElementById("paneControle").classList.toggle("hide", name!=="controle");
+  if(name==="or") resizeSignature();
+}
+
+/* ================= ONGLET OR ================= */
+const LS_OR = "controle_atelier_or_v1";
+const OR_FIELDS = ["or_client","or_numclient","or_tel","or_email","or_magasin","or_date","or_tech","or_vendeur","or_km","or_immat","or_modele","or_forfait","or_desc","or_livraison","or_obs","or_carrosserie_cmt"];
+let orState = { fields:{}, vtype:null, fuel:null, impact:null, impactType:null, cg:false, signature:"", damage:{} };
+
+const DAMAGE_STATES = [
+  { l:"", hex:"#f6f8fa", rgb:[246,248,250] },
+  { l:"Rayure", hex:"#E3B505", rgb:[227,181,5] },
+  { l:"Impact", hex:"#E8833A", rgb:[232,131,58] },
+  { l:"Enfonc.", hex:"#D64545", rgb:[214,69,69] },
+  { l:"Cassé", hex:"#8a2b2b", rgb:[138,43,43] }
+];
+const DAMAGE_ZONES = [
+  {id:"aile_av_g",l:"Aile AV G"},{id:"face_av",l:"Face avant"},{id:"aile_av_d",l:"Aile AV D"},
+  {id:"port_av_g",l:"Portière AV G"},{id:"capot",l:"Capot"},{id:"port_av_d",l:"Portière AV D"},
+  {id:"lat_ar_g",l:"Latéral AR G"},{id:"toit",l:"Toit"},{id:"lat_ar_d",l:"Latéral AR D"},
+  {id:"aile_ar_g",l:"Aile AR G"},{id:"face_ar",l:"Face arrière"},{id:"aile_ar_d",l:"Aile AR D"}
+];
+function buildDamageMap(){
+  const map=document.getElementById("dzMap");
+  map.innerHTML = DAMAGE_ZONES.map(z=>`<button class="dz" data-zone="${z.id}"><span class="dz-name">${z.l}</span><span class="dz-state"></span></button>`).join("");
+  map.querySelectorAll(".dz").forEach(b=> b.addEventListener("click", ()=>{
+    const id=b.dataset.zone; orState.damage[id]=((orState.damage[id]||0)+1)%DAMAGE_STATES.length;
+    if(orState.damage[id]===0) delete orState.damage[id];
+    renderDamage(); saveOR();
+  }));
+  document.getElementById("dzLegend").innerHTML = DAMAGE_STATES.slice(1).map(s=>`<span><i style="background:${s.hex}"></i>${s.l}</span>`).join("");
+  document.getElementById("dzClear").addEventListener("click", ()=>{ orState.damage={}; renderDamage(); saveOR(); });
+}
+function renderDamage(){
+  document.querySelectorAll("#dzMap .dz").forEach(b=>{
+    const st=orState.damage[b.dataset.zone]||0, S=DAMAGE_STATES[st];
+    b.style.background=S.hex; b.style.borderColor = st?S.hex:"var(--line)";
+    b.querySelector(".dz-name").style.color = st>=2?"#fff":(st===1?"#4a3c00":"var(--ink)");
+    const se=b.querySelector(".dz-state"); se.textContent=S.l; se.style.color = st>=2?"#fff":(st===1?"#4a3c00":"transparent");
+  });
+}
+
+function loadOR(){ try{ const s=JSON.parse(localStorage.getItem(LS_OR)); if(s) orState=Object.assign(orState,s); }catch(e){} }
+function persistOR(){
+  orState.fields = {};
+  OR_FIELDS.forEach(id=> orState.fields[id] = document.getElementById(id).value.trim());
+  saveOR();
+}
+function saveOR(){ try{ localStorage.setItem(LS_OR, JSON.stringify(orState)); }catch(e){} }
+function renderOR(){
+  OR_FIELDS.forEach(id=>{ if(orState.fields[id]!=null) document.getElementById(id).value = orState.fields[id]; });
+  document.querySelectorAll("#or_vtype .vt").forEach(b=> b.classList.toggle("sel", b.dataset.vt===orState.vtype));
+  document.querySelectorAll("#or_fuel .vt").forEach(b=> b.classList.toggle("sel", b.dataset.fuel===orState.fuel));
+  document.querySelectorAll("#or_impact button").forEach(b=> b.classList.toggle("active", b.dataset.on===orState.impact));
+  document.getElementById("or_impactType").classList.toggle("hide", orState.impact!=="oui");
+  document.querySelectorAll("#or_impactType .opt").forEach(b=> b.classList.toggle("sel", b.dataset.imp===orState.impactType));
+  document.getElementById("or_cg").checked = !!orState.cg;
+  renderDamage();
+}
+function wireOR(){
+  const magSel=document.getElementById("or_magasin");
+  CONFIG.STORES.forEach(s=>{ const o=document.createElement("option"); o.value=s; o.textContent=s; magSel.appendChild(o); });
+  if(!document.getElementById("or_date").value) document.getElementById("or_date").value=new Date().toISOString().slice(0,10);
+
+  OR_FIELDS.forEach(id=>{ const el=document.getElementById(id); el.addEventListener("input", persistOR); el.addEventListener("change", persistOR); });
+  document.querySelectorAll("#or_vtype .vt").forEach(b=> b.addEventListener("click", ()=>{ orState.vtype = orState.vtype===b.dataset.vt?null:b.dataset.vt; renderOR(); saveOR(); }));
+  document.querySelectorAll("#or_fuel .vt").forEach(b=> b.addEventListener("click", ()=>{ orState.fuel = orState.fuel===b.dataset.fuel?null:b.dataset.fuel; renderOR(); saveOR(); }));
+  document.querySelectorAll("#or_impact button").forEach(b=> b.addEventListener("click", ()=>{ orState.impact = orState.impact===b.dataset.on?null:b.dataset.on; if(orState.impact!=="oui") orState.impactType=null; renderOR(); saveOR(); }));
+  document.querySelectorAll("#or_impactType .opt").forEach(b=> b.addEventListener("click", ()=>{ orState.impactType = orState.impactType===b.dataset.imp?null:b.dataset.imp; renderOR(); saveOR(); }));
+  document.getElementById("or_cg").addEventListener("change", (e)=>{ orState.cg=e.target.checked; saveOR(); });
+  buildDamageMap();
+}
+
+/* signature tactile */
+let sigCtx=null, sigCanvas=null;
+function resizeSignature(){
+  if(!sigCanvas) return;
+  const rect=sigCanvas.getBoundingClientRect();
+  if(rect.width===0) return;
+  const ratio=window.devicePixelRatio||1;
+  const saved=orState.signature;
+  sigCanvas.width=rect.width*ratio; sigCanvas.height=rect.height*ratio;
+  sigCtx.setTransform(ratio,0,0,ratio,0,0);
+  sigCtx.lineWidth=2; sigCtx.lineCap="round"; sigCtx.lineJoin="round"; sigCtx.strokeStyle="#0F2A48";
+  if(saved){ const img=new Image(); img.onload=()=> sigCtx.drawImage(img,0,0,rect.width,rect.height); img.src=saved; }
+}
+function initSignature(){
+  sigCanvas=document.getElementById("or_sig"); sigCtx=sigCanvas.getContext("2d");
+  let drawing=false, last=null;
+  const pos=(e)=>{ const r=sigCanvas.getBoundingClientRect(); const t=e.touches?e.touches[0]:e; return {x:t.clientX-r.left,y:t.clientY-r.top}; };
+  const start=(e)=>{ e.preventDefault(); drawing=true; last=pos(e); };
+  const move=(e)=>{ if(!drawing)return; e.preventDefault(); const p=pos(e); sigCtx.beginPath(); sigCtx.moveTo(last.x,last.y); sigCtx.lineTo(p.x,p.y); sigCtx.stroke(); last=p; };
+  const end=()=>{ if(!drawing)return; drawing=false; orState.signature=sigCanvas.toDataURL("image/png"); saveOR(); };
+  sigCanvas.addEventListener("mousedown",start); sigCanvas.addEventListener("mousemove",move); window.addEventListener("mouseup",end);
+  sigCanvas.addEventListener("touchstart",start,{passive:false}); sigCanvas.addEventListener("touchmove",move,{passive:false}); sigCanvas.addEventListener("touchend",end);
+  document.getElementById("or_sigClear").addEventListener("click", ()=>{ sigCtx.clearRect(0,0,sigCanvas.width,sigCanvas.height); orState.signature=""; saveOR(); });
+  resizeSignature();
+  window.addEventListener("resize", resizeSignature);
+}
+function resetOR(){
+  orState={ fields:{}, vtype:null, fuel:null, impact:null, impactType:null, cg:false, signature:"", damage:{} };
+  OR_FIELDS.forEach(id=> document.getElementById(id).value="");
+  document.getElementById("or_date").value=new Date().toISOString().slice(0,10);
+  const setg=loadSettings(); if(setg.magasinDefault) document.getElementById("or_magasin").value=setg.magasinDefault;
+  if(sigCtx&&sigCanvas) sigCtx.clearRect(0,0,sigCanvas.width,sigCanvas.height);
+  persistOR(); renderOR();
+}
+function orFilename(){
+  const d=(orState.fields.or_date||new Date().toISOString().slice(0,10)).replace(/-/g,"");
+  const immat=(orState.fields.or_immat||"vehicule").replace(/[^a-zA-Z0-9]/g,"").toUpperCase();
+  return `OR_${d}_${immat}.pdf`;
+}
+function initOR(){
+  loadOR(); wireOR(); initSignature();
+  const setg=loadSettings();
+  if(setg.magasinDefault && !document.getElementById("or_magasin").value){ document.getElementById("or_magasin").value=setg.magasinDefault; orState.fields.or_magasin=setg.magasinDefault; }
+  renderOR();
+  document.querySelectorAll(".tab").forEach(t=> t.addEventListener("click", ()=> switchTab(t.dataset.tab)));
+  initCGModal();
+}
+function initCGModal(){
+  const body=document.getElementById("cgBody");
+  body.innerHTML = CG_CONTENT.map(a=> `<h4>${a.t}</h4>` + a.b.map(p=>`<p>${p}</p>`).join("")).join("");
+  const modal=document.getElementById("cgModal");
+  document.getElementById("btnViewCG").addEventListener("click", ()=> modal.classList.add("show"));
+  document.getElementById("cgClose").addEventListener("click", ()=> modal.classList.remove("show"));
+  modal.addEventListener("click", (e)=>{ if(e.target.id==="cgModal") modal.classList.remove("show"); });
+}
+
+/* Synchronisation des champs communs entre l'onglet OR et l'onglet Contrôle */
+const SYNC_PAIRS = [["or_magasin","f_magasin"],["or_date","f_date"],["or_immat","f_immat"],["or_client","f_client"],["or_tech","f_tech"],["or_vendeur","f_vendeur"],["or_modele","f_vehicule"]];
+function setupSync(){
+  SYNC_PAIRS.forEach(([a,b])=>{
+    const ea=document.getElementById(a), eb=document.getElementById(b);
+    if(!ea||!eb) return;
+    const copy=(from,to,persistTo)=>{ if(to.value!==from.value){ to.value=from.value; persistTo(); } };
+    ea.addEventListener("input", ()=> copy(ea,eb,persist));
+    ea.addEventListener("change", ()=> copy(ea,eb,persist));
+    eb.addEventListener("input", ()=> copy(eb,ea,persistOR));
+    eb.addEventListener("change", ()=> copy(eb,ea,persistOR));
+    // réconciliation initiale : remplir le champ vide à partir de l'autre
+    if(ea.value && !eb.value) eb.value=ea.value;
+    else if(eb.value && !ea.value) ea.value=eb.value;
+  });
+  persist(); persistOR();
+}
+
+/* ===== PDF OR : Bon de travaux + Conditions Générales ===== */
+async function makeORPdfBlob(){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit:"mm", format:"a4", orientation:"portrait" });
+  const o = orState; const f = o.fields;
+  const L=14, R=196, W=R-L; let y=16;
+  const fr=(d)=> d? new Date(d).toLocaleDateString("fr-FR"):"-";
+  function ensure(h){ if(y+h>282){ doc.addPage(); y=18; } }
+  function band(title){ ensure(13); doc.setFillColor(29,158,117); doc.rect(L,y,W,7,"F"); doc.setFont("helvetica","bold"); doc.setFontSize(9.5); doc.setTextColor(255,255,255); doc.text(title,L+3,y+4.8); y+=7+3.5; }
+  function kv(pairs){ doc.setFontSize(9.5); for(let idx=0;idx<pairs.length;idx+=2){ ensure(6); [pairs[idx],pairs[idx+1]].forEach((p,ci)=>{ if(!p)return; const x=L+ci*(W/2); doc.setFont("helvetica","bold"); doc.setTextColor(15,42,72); doc.text(p[0]+" :",x,y); const lw=doc.getTextWidth(p[0]+" : "); doc.setFont("helvetica","normal"); doc.setTextColor(50,55,62); doc.text(String(p[1]||"-"),x+lw,y); }); y+=6; } }
+  function longText(label,value){ ensure(8); doc.setFont("helvetica","bold"); doc.setTextColor(15,42,72); doc.setFontSize(9.5); doc.text(label+" :",L,y); y+=4.6; doc.setFont("helvetica","normal"); doc.setTextColor(50,55,62); doc.splitTextToSize(value||"-",W).forEach(ln=>{ ensure(4.6); doc.text(ln,L,y); y+=4.6; }); y+=1.5; }
+
+  doc.setFont("helvetica","bold"); doc.setFontSize(19); doc.setTextColor(15,42,72); doc.text("NARBONNE ACCESSOIRES",L,y); y+=5.5;
+  doc.setFont("helvetica","bold"); doc.setFontSize(10); doc.setTextColor(29,158,117); doc.text("BON DE TRAVAUX",L,y);
+  doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor(130,140,150); doc.text("Édité le "+new Date().toLocaleDateString("fr-FR"),R,y,{align:"right"}); y+=2.5;
+  doc.setDrawColor(15,42,72); doc.setLineWidth(0.6); doc.line(L,y,R,y); y+=8;
+
+  band("INFORMATIONS CLIENT");
+  kv([["Client",f.or_client],["N° client",f.or_numclient],["Téléphone",f.or_tel],["E-mail",f.or_email]]); y+=2;
+  band("VÉHICULE");
+  kv([["Magasin",f.or_magasin],["Date",fr(f.or_date)],["Kilométrage",f.or_km],["Immatriculation",(f.or_immat||"").toUpperCase()],["Type",o.vtype],["Marque / modèle",f.or_modele]]); y+=2;
+  band("INTERVENTION");
+  kv([["Forfait",f.or_forfait],["Technicien",f.or_tech],["Vendeur",f.or_vendeur],["Livraison prévue",fr(f.or_livraison)]]);
+  longText("Description / commentaires",f.or_desc); y+=1;
+  band("ÉTAT À LA RÉCEPTION");
+  const imp = o.impact==="oui" ? ("Oui"+(o.impactType?" — "+o.impactType:"")) : (o.impact==="non"?"Non":"-");
+  kv([["Impact pare-brise",imp],["Niveau carburant",o.fuel||"-"]]);
+  longText("Observations technicien",f.or_obs); y+=2;
+
+  // ---- ÉTAT CARROSSERIE (schéma) ----
+  {
+    const cols=3, cellW=W/cols, cellH=13, rows=Math.ceil(DAMAGE_ZONES.length/cols);
+    ensure(14 + rows*cellH + 10);
+    band("ÉTAT CARROSSERIE");
+    const top=y;
+    DAMAGE_ZONES.forEach((z,idx)=>{
+      const r=Math.floor(idx/cols), c=idx%cols;
+      const x=L+c*cellW, yy=top+r*cellH;
+      const st=(orState.damage||{})[z.id]||0, S=DAMAGE_STATES[st];
+      doc.setFillColor(S.rgb[0],S.rgb[1],S.rgb[2]); doc.setDrawColor(225,230,236); doc.setLineWidth(0.2);
+      doc.rect(x+1,yy+1,cellW-2,cellH-2,"FD");
+      if(st===1) doc.setTextColor(74,60,0); else doc.setTextColor(st>=2?255:35, st>=2?255:42, st>=2?255:52);
+      doc.setFont("helvetica","bold"); doc.setFontSize(7); doc.text(z.l, x+3, yy+5.5);
+      if(st>0){ doc.setFont("helvetica","normal"); doc.setFontSize(6.5); doc.text(S.l, x+3, yy+9.5); }
+    });
+    y = top + rows*cellH + 4;
+    doc.setFont("helvetica","normal"); doc.setFontSize(6.8);
+    let lx=L;
+    DAMAGE_STATES.slice(1).forEach(s=>{ doc.setFillColor(s.rgb[0],s.rgb[1],s.rgb[2]); doc.rect(lx,y-2.6,3,3,"F"); doc.setTextColor(90,100,110); doc.text(s.l, lx+4, y); lx += doc.getTextWidth(s.l)+12; });
+    y+=6;
+    if((f.or_carrosserie_cmt||"").trim()) longText("Commentaires carrosserie", f.or_carrosserie_cmt);
+  }
+
+  ensure(50);
+  band("SIGNATURE DU CLIENT");
+  doc.setFont("helvetica","normal"); doc.setFontSize(8.5); doc.setTextColor(50,55,62);
+  const cgLine=(o.cg?"[X] ":"[ ] ")+"Le client reconnaît avoir pris connaissance des Conditions Générales de Réparations (ci-jointes) et les accepte sans réserve.";
+  doc.splitTextToSize(cgLine,W).forEach(ln=>{ doc.text(ln,L,y); y+=4.2; });
+  y+=3;
+  doc.setFont("helvetica","bold"); doc.setTextColor(15,42,72); doc.setFontSize(9);
+  doc.text("Fait le "+new Date().toLocaleDateString("fr-FR"),L,y+4);
+  doc.text("Signature du client :",L+95,y);
+  doc.setDrawColor(200,208,216); doc.setLineWidth(0.3); doc.rect(L+95,y+2,85,28);
+  if(o.signature){ try{ doc.addImage(o.signature,"PNG",L+97,y+4,81,24); }catch(e){} }
+  y+=34;
+
+  // ---- PHOTOS RÉCEPTION ----
+  const orPhotos = photosOR.get();
+  if(orPhotos.length){
+    const gap=6, colW=(W-gap)/2, maxH=62;
+    ensure(14+maxH);
+    doc.setFillColor(29,158,117); doc.rect(L,y,W,7,"F");
+    doc.setFont("helvetica","bold"); doc.setFontSize(9.5); doc.setTextColor(255,255,255);
+    doc.text("PHOTOS DU VÉHICULE (RÉCEPTION)", L+3, y+4.8); y+=7+4;
+    let col=0, rowY=y, rowMaxH=0;
+    orPhotos.forEach(p=>{
+      let w=colW, h=colW*(p.h/p.w);
+      if(h>maxH){ h=maxH; w=maxH*(p.w/p.h); }
+      if(col===0){ ensure(maxH+4); rowY=y; }
+      const x = L + col*(colW+gap) + (colW-w)/2;
+      try{ doc.addImage(p.dataUrl,"JPEG", x, rowY, w, h); }catch(e){}
+      rowMaxH=Math.max(rowMaxH,h);
+      col++;
+      if(col===2){ y=rowY+rowMaxH+gap; col=0; rowMaxH=0; }
+    });
+    if(col===1){ y=rowY+rowMaxH+gap; }
+  }
+
+  // ===== CONDITIONS GÉNÉRALES =====
+  doc.addPage(); y=16;
+  doc.setFont("helvetica","bold"); doc.setFontSize(12.5); doc.setTextColor(15,42,72);
+  doc.text("CONDITIONS GÉNÉRALES DE RÉPARATIONS ATELIER",L,y); y+=2.5;
+  doc.setDrawColor(15,42,72); doc.setLineWidth(0.5); doc.line(L,y,R,y); y+=6;
+  CG_CONTENT.forEach(art=>{
+    ensure(9);
+    doc.setFont("helvetica","bold"); doc.setFontSize(8.8); doc.setTextColor(29,158,117);
+    doc.splitTextToSize(art.t,W).forEach(ln=>{ ensure(4.4); doc.text(ln,L,y); y+=4.4; });
+    doc.setFont("helvetica","normal"); doc.setFontSize(7.8); doc.setTextColor(55,60,68);
+    art.b.forEach(par=>{ doc.splitTextToSize(par,W).forEach(ln=>{ ensure(3.7); doc.text(ln,L,y); y+=3.7; }); y+=1.4; });
+    y+=2;
+  });
+  ensure(6); doc.setFont("helvetica","italic"); doc.setFontSize(7); doc.setTextColor(130,140,150);
+  doc.text("Copyright Groupe Narbonne — Édition Septembre 2022",L,y);
+
+  return doc.output("blob");
+}
+
+/* ================= ACTIONS ================= */
+document.getElementById("btnPdf").addEventListener("click", async ()=>{
+  overlay(true);
+  try{
+    let blob, name;
+    if(activeTab==="or"){ persistOR(); blob=await makeORPdfBlob(); name=orFilename(); }
+    else { persist(); blob=await makePdfBlob(); name=pdfFilename(); }
+    const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=name; a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),4000);
+  }catch(e){ toast("Erreur génération PDF","err"); } finally{ overlay(false); }
+});
+
+document.getElementById("btnPrint").addEventListener("click", async ()=>{
+  if(activeTab==="controle"){
+    persist();
+    const w=window.open("","_blank");
+    w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${pdfFilename()}</title></head><body onload="print()">${buildPdfHtml()}</body></html>`);
+    w.document.close();
+  } else {
+    persistOR(); overlay(true);
+    try{ const blob=await makeORPdfBlob(); const url=URL.createObjectURL(blob); window.open(url,"_blank"); setTimeout(()=>URL.revokeObjectURL(url),8000); }
+    catch(e){ toast("Erreur génération PDF","err"); } finally{ overlay(false); }
+  }
+});
+
+document.getElementById("btnSend").addEventListener("click", async ()=>{
+  persist(); persistOR();
+  const settings = loadSettings(); const dm = (settings.dmEmail||"").trim();
+  if(!dm){ toast("Renseignez l'adresse DM dans Réglages ⚙","err"); openSettings(); return; }
+  if(!CONFIG.APPS_SCRIPT_URL){ toast("URL Apps Script non configurée (voir CONFIG)","err"); return; }
+  const clientEmail = (orState.fields.or_email||"").trim();
+  const btn=document.getElementById("btnSend"); btn.disabled=true; overlay(true);
+  try{
+    const [orBlob, ctrlBlob] = await Promise.all([ makeORPdfBlob(), makePdfBlob() ]);
+    const files = [
+      { filename: orFilename(),  b64: await blobToBase64(orBlob) },
+      { filename: pdfFilename(), b64: await blobToBase64(ctrlBlob) }
+    ];
+    const meta = {
+      magasin: orState.fields.or_magasin || state.infos.magasin || "",
+      immat: (orState.fields.or_immat || state.infos.immat || "").toUpperCase(),
+      client: orState.fields.or_client || state.infos.client || "",
+      date: orState.fields.or_date || state.infos.date || ""
+    };
+    const payload = { toClient: clientEmail, toDM: dm, files, meta };
+    const res = await fetch(CONFIG.APPS_SCRIPT_URL, { method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(payload) });
+    const out = await res.json();
+    if(out && out.ok){ toast(clientEmail ? "Documents envoyés au client et au DM ✓" : "Documents envoyés au DM (e-mail client vide)","ok"); }
+    else throw new Error(out&&out.error||"Réponse inattendue");
+  }catch(e){ toast("Échec de l'envoi : "+e.message,"err"); }
+  finally{ btn.disabled=false; overlay(false); }
+});
+
+function blobToBase64(blob){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result.split(",")[1]); r.onerror=rej; r.readAsDataURL(blob); }); }
+
+/* ================= RÉGLAGES APPAREIL ================= */
+const SET_KEY = "controle_atelier_settings_v1";
+function loadSettings(){ try{ return JSON.parse(localStorage.getItem(SET_KEY)) || {}; }catch(e){ return {}; } }
+function saveSettings(s){ localStorage.setItem(SET_KEY, JSON.stringify(s)); }
+function openSettings(){
+  const s = loadSettings();
+  document.getElementById("s_dm").value = s.dmEmail || "";
+  document.getElementById("s_magasin").value = s.magasinDefault || "";
+  document.getElementById("settingsModal").classList.add("show");
+}
+function closeSettings(){ document.getElementById("settingsModal").classList.remove("show"); }
+function initSettingsUI(){
+  const sel = document.getElementById("s_magasin");
+  CONFIG.STORES.forEach(st=>{ const o=document.createElement("option"); o.value=st; o.textContent=st; sel.appendChild(o); });
+  document.getElementById("btnSettings").addEventListener("click", openSettings);
+  document.getElementById("s_cancel").addEventListener("click", closeSettings);
+  document.getElementById("settingsModal").addEventListener("click", (e)=>{ if(e.target.id==="settingsModal") closeSettings(); });
+  document.getElementById("s_save").addEventListener("click", ()=>{
+    const dm = document.getElementById("s_dm").value.trim();
+    if(dm && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(dm)){ toast("Adresse e-mail invalide","err"); return; }
+    const mag = document.getElementById("s_magasin").value;
+    saveSettings({ dmEmail:dm, magasinDefault:mag });
+    // applique le magasin par défaut si la fiche courante n'en a pas
+    const f = document.getElementById("f_magasin");
+    if(mag && !f.value){ f.value = mag; persist(); }
+    closeSettings();
+    toast("Réglages enregistrés ✓","ok");
+  });
+}
+
+/* ================= NOUVELLE FICHE (RESET) ================= */
+function resetForm(){
+  Object.values(state.items).forEach(st=>{ st.equipe=null; st.etat=null; st.cmt=""; st.type=null; st.dateValid=""; });
+  ["f_tech","f_vendeur","f_vehicule","f_immat","f_client"].forEach(id=> document.getElementById(id).value="");
+  document.getElementById("f_date").value = new Date().toISOString().slice(0,10);
+  const setg = loadSettings();
+  document.getElementById("f_magasin").value = setg.magasinDefault || "";
+  photosCtrl.reset(); photosOR.reset();
+  resetOR();
+  document.querySelectorAll(".cmt").forEach(c=> c.classList.remove("open"));
+  document.querySelectorAll(".item").forEach(card=> card._render());
+  persist(); updateProgress();
+  window.scrollTo({ top:0, behavior:"smooth" });
+  toast("Nouvelle fiche vierge ✓","ok");
+}
+
+/* ================= INIT ================= */
+function init(){
+  buildSelect();
+  if(!document.getElementById("f_date").value) document.getElementById("f_date").value=new Date().toISOString().slice(0,10);
+  const c=document.getElementById("sections");
+  const s1=buildSection("Équipement",EQUIPEMENT,"oui");
+  const s2=buildSection("Entretien / Révision / État",ENTRETIEN,"conforme");
+  c.appendChild(s1); c.appendChild(s2);
+  sectionsEls=[s1,s2];
+  restore();
+  // magasin par défaut de l'appareil si aucune fiche en cours
+  const setg = loadSettings();
+  const fmag = document.getElementById("f_magasin");
+  if(setg.magasinDefault && !fmag.value){ fmag.value = setg.magasinDefault; }
+  initSettingsUI();
+  photosCtrl.init();
+  photosOR.init();
+  initOR();
+  setupSync();
+  document.getElementById("btnReset").addEventListener("click", ()=>{
+    if(confirm("Effacer la fiche en cours et repartir d'un document vierge ?")) resetForm();
+  });
+  document.querySelectorAll(".item").forEach(card=> card._render());
+  ["f_magasin","f_date","f_tech","f_vendeur","f_vehicule","f_immat","f_client"].forEach(id=>{
+    document.getElementById(id).addEventListener("input", persist);
+    document.getElementById(id).addEventListener("change", persist);
+  });
+  updateProgress();
+}
+init();
+
+/* ================= PWA : installation + offline ================= */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=> navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+
+(function installFlow(){
+  const bar=document.getElementById('installbar');
+  const go=document.getElementById('ibGo');
+  const x=document.getElementById('ibX');
+  const hint=document.getElementById('ibHint');
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone===true;
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  let deferred=null;
+
+  if(isStandalone || localStorage.getItem('install_hidden')==='1') return;
+
+  x.addEventListener('click', ()=>{ bar.classList.remove('show'); localStorage.setItem('install_hidden','1'); });
+
+  // Chrome / Edge / Android : prompt natif
+  window.addEventListener('beforeinstallprompt', (e)=>{
+    e.preventDefault(); deferred=e;
+    hint.textContent="Ajouter l'icône sur le bureau / l'écran d'accueil";
+    bar.classList.add('show');
+  });
+  go.addEventListener('click', async ()=>{
+    if(deferred){
+      deferred.prompt();
+      await deferred.userChoice;
+      deferred=null; bar.classList.remove('show');
+    } else if(isIOS){
+      toast("Appuyez sur Partager ⎋ puis « Sur l'écran d'accueil »", "");
+    }
+  });
+  window.addEventListener('appinstalled', ()=>{ bar.classList.remove('show'); });
+
+  // iOS Safari : pas de prompt natif → afficher la consigne
+  if(isIOS){
+    hint.textContent="Partager ⎋ → « Sur l'écran d'accueil »";
+    go.textContent="Comment ?";
+    bar.classList.add('show');
+  }
+})();
+</script>
+</body>
+</html>
