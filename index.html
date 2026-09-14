@@ -189,6 +189,20 @@ body{
 .tab:not(.active):active{background:#eef2f6}
 .pane.hide{display:none}
 
+/* écran de code d'accès */
+.gate{position:fixed;inset:0;z-index:200;background:linear-gradient(180deg,#0F2A48,#173a5e);display:none;align-items:center;justify-content:center;padding:24px}
+.gate.show{display:flex}
+.gate-card{width:100%;max-width:340px;text-align:center;color:#fff}
+.gate-logo{font-size:19px;font-weight:800;letter-spacing:.5px}
+.gate-logo b{color:#C9A227}
+.gate-sub{color:#9db4cc;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;font-weight:600;margin:6px 0 34px}
+.gate-lbl{display:block;text-align:left;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#9db4cc;margin-bottom:8px}
+.gate input{width:100%;font-family:var(--font);font-size:18px;text-align:center;letter-spacing:2px;padding:14px;border:0;border-radius:12px;background:#fff;color:#0F2A48;box-sizing:border-box}
+.gate input:focus{outline:none;box-shadow:0 0 0 3px rgba(29,158,117,.5)}
+.gate-btn{width:100%;margin-top:14px;border:0;border-radius:12px;background:var(--teal);color:#fff;font-family:var(--font);font-weight:700;font-size:15px;padding:14px;cursor:pointer;box-shadow:0 6px 16px rgba(29,158,117,.35)}
+.gate-btn:active{transform:scale(.98)}
+.gate-err{color:#ff9a9a;font-size:13px;font-weight:600;margin-top:14px;min-height:18px}
+
 /* mini titres de sections OR */
 .section-title-mini{font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--teal);margin-bottom:12px}
 .mini-lbl{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
@@ -355,6 +369,17 @@ body{
   <div class="ib-txt"><b>Installer l'application</b><span id="ibHint">Ajouter l'icône sur cet appareil</span></div>
   <button class="ib-go" id="ibGo">Installer</button>
   <button class="ib-x" id="ibX" aria-label="Fermer">×</button>
+</div>
+
+<div class="gate" id="accessGate">
+  <div class="gate-card">
+    <div class="gate-logo">NARB<b>O</b>NNE ACCESS<b>O</b>IRES</div>
+    <div class="gate-sub">Application Atelier</div>
+    <label class="gate-lbl">Code d'accès</label>
+    <input type="password" id="gateInput" inputmode="text" autocomplete="off" autocapitalize="characters">
+    <button class="gate-btn" id="gateBtn">Accéder</button>
+    <div class="gate-err" id="gateErr"></div>
+  </div>
 </div>
 
 <div class="tabbar">
@@ -598,6 +623,8 @@ body{
 const CONFIG = {
   // ▼▼▼ URL du déploiement Apps Script (Web App) ▼▼▼
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbzUq0dhs7Bt5SoQfzg2brdNFMCZqkaeI4qIp85Xl93ciL45zz5lKR2lXN5saQ7D1m3a/exec",
+  SHARED_TOKEN: "na-orfdl-8c188aa7fd3f125fe15be651f5df873c",
+  ACCESS_CODE: "NARB-ATELIER",
   STORES: ["Angoulême", "Annecy", "Arpajon", "Aubagne", "Auch", "Béziers", "Bordeaux Nord", "Bordeaux Sud", "Caen", "Coignières", "Dax", "Dijon", "Grenoble", "La Rochelle", "Les Pennes-Mirabeau", "Lyon", "Lyon Outdoor", "Mâcon", "Mandelieu", "Montpellier", "Nantes", "Narbonne", "Pau", "Périgueux", "Perpignan", "Rennes", "Roncq", "Saint-Étienne", "Seclin", "Sens", "Sorgues", "St Alban", "Toulon", "Valence", "Valenciennes"]
 };
 
@@ -1529,7 +1556,7 @@ document.getElementById("btnSend").addEventListener("click", async ()=>{
       client: orState.fields.or_client || state.infos.client || "",
       date: orState.fields.or_date || state.infos.date || ""
     };
-    const payload = { toClient: clientEmail, toDM: dm, files, meta };
+    const payload = { token: CONFIG.SHARED_TOKEN, toClient: clientEmail, toDM: dm, files, meta };
     const res = await fetch(CONFIG.APPS_SCRIPT_URL, { method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(payload) });
     const out = await res.json();
     if(out && out.ok){ toast(clientEmail ? "Documents envoyés au client et au DM ✓" : "Documents envoyés au DM (e-mail client vide)","ok"); }
@@ -1587,7 +1614,26 @@ function resetForm(){
 }
 
 /* ================= INIT ================= */
+function initGate(){
+  const gate=document.getElementById("accessGate");
+  if(!CONFIG.ACCESS_CODE){ gate.classList.remove("show"); return; }
+  const stored=localStorage.getItem("controle_atelier_access_v1");
+  if(stored && stored===CONFIG.ACCESS_CODE){ gate.classList.remove("show"); return; }
+  gate.classList.add("show");
+  const inp=document.getElementById("gateInput"), err=document.getElementById("gateErr");
+  const tryCode=()=>{
+    if(inp.value.trim()===CONFIG.ACCESS_CODE){
+      localStorage.setItem("controle_atelier_access_v1", inp.value.trim());
+      gate.classList.remove("show");
+    } else { err.textContent="Code incorrect"; inp.select(); }
+  };
+  document.getElementById("gateBtn").addEventListener("click", tryCode);
+  inp.addEventListener("keydown", e=>{ if(e.key==="Enter") tryCode(); });
+  setTimeout(()=>inp.focus(), 100);
+}
+
 function init(){
+  initGate();
   buildSelect();
   if(!document.getElementById("f_date").value) document.getElementById("f_date").value=new Date().toISOString().slice(0,10);
   const c=document.getElementById("sections");
