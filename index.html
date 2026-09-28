@@ -260,14 +260,21 @@ body{
 
 /* schéma carrosserie */
 .dz-hint{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.4}
-.dzmap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;max-width:420px;margin:0 auto}
-.dz{border:1.5px solid var(--line);background:#f6f8fa;border-radius:10px;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;padding:6px 4px;transition:all .12s;text-align:center}
-.dz:active{transform:scale(.96)}
-.dz-name{font-size:10.5px;font-weight:700;color:var(--ink);line-height:1.1}
-.dz-state{font-size:9.5px;font-weight:700;min-height:11px}
-.dz-legend{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:14px;font-size:10.5px;color:var(--muted)}
+.dz-legend{display:flex;flex-wrap:wrap;gap:8px 14px;justify-content:center;margin-bottom:14px;font-size:11px;color:var(--muted)}
 .dz-legend span{display:flex;align-items:center;gap:5px}
-.dz-legend i{width:12px;height:12px;border-radius:4px;display:inline-block}
+.dz-legend i{width:16px;height:16px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:800;color:#fff}
+.dz-croquis{max-width:340px;margin:0 auto 6px}
+.dz-croquis svg{width:100%;height:auto;display:block;touch-action:manipulation}
+.dz-croquis .zone{cursor:pointer}
+.dz-croquis .zone rect{transition:fill .12s}
+.dz-empty{text-align:center;font-size:12.5px;color:var(--muted);padding:26px 10px;border:1.5px dashed var(--line);border-radius:12px}
+.dz-grid-title{font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin:16px 0 8px}
+.dz-grid{display:flex;flex-direction:column;gap:6px}
+.dz-row{display:flex;align-items:center;gap:8px}
+.dz-row .zn{flex:1;min-width:0;font-size:12.5px;font-weight:600;color:var(--ink)}
+.dz-row .sig{display:flex;gap:4px}
+.dz-row .sig button{border:1.5px solid var(--line);background:#fbfcfd;border-radius:7px;font-family:var(--font);font-weight:800;font-size:11px;color:#b6c1cc;padding:6px 7px;min-width:34px;cursor:pointer;transition:all .12s}
+.dz-row .sig button.sel{color:#fff;border-color:transparent}
 .dz-clear{display:block;margin:14px auto 0;border:1.5px solid var(--line);background:#fbfcfd;color:var(--navy);font-family:var(--font);font-weight:700;font-size:12.5px;padding:9px 18px;border-radius:10px;cursor:pointer}
 
 /* champ date de fin de validité */
@@ -504,10 +511,12 @@ body{
     </div>
 
     <div class="info">
-      <div class="section-title-mini">État carrosserie — schéma</div>
-      <div class="dz-hint">Tapez sur une zone pour marquer un dommage (chaque appui change l'état).</div>
-      <div class="dzmap" id="dzMap"></div>
+      <div class="section-title-mini">État descriptif du véhicule</div>
+      <div class="dz-hint" id="dzHint">Sélectionnez le type de véhicule ci-dessus, puis tapez sur une zone du croquis (ou utilisez la grille). Chaque appui change le sigle&nbsp;: RS → P → T+P → HS.</div>
       <div class="dz-legend" id="dzLegend"></div>
+      <div class="dz-croquis" id="dzCroquis"></div>
+      <div class="dz-grid-title">Grille par zone</div>
+      <div class="dz-grid" id="dzGrid"></div>
       <button class="dz-clear" id="dzClear">Effacer les marques</button>
       <div class="field full" style="margin-top:16px"><label>Commentaires carrosserie</label><textarea id="or_carrosserie_cmt" rows="2"></textarea></div>
     </div>
@@ -1098,7 +1107,16 @@ function svgToPng(id, px, color){
     }catch(e){ resolve(null); }
   });
 }
-
+function svgStringToPng(svg, w, h){
+  return new Promise(resolve=>{
+    try{
+      const img=new Image();
+      img.onload=()=>{ try{ const c=document.createElement("canvas"); c.width=w; c.height=h; const ctx=c.getContext("2d"); ctx.fillStyle="#ffffff"; ctx.fillRect(0,0,w,h); ctx.drawImage(img,0,0,w,h); resolve(c.toDataURL("image/png")); }catch(e){ resolve(null); } };
+      img.onerror=()=>resolve(null);
+      img.src="data:image/svg+xml;base64,"+btoa(unescape(encodeURIComponent(svg)));
+    }catch(e){ resolve(null); }
+  });
+}
 const ETATC = [[214,69,69],[232,131,58],[227,181,5],[127,185,62],[29,158,117]];
 
 async function makePdfBlob(){
@@ -1327,36 +1345,123 @@ const LS_OR = "controle_atelier_or_v1";
 const OR_FIELDS = ["or_client","or_numclient","or_tel","or_email","or_magasin","or_date","or_tech","or_vendeur","or_km","or_immat","or_modele","or_forfait","or_desc","or_techadd","or_livraison","or_obs","or_carrosserie_cmt","or_resdate","or_resheure"];
 let orState = { fields:{}, vtype:null, fuel:null, impact:null, impactType:null, cg:false, resconforme:false, signatures:{}, damage:{}, number:"", savedId:"" };
 
-const DAMAGE_STATES = [
-  { l:"", hex:"#f6f8fa", rgb:[246,248,250] },
-  { l:"Rayure", hex:"#E3B505", rgb:[227,181,5] },
-  { l:"Impact", hex:"#E8833A", rgb:[232,131,58] },
-  { l:"Enfonc.", hex:"#D64545", rgb:[214,69,69] },
-  { l:"Cassé", hex:"#8a2b2b", rgb:[138,43,43] }
+/* Sigles juridiques : RS / P / T+P / HS */
+const DMG_STATES = [
+  { code:"",    full:"", hex:"#eef2f6", rgb:[238,242,246], dark:true },
+  { code:"RS",  full:"RS · rayure superficielle (pas de réparation)", hex:"#E3B505", rgb:[227,181,5], dark:true },
+  { code:"P",   full:"P · rayure profonde (peinture)",                hex:"#E8833A", rgb:[232,131,58], dark:false },
+  { code:"T+P", full:"T+P · enfoncement (tôlerie + peinture)",        hex:"#D64545", rgb:[214,69,69], dark:false },
+  { code:"HS",  full:"HS · remplacement",                             hex:"#8a2b2b", rgb:[138,43,43], dark:false }
 ];
-const DAMAGE_ZONES = [
-  {id:"aile_av_g",l:"Aile AV G"},{id:"face_av",l:"Face avant"},{id:"aile_av_d",l:"Aile AV D"},
-  {id:"port_av_g",l:"Portière AV G"},{id:"capot",l:"Capot"},{id:"port_av_d",l:"Portière AV D"},
-  {id:"lat_ar_g",l:"Latéral AR G"},{id:"toit",l:"Toit"},{id:"lat_ar_d",l:"Latéral AR D"},
-  {id:"aile_ar_g",l:"Aile AR G"},{id:"face_ar",l:"Face arrière"},{id:"aile_ar_d",l:"Aile AR D"}
-];
+/* Zones (grille 3×3) — l'étiquette AV-centre s'adapte au type */
+function zonesFor(type){
+  const avc = (type==="Caravane") ? "Face AV / Timon" : "Cabine / Pare-brise";
+  return [
+    {id:"av_g", l:"Angle AV G", x:56, y:44, w:64, h:126},
+    {id:"face_av", l:avc,       x:124,y:44, w:52, h:126},
+    {id:"av_d", l:"Angle AV D", x:180,y:44, w:64, h:126},
+    {id:"cote_g", l:"Côté G",   x:56, y:176,w:64, h:124},
+    {id:"toit", l:"Toit / Pavillon", x:124,y:176,w:52,h:124},
+    {id:"cote_d", l:"Côté D",   x:180,y:176,w:64, h:124},
+    {id:"ar_g", l:"Angle AR G", x:56, y:306,w:64, h:120},
+    {id:"face_ar", l:"Face AR", x:124,y:306,w:52, h:120},
+    {id:"ar_d", l:"Angle AR D", x:180,y:306,w:64, h:120}
+  ];
+}
+/* Décor silhouette (non cliquable) propre à chaque type */
+function outlineFor(type){
+  const wheel='fill="#c7d0da"';
+  let s='';
+  // roues dans les gouttières latérales
+  s+=`<rect x="40" y="150" width="14" height="40" rx="6" ${wheel}/><rect x="246" y="150" width="14" height="40" rx="6" ${wheel}/>`;
+  s+=`<rect x="40" y="330" width="14" height="40" rx="6" ${wheel}/><rect x="246" y="330" width="14" height="40" rx="6" ${wheel}/>`;
+  if(type==="Caravane"){
+    // timon + attelage au-dessus, une seule ligne de roues au milieu
+    s=`<polygon points="150,8 132,40 168,40" fill="#c7d0da"/><circle cx="150" cy="10" r="5" fill="#9db0c4"/>`;
+    s+=`<rect x="40" y="238" width="14" height="44" rx="6" ${wheel}/><rect x="246" y="238" width="14" height="44" rx="6" ${wheel}/>`;
+  } else if(type==="Camping-car"){
+    // capucine (avancée au-dessus de la cabine)
+    s+=`<rect x="120" y="24" width="60" height="18" rx="6" fill="#d7dee6"/>`;
+  } else if(type==="Fourgon"){
+    // nez de cabine
+    s+=`<path d="M124 44 q-6 -12 8 -14 h36 q14 2 8 14 z" fill="#d7dee6"/>`;
+  }
+  return s;
+}
+function buildCroquisSVG(type){
+  const zones=zonesFor(type);
+  const zg=zones.map(z=>`<g class="zone" data-zone="${z.id}">
+     <rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="9" fill="#eef2f6" stroke="#cdd6df" stroke-width="1.5"/>
+     <text x="${z.x+z.w/2}" y="${z.y+z.h/2-4}" text-anchor="middle" font-size="9" font-weight="700" fill="#5a6a7a" style="pointer-events:none">${z.l.split(" / ")[0]}</text>
+     <text class="zc" x="${z.x+z.w/2}" y="${z.y+z.h/2+13}" text-anchor="middle" font-size="13" font-weight="800" fill="transparent" style="pointer-events:none"></text>
+   </g>`).join("");
+  return `<svg viewBox="0 0 300 460" xmlns="http://www.w3.org/2000/svg" aria-label="Croquis ${type}">
+     <rect x="52" y="38" width="196" height="394" rx="20" fill="none" stroke="#0F2A48" stroke-width="2"/>
+     ${outlineFor(type)}${zg}</svg>`;
+}
+/* Croquis coloré selon l'état courant, pour le PDF */
+function buildCroquisSVGColored(type){
+  const zones=zonesFor(type);
+  const zg=zones.map(z=>{
+    const st=(orState.damage||{})[z.id]||0, S=DMG_STATES[st];
+    const fill=st?S.hex:"#eef2f6", stroke=st?S.hex:"#cdd6df";
+    const nameCol=st&&!S.dark?"#ffffff":"#5a6a7a";
+    const codeCol=st?(S.dark?"#4a3c00":"#ffffff"):"transparent";
+    return `<g><rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="9" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>
+      <text x="${z.x+z.w/2}" y="${z.y+z.h/2-4}" text-anchor="middle" font-size="9" font-weight="700" fill="${nameCol}">${z.l.split(" / ")[0]}</text>
+      <text x="${z.x+z.w/2}" y="${z.y+z.h/2+13}" text-anchor="middle" font-size="13" font-weight="800" fill="${codeCol}">${S.code}</text></g>`;
+  }).join("");
+  return `<svg viewBox="0 0 300 460" xmlns="http://www.w3.org/2000/svg">
+     <rect x="0" y="0" width="300" height="460" fill="#ffffff"/>
+     <rect x="52" y="38" width="196" height="394" rx="20" fill="none" stroke="#0F2A48" stroke-width="2"/>
+     ${outlineFor(type)}${zg}</svg>`;
+}
 function buildDamageMap(){
-  const map=document.getElementById("dzMap");
-  map.innerHTML = DAMAGE_ZONES.map(z=>`<button class="dz" data-zone="${z.id}"><span class="dz-name">${z.l}</span><span class="dz-state"></span></button>`).join("");
-  map.querySelectorAll(".dz").forEach(b=> b.addEventListener("click", ()=>{
-    const id=b.dataset.zone; orState.damage[id]=((orState.damage[id]||0)+1)%DAMAGE_STATES.length;
+  document.getElementById("dzLegend").innerHTML = DMG_STATES.slice(1).map(s=>`<span><i style="background:${s.hex};color:${s.dark?'#4a3c00':'#fff'}">${s.code.replace('T+P','T')}</i>${s.full.split(" · ")[0]} — ${s.full.split("· ")[1]||""}</span>`).join("");
+  document.getElementById("dzClear").addEventListener("click", ()=>{ orState.damage={}; renderDamage(); saveOR(); });
+  buildDamageUI();
+}
+function buildDamageUI(){
+  const type=orState.vtype;
+  const croq=document.getElementById("dzCroquis"), grid=document.getElementById("dzGrid");
+  if(!type){
+    croq.innerHTML='<div class="dz-empty">Choisissez d\'abord le <b>type de véhicule</b> ci-dessus pour afficher le croquis.</div>';
+    grid.innerHTML=""; return;
+  }
+  croq.innerHTML=buildCroquisSVG(type);
+  croq.querySelectorAll(".zone").forEach(g=> g.addEventListener("click", ()=>{
+    const id=g.dataset.zone; orState.damage[id]=((orState.damage[id]||0)+1)%DMG_STATES.length;
     if(orState.damage[id]===0) delete orState.damage[id];
     renderDamage(); saveOR();
   }));
-  document.getElementById("dzLegend").innerHTML = DAMAGE_STATES.slice(1).map(s=>`<span><i style="background:${s.hex}"></i>${s.l}</span>`).join("");
-  document.getElementById("dzClear").addEventListener("click", ()=>{ orState.damage={}; renderDamage(); saveOR(); });
+  grid.innerHTML = zonesFor(type).map(z=>`<div class="dz-row"><span class="zn">${z.l}</span><span class="sig">${
+    [1,2,3,4].map(i=>`<button data-zone="${z.id}" data-st="${i}">${DMG_STATES[i].code}</button>`).join("")
+  }</span></div>`).join("");
+  grid.querySelectorAll("button").forEach(b=> b.addEventListener("click", ()=>{
+    const id=b.dataset.zone, st=+b.dataset.st;
+    orState.damage[id] = (orState.damage[id]===st) ? 0 : st;
+    if(orState.damage[id]===0) delete orState.damage[id];
+    renderDamage(); saveOR();
+  }));
+  renderDamage();
 }
 function renderDamage(){
-  document.querySelectorAll("#dzMap .dz").forEach(b=>{
-    const st=orState.damage[b.dataset.zone]||0, S=DAMAGE_STATES[st];
-    b.style.background=S.hex; b.style.borderColor = st?S.hex:"var(--line)";
-    b.querySelector(".dz-name").style.color = st>=2?"#fff":(st===1?"#4a3c00":"var(--ink)");
-    const se=b.querySelector(".dz-state"); se.textContent=S.l; se.style.color = st>=2?"#fff":(st===1?"#4a3c00":"transparent");
+  // croquis
+  document.querySelectorAll("#dzCroquis .zone").forEach(g=>{
+    const st=orState.damage[g.dataset.zone]||0, S=DMG_STATES[st];
+    const r=g.querySelector("rect"); r.setAttribute("fill", st?S.hex:"#eef2f6"); r.setAttribute("stroke", st?S.hex:"#cdd6df");
+    const nameT=g.querySelectorAll("text")[0]; nameT.setAttribute("fill", st&&!S.dark?"#ffffff":"#5a6a7a");
+    const zc=g.querySelector(".zc"); zc.textContent=S.code; zc.setAttribute("fill", st?(S.dark?"#4a3c00":"#ffffff"):"transparent");
+  });
+  // grille
+  document.querySelectorAll("#dzGrid .dz-row").forEach(row=>{
+    row.querySelectorAll("button").forEach(b=>{
+      const sel=(orState.damage[b.dataset.zone]||0)===(+b.dataset.st);
+      b.classList.toggle("sel", sel);
+      b.style.background = sel?DMG_STATES[+b.dataset.st].hex:"#fbfcfd";
+      if(sel) b.style.color = DMG_STATES[+b.dataset.st].dark?"#4a3c00":"#fff";
+      else b.style.color = "#b6c1cc";
+    });
   });
 }
 
@@ -1387,7 +1492,7 @@ function wireOR(){
   if(!document.getElementById("or_date").value) document.getElementById("or_date").value=new Date().toISOString().slice(0,10);
 
   OR_FIELDS.forEach(id=>{ const el=document.getElementById(id); el.addEventListener("input", persistOR); el.addEventListener("change", persistOR); });
-  document.querySelectorAll("#or_vtype .vt").forEach(b=> b.addEventListener("click", ()=>{ orState.vtype = orState.vtype===b.dataset.vt?null:b.dataset.vt; renderOR(); saveOR(); }));
+  document.querySelectorAll("#or_vtype .vt").forEach(b=> b.addEventListener("click", ()=>{ orState.vtype = orState.vtype===b.dataset.vt?null:b.dataset.vt; renderOR(); buildDamageUI(); saveOR(); }));
   document.querySelectorAll("#or_fuel .vt").forEach(b=> b.addEventListener("click", ()=>{ orState.fuel = orState.fuel===b.dataset.fuel?null:b.dataset.fuel; renderOR(); saveOR(); }));
   document.querySelectorAll("#or_impact button").forEach(b=> b.addEventListener("click", ()=>{ orState.impact = orState.impact===b.dataset.on?null:b.dataset.on; if(orState.impact!=="oui") orState.impactType=null; renderOR(); saveOR(); }));
   document.querySelectorAll("#or_impactType .opt").forEach(b=> b.addEventListener("click", ()=>{ orState.impactType = orState.impactType===b.dataset.imp?null:b.dataset.imp; renderOR(); saveOR(); }));
@@ -1505,7 +1610,7 @@ function openArchive(id){
   orState = Object.assign({ fields:{}, vtype:null, fuel:null, impact:null, impactType:null, cg:false, resconforme:false, signatures:{}, damage:{}, number:"", savedId:"" }, JSON.parse(JSON.stringify(r.data)));
   orState.savedId = r.id; orState.number = r.number || orState.number || "";
   OR_FIELDS.forEach(fid=>{ const el=document.getElementById(fid); if(el) el.value = (orState.fields[fid]!=null?orState.fields[fid]:""); });
-  renderOR(); updateOrNum(); sigPads.forEach(p=> p.redraw());
+  buildDamageUI(); renderOR(); updateOrNum(); sigPads.forEach(p=> p.redraw());
   document.getElementById("orArchive").classList.add("hide");
   switchTab("or");
   toast("OR rouvert — complétez la restitution si besoin","ok");
@@ -1576,27 +1681,45 @@ async function makeORPdfBlob(){
   kv([["Impact pare-brise",imp],["Niveau carburant",o.fuel||"-"]]);
   longText("Observations technicien",f.or_obs); y+=2;
 
-  // ---- ÉTAT CARROSSERIE (schéma) ----
+  // ---- ÉTAT DESCRIPTIF DU VÉHICULE ----
   {
-    const cols=3, cellW=W/cols, cellH=13, rows=Math.ceil(DAMAGE_ZONES.length/cols);
-    ensure(14 + rows*cellH + 10);
-    band("ÉTAT CARROSSERIE");
-    const top=y;
-    DAMAGE_ZONES.forEach((z,idx)=>{
-      const r=Math.floor(idx/cols), c=idx%cols;
-      const x=L+c*cellW, yy=top+r*cellH;
-      const st=(orState.damage||{})[z.id]||0, S=DAMAGE_STATES[st];
-      doc.setFillColor(S.rgb[0],S.rgb[1],S.rgb[2]); doc.setDrawColor(225,230,236); doc.setLineWidth(0.2);
-      doc.rect(x+1,yy+1,cellW-2,cellH-2,"FD");
-      if(st===1) doc.setTextColor(74,60,0); else doc.setTextColor(st>=2?255:35, st>=2?255:42, st>=2?255:52);
-      doc.setFont("helvetica","bold"); doc.setFontSize(7); doc.text(z.l, x+3, yy+5.5);
-      if(st>0){ doc.setFont("helvetica","normal"); doc.setFontSize(6.5); doc.text(S.l, x+3, yy+9.5); }
+    ensure(20);
+    band("ÉTAT DESCRIPTIF DU VÉHICULE");
+    doc.setFont("helvetica","bold"); doc.setFontSize(9.5); doc.setTextColor(15,42,72);
+    doc.text("Type : ", L, y); const lw=doc.getTextWidth("Type : ");
+    doc.setFont("helvetica","normal"); doc.setTextColor(50,55,62); doc.text(o.vtype||"-", L+lw, y); y+=6;
+    // légende sigles
+    doc.setFontSize(7.2);
+    [["RS","rayure superficielle"],["P","rayure profonde (peinture)"],["T+P","enfoncement (tôlerie+peinture)"],["HS","remplacement"]].forEach((s,i)=>{
+      const S=DMG_STATES[i+1]; ensure(4.4);
+      doc.setFillColor(S.rgb[0],S.rgb[1],S.rgb[2]); doc.rect(L,y-2.8,4,3.4,"F");
+      doc.setTextColor(30,40,50); doc.setFont("helvetica","bold"); doc.text(s[0], L+5.5, y);
+      doc.setFont("helvetica","normal"); doc.setTextColor(90,100,110); doc.text(" : "+s[1], L+5.5+doc.getTextWidth(s[0]), y); y+=4.4;
     });
-    y = top + rows*cellH + 4;
-    doc.setFont("helvetica","normal"); doc.setFontSize(6.8);
-    let lx=L;
-    DAMAGE_STATES.slice(1).forEach(s=>{ doc.setFillColor(s.rgb[0],s.rgb[1],s.rgb[2]); doc.rect(lx,y-2.6,3,3,"F"); doc.setTextColor(90,100,110); doc.text(s.l, lx+4, y); lx += doc.getTextWidth(s.l)+12; });
-    y+=6;
+    y+=2;
+    if(o.vtype){
+      // croquis coloré
+      const cimg = await svgStringToPng(buildCroquisSVGColored(o.vtype), 300, 460);
+      const cw=52, ch=cw*460/300;
+      ensure(ch+2);
+      if(cimg){ try{ doc.addImage(cimg,"PNG", L, y, cw, ch); }catch(e){} }
+      // liste des zones marquées, à droite du croquis
+      const zx=L+cw+8, zw=R-zx; let zy=y+2;
+      const marked=zonesFor(o.vtype).filter(z=>(orState.damage||{})[z.id]);
+      doc.setFont("helvetica","bold"); doc.setFontSize(8.5); doc.setTextColor(15,42,72);
+      doc.text("Dommages relevés", zx, zy); zy+=5;
+      doc.setFontSize(8);
+      if(!marked.length){ doc.setFont("helvetica","italic"); doc.setTextColor(110,120,130); doc.text("Aucun dommage relevé.", zx, zy); zy+=5; }
+      else marked.forEach(z=>{
+        const S=DMG_STATES[orState.damage[z.id]];
+        doc.setFillColor(S.rgb[0],S.rgb[1],S.rgb[2]); doc.rect(zx,zy-2.8,4,3.4,"F");
+        doc.setFont("helvetica","bold"); doc.setTextColor(30,40,50); doc.text(S.code, zx+5.5, zy);
+        doc.setFont("helvetica","normal"); doc.setTextColor(50,55,62);
+        doc.text(" — "+z.l, zx+5.5+doc.getTextWidth(S.code), zy); zy+=4.8;
+        if(zy>y+ch-2){ /* évite de dépasser le croquis */ }
+      });
+      y = Math.max(y+ch, zy) + 2;
+    }
     if((f.or_carrosserie_cmt||"").trim()) longText("Commentaires carrosserie", f.or_carrosserie_cmt);
   }
 
