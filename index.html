@@ -1402,78 +1402,94 @@ const DMG_STATES = [
 function zonesFor(type){
   if(type==="Caravane"){
     return [
-      {id:"av_g", l:"Angle AV G", x:60, y:46, w:56, h:78},
-      {id:"face_av", l:"Face AV / Timon", x:120,y:46, w:60, h:78},
-      {id:"av_d", l:"Angle AV D", x:184,y:46, w:56, h:78},
-      {id:"cote_g", l:"Côté G",   x:60, y:128,w:56, h:150},
-      {id:"toit", l:"Toit / Pavillon", x:120,y:128,w:60,h:150},
-      {id:"cote_d", l:"Côté D",   x:184,y:128,w:56, h:150},
-      {id:"ar_g", l:"Angle AR G", x:60, y:282,w:56, h:86},
-      {id:"face_ar", l:"Face AR", x:120,y:282,w:60, h:86},
-      {id:"ar_d", l:"Angle AR D", x:184,y:282,w:56, h:86}
+      {id:"av_g", l:"Angle AV G", x:60, y:46, w:56, h:74},
+      {id:"face_av", l:"Face AV / Timon", x:120,y:46, w:60, h:74},
+      {id:"av_d", l:"Angle AV D", x:184,y:46, w:56, h:74},
+      {id:"cote_g", l:"Côté G",   x:60, y:126,w:56, h:140},
+      {id:"toit", l:"Toit / Pavillon", x:120,y:126,w:60,h:140},
+      {id:"cote_d", l:"Côté D",   x:184,y:126,w:56, h:140},
+      {id:"ar_g", l:"Angle AR G", x:60, y:272,w:56, h:54},
+      {id:"face_ar", l:"Face AR", x:120,y:272,w:60, h:54},
+      {id:"ar_d", l:"Angle AR D", x:184,y:272,w:56, h:54},
+      {id:"feu_ar_g", l:"Feu AR G", short:"Feu G", x:60, y:332, w:88, h:20, t:1},
+      {id:"feu_ar_d", l:"Feu AR D", short:"Feu D", x:152,y:332, w:88, h:20, t:1}
     ];
   }
   // Camping-car & Fourgon
   return [
-    {id:"pc_av", l:"Pare-choc AV", x:60, y:40, w:180, h:22, t:1},
-    {id:"av_g", l:"Angle AV G", x:60, y:66, w:56, h:58},
-    {id:"face_av", l:"Face avant", x:120,y:66, w:60, h:27, t:1},
-    {id:"capot", l:"Capot",     x:120,y:97, w:60, h:27, t:1},
-    {id:"av_d", l:"Angle AV D", x:184,y:66, w:56, h:58},
-    {id:"retro_g", l:"Rétro G", x:8, y:100, w:42, h:30, t:1},
-    {id:"retro_d", l:"Rétro D", x:250, y:100, w:42, h:30, t:1},
-    {id:"cote_g", l:"Côté G",   x:60, y:128,w:56, h:150},
-    {id:"toit", l:"Toit / Pavillon", x:120,y:128,w:60,h:150},
-    {id:"cote_d", l:"Côté D",   x:184,y:128,w:56, h:150},
-    {id:"ar_g", l:"Angle AR G", x:60, y:282,w:56, h:58},
-    {id:"face_ar", l:"Face AR", x:120,y:282,w:60, h:58},
-    {id:"ar_d", l:"Angle AR D", x:184,y:282,w:56, h:58},
-    {id:"pc_ar", l:"Pare-choc AR", x:60, y:344, w:180, h:22, t:1}
+    {id:"phare_av_g", l:"Phare AV G", short:"Phare G", x:60, y:38, w:44, h:20, t:1},
+    {id:"pc_av", l:"Pare-choc AV", x:108, y:38, w:84, h:20, t:1},
+    {id:"phare_av_d", l:"Phare AV D", short:"Phare D", x:196,y:38, w:44, h:20, t:1},
+    {id:"av_g", l:"Angle AV G", x:60, y:62, w:56, h:54},
+    {id:"face_av", l:"Face avant", x:120,y:62, w:60, h:26, t:1},
+    {id:"capot", l:"Capot",     x:120,y:90, w:60, h:26, t:1},
+    {id:"av_d", l:"Angle AV D", x:184,y:62, w:56, h:54},
+    {id:"retro_g", l:"Rétro G", x:8, y:92, w:42, h:28, t:1},
+    {id:"retro_d", l:"Rétro D", x:250, y:92, w:42, h:28, t:1},
+    {id:"cote_g", l:"Côté G",   x:60, y:120,w:56, h:140},
+    {id:"toit", l:"Toit / Pavillon", x:120,y:120,w:60,h:140},
+    {id:"cote_d", l:"Côté D",   x:184,y:120,w:56, h:140},
+    {id:"ar_g", l:"Angle AR G", x:60, y:266,w:56, h:54},
+    {id:"face_ar", l:"Face AR", x:120,y:266,w:60, h:54},
+    {id:"ar_d", l:"Angle AR D", x:184,y:266,w:56, h:54},
+    {id:"feu_ar_g", l:"Feu AR G", short:"Feu G", x:60, y:326, w:44, h:20, t:1},
+    {id:"pc_ar", l:"Pare-choc AR", x:108, y:326, w:84, h:20, t:1},
+    {id:"feu_ar_d", l:"Feu AR D", short:"Feu D", x:196,y:326, w:44, h:20, t:1}
   ];
 }
 /* Décor silhouette (non cliquable) + contour, propre à chaque type */
 function outlineFor(type){
   const wheel='fill="#c7d0da"';
-  let s=`<rect x="52" y="34" width="196" height="340" rx="20" fill="none" stroke="#0F2A48" stroke-width="2"/>`;
+  const bodyH = (type==="Caravane")?332:320;
+  let s=`<rect x="52" y="34" width="196" height="${bodyH}" rx="20" fill="none" stroke="#0F2A48" stroke-width="2"/>`;
   if(type==="Caravane"){
     s+=`<polygon points="150,6 132,36 168,36" fill="#c7d0da"/><circle cx="150" cy="8" r="5" fill="#9db0c4"/>`;
-    s+=`<rect x="40" y="210" width="14" height="44" rx="6" ${wheel}/><rect x="246" y="210" width="14" height="44" rx="6" ${wheel}/>`;
+    s+=`<rect x="40" y="196" width="14" height="44" rx="6" ${wheel}/><rect x="246" y="196" width="14" height="44" rx="6" ${wheel}/>`;
   } else {
-    s+=`<rect x="40" y="148" width="14" height="40" rx="6" ${wheel}/><rect x="246" y="148" width="14" height="40" rx="6" ${wheel}/>`;
-    s+=`<rect x="40" y="298" width="14" height="40" rx="6" ${wheel}/><rect x="246" y="298" width="14" height="40" rx="6" ${wheel}/>`;
-    if(type==="Camping-car") s+=`<rect x="120" y="20" width="60" height="15" rx="5" fill="#d7dee6"/>`; // capucine
+    s+=`<rect x="40" y="150" width="14" height="40" rx="6" ${wheel}/><rect x="246" y="150" width="14" height="40" rx="6" ${wheel}/>`;
+    s+=`<rect x="40" y="280" width="14" height="40" rx="6" ${wheel}/><rect x="246" y="280" width="14" height="40" rx="6" ${wheel}/>`;
+    if(type==="Camping-car") s+=`<rect x="120" y="20" width="60" height="14" rx="5" fill="#d7dee6"/>`; // capucine
     else if(type==="Fourgon") s+=`<path d="M120 34 q-4 -12 10 -13 h40 q14 1 10 13 z" fill="#d7dee6"/>`; // nez
   }
   return s;
 }
+/* Petit picto « impact » (Option A) pour les zones normales */
+function zoneIconSVG(cx, iy, col){
+  return `<g class="zn-ic" stroke="${col}" stroke-width="1.5" fill="none" stroke-linecap="round" style="pointer-events:none">`
+    +`<circle cx="${cx}" cy="${iy}" r="2.4"/>`
+    +`<line x1="${cx}" y1="${iy-4.2}" x2="${cx}" y2="${iy-6.6}"/><line x1="${cx}" y1="${iy+4.2}" x2="${cx}" y2="${iy+6.6}"/>`
+    +`<line x1="${cx-4.2}" y1="${iy}" x2="${cx-6.6}" y2="${iy}"/><line x1="${cx+4.2}" y1="${iy}" x2="${cx+6.6}" y2="${iy}"/></g>`;
+}
 function zoneTexts(z, nameFill, code, codeFill){
-  const cx=z.x+z.w/2, cy=z.y+z.h/2, nm=z.l.split(" / ")[0];
-  if(z.t){ // zone fine : nom et code centrés (superposés, l'un masque l'autre selon l'état)
-    return `<text class="zn-name" x="${cx}" y="${cy+3}" text-anchor="middle" font-size="8" font-weight="700" fill="${nameFill}" style="pointer-events:none">${nm}</text>
+  const cx=z.x+z.w/2, cy=z.y+z.h/2, nm=z.short||z.l.split(" / ")[0];
+  if(z.t){ // zone fine : nom et code centrés (superposés)
+    const fs = z.w<70 ? 7.5 : 8;
+    return `<text class="zn-name" x="${cx}" y="${cy+3}" text-anchor="middle" font-size="${fs}" font-weight="700" fill="${nameFill}" style="pointer-events:none">${nm}</text>
      <text class="zc" x="${cx}" y="${cy+3.5}" text-anchor="middle" font-size="11" font-weight="800" fill="${codeFill}" style="pointer-events:none">${code}</text>`;
   }
-  return `<text class="zn-name" x="${cx}" y="${cy-3}" text-anchor="middle" font-size="8.5" font-weight="700" fill="${nameFill}" style="pointer-events:none">${nm}</text>
-     <text class="zc" x="${cx}" y="${cy+12}" text-anchor="middle" font-size="12" font-weight="800" fill="${codeFill}" style="pointer-events:none">${code}</text>`;
+  return `${zoneIconSVG(cx, cy-14, nameFill)}
+     <text class="zn-name" x="${cx}" y="${cy-2}" text-anchor="middle" font-size="8.5" font-weight="700" fill="${nameFill}" style="pointer-events:none">${nm}</text>
+     <text class="zc" x="${cx}" y="${cy+13}" text-anchor="middle" font-size="12" font-weight="800" fill="${codeFill}" style="pointer-events:none">${code}</text>`;
 }
 function buildCroquisSVG(type){
   const zg=zonesFor(type).map(z=>`<g class="zone" data-zone="${z.id}" data-thin="${z.t?1:0}">
-     <rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="8" fill="#eef2f6" stroke="#cdd6df" stroke-width="1.5"/>
+     <rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="8" fill="#f2f6fa" stroke="#cdd6df" stroke-width="1.5"/>
      ${zoneTexts(z, "#5a6a7a", "", "transparent")}
    </g>`).join("");
-  return `<svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" aria-label="Croquis ${type}">${outlineFor(type)}${zg}</svg>`;
+  return `<svg viewBox="0 0 300 380" xmlns="http://www.w3.org/2000/svg" aria-label="Croquis ${type}">${outlineFor(type)}${zg}</svg>`;
 }
 /* Croquis coloré selon l'état courant, pour le PDF */
 function buildCroquisSVGColored(type){
   const zg=zonesFor(type).map(z=>{
     const st=(orState.damage||{})[z.id]||0, S=DMG_STATES[st];
-    const fill=st?S.hex:"#eef2f6", stroke=st?S.hex:"#cdd6df";
+    const fill=st?S.hex:"#f2f6fa", stroke=st?S.hex:"#cdd6df";
     let nameFill, codeFill, code=S.code;
     if(z.t){ nameFill = st?"transparent":"#5a6a7a"; codeFill = st?(S.dark?"#4a3c00":"#fff"):"transparent"; }
     else { nameFill = st&&!S.dark?"#fff":"#5a6a7a"; codeFill = st?(S.dark?"#4a3c00":"#fff"):"transparent"; }
     return `<g><rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="8" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>
       ${zoneTexts(z, nameFill, code, codeFill)}</g>`;
   }).join("");
-  return `<svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="300" height="400" fill="#ffffff"/>${outlineFor(type)}${zg}</svg>`;
+  return `<svg viewBox="0 0 300 380" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="300" height="380" fill="#ffffff"/>${outlineFor(type)}${zg}</svg>`;
 }
 function buildDamageMap(){
   document.getElementById("dzLegend").innerHTML = DMG_STATES.slice(1).map(s=>`<span><i style="background:${s.hex};color:${s.dark?'#4a3c00':'#fff'}">${s.code.replace('T+P','T')}</i>${s.full.split(" · ")[0]} — ${s.full.split("· ")[1]||""}</span>`).join("");
@@ -1508,13 +1524,15 @@ function renderDamage(){
   // croquis
   document.querySelectorAll("#dzCroquis .zone").forEach(g=>{
     const st=orState.damage[g.dataset.zone]||0, S=DMG_STATES[st], thin=g.dataset.thin==="1";
-    const r=g.querySelector("rect"); r.setAttribute("fill", st?S.hex:"#eef2f6"); r.setAttribute("stroke", st?S.hex:"#cdd6df");
-    const nameT=g.querySelector(".zn-name"), zc=g.querySelector(".zc");
+    const r=g.querySelector("rect"); r.setAttribute("fill", st?S.hex:"#f2f6fa"); r.setAttribute("stroke", st?S.hex:"#cdd6df");
+    const nameT=g.querySelector(".zn-name"), zc=g.querySelector(".zc"), ic=g.querySelector(".zn-ic");
     if(thin){
       if(st){ nameT.setAttribute("fill","transparent"); zc.textContent=S.code; zc.setAttribute("fill", S.dark?"#4a3c00":"#ffffff"); }
       else { nameT.setAttribute("fill","#5a6a7a"); zc.textContent=""; zc.setAttribute("fill","transparent"); }
     } else {
-      nameT.setAttribute("fill", st&&!S.dark?"#ffffff":"#5a6a7a");
+      const nCol = st&&!S.dark?"#ffffff":"#5a6a7a";
+      nameT.setAttribute("fill", nCol);
+      if(ic) ic.setAttribute("stroke", st ? (S.dark?"#4a3c00":"#ffffff") : "#9db0c4");
       zc.textContent=S.code; zc.setAttribute("fill", st?(S.dark?"#4a3c00":"#ffffff"):"transparent");
     }
   });
