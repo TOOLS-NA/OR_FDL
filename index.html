@@ -151,6 +151,7 @@ body{
   display:flex;align-items:center;justify-content:center;
 }
 .item-name{font-weight:700;font-size:15.5px;flex:1;min-width:0}
+.item-sub{font-weight:600;font-size:11.5px;color:var(--muted);margin-top:2px}
 .item.done{border-color:rgba(29,158,117,.35)}
 .item.done .item-ic{background:rgba(29,158,117,.12);color:var(--teal)}
 
@@ -158,13 +159,13 @@ body{
 .opts{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin-top:12px}
 .opts.hide{display:none}
 .opts-lbl{font-size:10.5px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-right:2px}
-.opt{
+.opt,.opt2{
   border:1.5px solid var(--line);background:#fbfcfd;border-radius:99px;
   font-family:var(--font);font-weight:700;font-size:12.5px;color:var(--muted);
   padding:7px 14px;cursor:pointer;transition:all .13s;
 }
-.opt:active{transform:scale(.96)}
-.opt.sel{background:var(--navy);border-color:var(--navy);color:#fff}
+.opt:active,.opt2:active{transform:scale(.96)}
+.opt.sel,.opt2.sel{background:var(--navy);border-color:var(--navy);color:#fff}
 
 /* photos du véhicule */
 .photos-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:18px}
@@ -703,12 +704,11 @@ const CONFIG = {
 
 const EQUIPEMENT = [
   "État lyres gaz","Détendeur","Suspension pneumatique","Alarme","Batterie / Type","Vérins","Antenne","Climatisation",
-  "Panneau solaire","MPPT / PWM","Porte-vélo","Store","Serrure sécurité",
+  "Panneau solaire","Régulateur solaire","Porte-vélo","Store","Serrure sécurité",
   "Détecteur de gaz","GPL"
 ];
 const ENTRETIEN = [
-  "Révision circuit gaz","Révision frigo","État suspension origine",
-  "État batterie"
+  "Révision circuit gaz","Révision frigo","État suspension origine"
 ];
 const TOTAL_PTS = EQUIPEMENT.length + ENTRETIEN.length;
 const ETAT_LABELS = ["Critique","Mauvais","Moyen","Bon","Excellent"];
@@ -725,6 +725,7 @@ const ICONS = {
   climatisation:'<line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M19 15l-3-3 3-3M5 9l3 3-3 3M15 5l-3 3-3-3M9 19l3-3 3 3"/>',
   panneau_solaire:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6L19 19M19 5l-1.4 1.4M6.4 17.6L5 19"/>',
   mppt_pwm:'<line x1="5" y1="21" x2="5" y2="14"/><line x1="5" y1="10" x2="5" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="19" y1="21" x2="19" y2="16"/><line x1="19" y1="12" x2="19" y2="3"/><line x1="2" y1="14" x2="8" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="16" y1="16" x2="22" y2="16"/>',
+  regulateur_solaire:'<line x1="5" y1="21" x2="5" y2="14"/><line x1="5" y1="10" x2="5" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="19" y1="21" x2="19" y2="16"/><line x1="19" y1="12" x2="19" y2="3"/><line x1="2" y1="14" x2="8" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="16" y1="16" x2="22" y2="16"/>',
   porte_velo:'<circle cx="6" cy="17" r="3.2"/><circle cx="18" cy="17" r="3.2"/><path d="M6 17l4-8h5M9 9l2.5 5H14l3-5h2"/>',
   store:'<path d="M2 8h20l-2-4H4z"/><path d="M4 8l1.5 3M9 8l1.5 3M14 8l1.5 3M19 8l1.5 3"/><path d="M4 11v8"/>',
   gps:'<path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.4"/>',
@@ -751,18 +752,30 @@ function iconImg(id, size, color){
   return `<img src="${uri}" width="${size}" height="${size}" style="vertical-align:middle;margin-right:7px"/>`;
 }
 
-/* Options complémentaires par ligne (ex : type de batterie) */
+/* Options complémentaires par ligne (1er groupe) */
 const ITEM_OPTIONS = {
   batterie_type: ["Acide","AGM","Gel","Lithium"],
-  mppt_pwm: ["MPPT","PWM"],
+  regulateur_solaire: ["PWM","MPPT"],
   etat_lyres_gaz: ["Standard","TRUMA"],
-  detendeur: ["Classique","TRUMA CS mono/Duo"]
+  detendeur: ["Classique","TRUMA CS mono/Duo"],
+  antenne: ["Hertzien","Parabole","4-5G"]
+};
+/* 2e groupe d'options (ex : batterie "À remplacer") */
+const ITEM_OPTIONS2 = {
+  batterie_type: { label:"À remplacer", opts:["Oui","Non"] }
 };
 
 /* Lignes qui gardent le libellé "Conforme" quelle que soit leur section */
 const ITEM_CONFORME = new Set(["etat_lyres_gaz","detendeur"]);
-/* Lignes sans note d'état 0→4 */
-const ITEM_NO_ETAT = new Set(["etat_lyres_gaz","detendeur"]);
+/* Lignes forcées en Oui/Non même en section "conforme" */
+const ITEM_OUINON = new Set(["revision_circuit_gaz","revision_frigo"]);
+/* Sous-libellé (question) sous le nom de certaines lignes */
+const ITEM_SUBLABEL = {
+  revision_circuit_gaz: "Fait il y a plus d'un an ?",
+  revision_frigo: "Fait il y a plus d'un an ?"
+};
+/* Lignes sans note d'état 0→4 (uniquement Oui/Non, + options éventuelles) */
+const ITEM_NO_ETAT = new Set(["etat_lyres_gaz","detendeur","suspension_pneumatique","alarme","batterie_type","verins","antenne","regulateur_solaire","porte_velo","serrure_securite","gpl","revision_circuit_gaz","revision_frigo"]);
 /* Lignes avec un champ "Date de fin de validité" */
 const ITEM_DATE = new Set(["etat_lyres_gaz","detendeur"]);
 
@@ -853,13 +866,19 @@ function buildSection(title, items, oktoggleLabel){
 
   items.forEach(name=>{
     const id = slug(name);
-    state.items[id] = state.items[id] || { name, equipe:null, etat:null, cmt:"", type:null, dateValid:"" };
+    state.items[id] = state.items[id] || { name, equipe:null, etat:null, cmt:"", type:null, type2:null, dateValid:"" };
     const card = document.createElement("div");
     card.className = "item";
     card.dataset.id = id;
-    const optsLbl = (id==="batterie_type"||id==="mppt_pwm") ? "Type" : "Modèle";
+    const optsLbl = (id==="batterie_type"||id==="regulateur_solaire"||id==="antenne") ? "Type" : "Modèle";
+    const yesLabel = ITEM_OUINON.has(id) ? "Oui" : ((oktoggleLabel==="conforme"||ITEM_CONFORME.has(id))?"Conf.":"Oui");
+    const subHtml = ITEM_SUBLABEL[id] ? `<div class="item-sub">${ITEM_SUBLABEL[id]}</div>` : "";
     const optsHtml = ITEM_OPTIONS[id]
       ? `<div class="opts"><span class="opts-lbl">${optsLbl}</span>${ITEM_OPTIONS[id].map(o=>`<button class="opt" data-opt="${o}">${o}</button>`).join("")}</div>`
+      : "";
+    const o2 = ITEM_OPTIONS2[id];
+    const opts2Html = o2
+      ? `<div class="opts opts2"><span class="opts-lbl">${o2.label}</span>${o2.opts.map(o=>`<button class="opt2" data-opt="${o}">${o}</button>`).join("")}</div>`
       : "";
     const gaugeHtml = ITEM_NO_ETAT.has(id) ? "" : `
       <div class="gauge-wrap">
@@ -874,13 +893,14 @@ function buildSection(title, items, oktoggleLabel){
     card.innerHTML = `
       <div class="item-top">
         <div class="item-ic">${iconSvg(id,20)}</div>
-        <div class="item-name">${name}</div>
+        <div class="item-name">${name}${subHtml}</div>
         <div class="toggle">
-          <button data-on="oui">${(oktoggleLabel==="conforme"||ITEM_CONFORME.has(id))?"Conf.":"Oui"}</button>
+          <button data-on="oui">${yesLabel}</button>
           <button data-on="non">Non</button>
         </div>
       </div>
       ${optsHtml}
+      ${opts2Html}
       ${dateHtml}
       ${gaugeHtml}
       <button class="cmt-btn"><span class="dot"></span>+ Commentaire</button>
@@ -925,12 +945,23 @@ function wireCard(card, id){
   cmtBtn.addEventListener("click", ()=> cmtBox.classList.toggle("open"));
   cmtArea.addEventListener("input", ()=>{ st.cmt = cmtArea.value; cmtBtn.classList.toggle("has", !!st.cmt.trim()); persist(); });
 
-  const optsRow = card.querySelector(".opts");
+  const optsRow = card.querySelector(".opts:not(.opts2)");
   if(optsRow){
     optsRow.querySelectorAll(".opt").forEach(b=>{
       b.addEventListener("click", ()=>{
         const v = b.dataset.opt;
         st.type = (st.type===v) ? null : v;
+        renderCard(card, id);
+        persist();
+      });
+    });
+  }
+  const opts2Row = card.querySelector(".opts2");
+  if(opts2Row){
+    opts2Row.querySelectorAll(".opt2").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        const v = b.dataset.opt;
+        st.type2 = (st.type2===v) ? null : v;
         renderCard(card, id);
         persist();
       });
@@ -949,10 +980,12 @@ function wireCard(card, id){
     const isNon = st.equipe === "non";
     if(gaugeWrap) gaugeWrap.classList.toggle("hide", isNon);
     if(optsRow) optsRow.classList.toggle("hide", isNon);
+    if(opts2Row) opts2Row.classList.toggle("hide", isNon);
     if(dateRow) dateRow.classList.toggle("hide", isNon);
     card.classList.toggle("off", isNon);
     card.querySelectorAll(".gauge button").forEach(b=> b.classList.toggle("sel", st.etat!==null && +b.dataset.v===st.etat));
     if(optsRow) optsRow.querySelectorAll(".opt").forEach(b=> b.classList.toggle("sel", st.type===b.dataset.opt));
+    if(opts2Row) opts2Row.querySelectorAll(".opt2").forEach(b=> b.classList.toggle("sel", st.type2===b.dataset.opt));
     if(dateInput) dateInput.value = st.dateValid || "";
     if(etatTxt) etatTxt.textContent = (st.etat===null) ? "—" : `${st.etat} · ${ETAT_LABELS[st.etat]}`;
     cmtArea.value = st.cmt || "";
@@ -1033,13 +1066,16 @@ function tableRows(ids, okLabel){
   return ids.map(id=>{
     const s=state.items[id];
     const okYes = s.equipe==="oui", okNo = s.equipe==="non";
-    const typeTxt = s.type ? ` <span style="color:#1D9E75;font-weight:700">(${s.type})</span>` : "";
+    const lbl = ITEM_OUINON.has(id) ? "Oui" : (ITEM_CONFORME.has(id) ? "Conf." : okLabel);
+    const subTxt = ITEM_SUBLABEL[id] ? ` <span style="color:#6a7a8a;font-weight:600">(> 1 an ?)</span>` : "";
+    const typeTxt = (s.type ? ` <span style="color:#1D9E75;font-weight:700">(${s.type})</span>` : "")
+      + (s.type2 && ITEM_OPTIONS2[id] ? ` <span style="color:#0F2A48;font-weight:700">[${ITEM_OPTIONS2[id].label} : ${s.type2}]</span>` : "");
     return `<tr>
       <td style="padding:6px 8px;border-bottom:1px solid #e6ebf0;font-size:11px;font-weight:600">
-        ${iconImg(id,15,'#0F2A48')}${s.name}${typeTxt}
+        ${iconImg(id,15,'#0F2A48')}${s.name}${subTxt}${typeTxt}
       </td>
       <td style="text-align:center;border-bottom:1px solid #e6ebf0;font-size:10px">
-        <span style="color:${okYes?'#1D9E75':'#c2ccd6'};font-weight:700">${okLabel} ${okYes?'✓':''}</span>
+        <span style="color:${okYes?'#1D9E75':'#c2ccd6'};font-weight:700">${lbl} ${okYes?'✓':''}</span>
         &nbsp;/&nbsp;<span style="color:${okNo?'#8494a4':'#c2ccd6'};font-weight:700">Non ${okNo?'✓':''}</span>
       </td>
       ${etatCell(s.etat)}
@@ -1150,7 +1186,8 @@ async function makePdfBlob(){
   }
   function drawRow(id, okLabel){
     const s = state.items[id];
-    if(ITEM_CONFORME.has(id)) okLabel = "Conf.";
+    if(ITEM_OUINON.has(id)) okLabel = "Oui";
+    else if(ITEM_CONFORME.has(id)) okLabel = "Conf.";
     doc.setFont("helvetica","normal"); doc.setFontSize(8);
     const cmtLines = (s.cmt||"").trim() ? doc.splitTextToSize(s.cmt.trim(), cmtW).slice(0,2) : [];
     const rowH = cmtLines.length>1 ? 10.5 : 8;
@@ -1159,9 +1196,10 @@ async function makePdfBlob(){
 
     // icône
     if(ic[id]) doc.addImage(ic[id],"PNG", L+1, cy-2.2, 4.4, 4.4);
-    // désignation (+ type éventuel)
+    // désignation (+ sous-libellé éventuel + type éventuel)
     doc.setFont("helvetica","bold"); doc.setFontSize(9); doc.setTextColor(30,40,50);
-    let name = doc.splitTextToSize(s.name, 66)[0];
+    let dispName = s.name + (ITEM_SUBLABEL[id] ? " (> 1 an ?)" : "");
+    let name = doc.splitTextToSize(dispName, 72)[0];
     doc.text(name, nameX, ty);
     if(s.type){
       const nw = doc.getTextWidth(name);
@@ -1177,11 +1215,14 @@ async function makePdfBlob(){
     doc.setFont("helvetica","normal"); doc.setTextColor(190,196,204); doc.text("/", ex, ty); ex += doc.getTextWidth("/")+1.5;
     doc.setFont("helvetica", non?"bold":"normal"); doc.setTextColor(non?130:190, non?140:196, non?150:204);
     doc.text("Non", ex, ty);
-    // état : 5 pastilles, ou date de validité pour les lignes sans état
+    // état : 5 pastilles, ou (lignes sans état) date de validité / "À remplacer"
     if(ITEM_NO_ETAT.has(id)){
-      if(s.dateValid){
+      let extra="";
+      if(s.dateValid) extra="Fin val. "+new Date(s.dateValid).toLocaleDateString("fr-FR");
+      else if(s.type2) extra=(ITEM_OPTIONS2[id]?ITEM_OPTIONS2[id].label:"")+" : "+s.type2;
+      if(extra){
         doc.setFont("helvetica","normal"); doc.setFontSize(7.5); doc.setTextColor(90,100,110);
-        doc.text("Fin val. "+new Date(s.dateValid).toLocaleDateString("fr-FR"), cx0-2, ty);
+        doc.text(extra, cx0-2, ty);
       }
     } else {
       for(let k=0;k<5;k++){
@@ -1379,6 +1420,8 @@ function zonesFor(type){
     {id:"capot", l:"Capot",     x:120,y:66, w:60, h:27, t:1},
     {id:"face_av", l:"Face avant", x:120,y:97, w:60, h:27, t:1},
     {id:"av_d", l:"Angle AV D", x:184,y:66, w:56, h:58},
+    {id:"retro_g", l:"Rétro G", x:8, y:100, w:42, h:30, t:1},
+    {id:"retro_d", l:"Rétro D", x:250, y:100, w:42, h:30, t:1},
     {id:"cote_g", l:"Côté G",   x:60, y:128,w:56, h:150},
     {id:"toit", l:"Toit / Pavillon", x:120,y:128,w:60,h:150},
     {id:"cote_d", l:"Côté D",   x:184,y:128,w:56, h:150},
@@ -1922,7 +1965,7 @@ function initSettingsUI(){
 
 /* ================= NOUVELLE FICHE (RESET) ================= */
 function resetForm(){
-  Object.values(state.items).forEach(st=>{ st.equipe=null; st.etat=null; st.cmt=""; st.type=null; st.dateValid=""; });
+  Object.values(state.items).forEach(st=>{ st.equipe=null; st.etat=null; st.cmt=""; st.type=null; st.type2=null; st.dateValid=""; });
   ["f_tech","f_vendeur","f_vehicule","f_immat","f_client"].forEach(id=> document.getElementById(id).value="");
   document.getElementById("f_date").value = new Date().toISOString().slice(0,10);
   const setg = loadSettings();
