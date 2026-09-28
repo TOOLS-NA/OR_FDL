@@ -205,6 +205,22 @@ body{
 
 /* mini titres de sections OR */
 .section-title-mini{font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--teal);margin-bottom:12px}
+.or-toolbar{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:10px 12px;margin-bottom:14px;flex-wrap:wrap}
+.or-num{font-size:13px;color:var(--navy);margin-right:auto}
+.or-num b{color:var(--teal);font-weight:800}
+.or-tbtn{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:#fbfcfd;color:var(--navy);font-family:var(--font);font-weight:700;font-size:12.5px;padding:8px 12px;border-radius:9px;cursor:pointer}
+.or-tbtn:active{transform:scale(.97)}
+.or-archive{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:10px 12px;margin-bottom:14px}
+.or-archive.hide{display:none}
+.arch-empty{font-size:12.5px;color:var(--muted);text-align:center;padding:10px}
+.arch-item{display:flex;align-items:center;gap:8px;padding:10px 6px;border-bottom:1px solid var(--line)}
+.arch-item:last-child{border-bottom:0}
+.arch-info{flex:1;min-width:0}
+.arch-info b{display:block;font-size:13.5px;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.arch-info span{font-size:11px;color:var(--muted)}
+.arch-act{border:0;background:var(--navy);color:#fff;font-family:var(--font);font-weight:700;font-size:12px;padding:7px 11px;border-radius:8px;cursor:pointer}
+.arch-act.ghost{background:#eef2f6;color:var(--navy)}
+.arch-act.del{background:#fbecec;color:var(--e0);font-size:15px;padding:6px 10px}
 .field-client label{font-size:12px;color:var(--navy);font-weight:800}
 .field-client input{font-size:19px;font-weight:800;color:var(--navy);border-color:var(--navy);background:#fff}
 .field-client input::placeholder{font-weight:600;color:#9db0c4}
@@ -402,6 +418,19 @@ body{
 
   <!-- ============ PANE OR ============ -->
   <div class="pane" id="paneOR">
+    <div class="or-toolbar">
+      <div class="or-num">N° OR&nbsp;: <b id="orNumVal">à attribuer</b></div>
+      <button class="or-tbtn" id="orSaveBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Enregistrer
+      </button>
+      <button class="or-tbtn" id="orArchiveBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        Mes OR <span id="orArchiveCount">0</span>
+      </button>
+    </div>
+    <div class="or-archive hide" id="orArchive"></div>
+
     <div class="info">
       <div class="section-title-mini">Informations</div>
       <div class="info-grid">
@@ -1296,7 +1325,7 @@ function switchTab(name){
 /* ================= ONGLET OR ================= */
 const LS_OR = "controle_atelier_or_v1";
 const OR_FIELDS = ["or_client","or_numclient","or_tel","or_email","or_magasin","or_date","or_tech","or_vendeur","or_km","or_immat","or_modele","or_forfait","or_desc","or_techadd","or_livraison","or_obs","or_carrosserie_cmt","or_resdate","or_resheure"];
-let orState = { fields:{}, vtype:null, fuel:null, impact:null, impactType:null, cg:false, resconforme:false, signatures:{}, damage:{} };
+let orState = { fields:{}, vtype:null, fuel:null, impact:null, impactType:null, cg:false, resconforme:false, signatures:{}, damage:{}, number:"", savedId:"" };
 
 const DAMAGE_STATES = [
   { l:"", hex:"#f6f8fa", rgb:[246,248,250] },
@@ -1399,23 +1428,29 @@ function initSignature(){
   window.addEventListener("resize", resizeSignature);
 }
 function resetOR(){
-  orState={ fields:{}, vtype:null, fuel:null, impact:null, impactType:null, cg:false, resconforme:false, signatures:{}, damage:{} };
+  orState={ fields:{}, vtype:null, fuel:null, impact:null, impactType:null, cg:false, resconforme:false, signatures:{}, damage:{}, number:"", savedId:"" };
   OR_FIELDS.forEach(id=> document.getElementById(id).value="");
   document.getElementById("or_date").value=new Date().toISOString().slice(0,10);
   const setg=loadSettings(); if(setg.magasinDefault) document.getElementById("or_magasin").value=setg.magasinDefault;
   sigPads.forEach(p=> p.redraw());
-  persistOR(); renderOR();
+  persistOR(); renderOR(); updateOrNum();
 }
 function orFilename(){
   const d=(orState.fields.or_date||new Date().toISOString().slice(0,10)).replace(/-/g,"");
   const immat=(orState.fields.or_immat||"vehicule").replace(/[^a-zA-Z0-9]/g,"").toUpperCase();
-  return `OR_${d}_${immat}.pdf`;
+  const num=(orState.number||"").replace(/[^A-Za-z0-9-]/g,"");
+  return (num?num+"_":"OR_"+d+"_")+immat+".pdf";
 }
 function initOR(){
   loadOR(); wireOR(); initSignature();
   const setg=loadSettings();
   if(setg.magasinDefault && !document.getElementById("or_magasin").value){ document.getElementById("or_magasin").value=setg.magasinDefault; orState.fields.or_magasin=setg.magasinDefault; }
   renderOR();
+  updateOrNum();
+  renderArchive();
+  document.getElementById("orSaveBtn").addEventListener("click", ()=>{ saveToArchive(false); toast("OR enregistré sur cet appareil ✓","ok"); });
+  const archBox=document.getElementById("orArchive");
+  document.getElementById("orArchiveBtn").addEventListener("click", ()=>{ archBox.classList.toggle("hide"); });
   document.querySelectorAll(".tab").forEach(t=> t.addEventListener("click", ()=> switchTab(t.dataset.tab)));
   initCGModal();
 }
@@ -1426,6 +1461,65 @@ function initCGModal(){
   document.getElementById("btnViewCG").addEventListener("click", ()=> modal.classList.add("show"));
   document.getElementById("cgClose").addEventListener("click", ()=> modal.classList.remove("show"));
   modal.addEventListener("click", (e)=>{ if(e.target.id==="cgModal") modal.classList.remove("show"); });
+}
+
+/* ===== Archive locale « Mes OR » (type CRV) ===== */
+const LS_ARCHIVE = "controle_atelier_or_archive_v1";
+function getArchive(){ try{ return JSON.parse(localStorage.getItem(LS_ARCHIVE)) || []; }catch(e){ return []; } }
+function setArchive(a){ try{ localStorage.setItem(LS_ARCHIVE, JSON.stringify(a)); }catch(e){ toast("Stockage plein — exportez puis supprimez d'anciens OR","err"); } }
+function updateOrNum(){ document.getElementById("orNumVal").textContent = orState.number || "à attribuer"; }
+function archiveLabel(d){
+  const f=d.fields||{};
+  return { client:(f.or_client||"—"), immat:(f.or_immat||"").toUpperCase(), magasin:(f.or_magasin||""), date:(f.or_date||"") };
+}
+function saveToArchive(markSent){
+  persistOR();
+  const a=getArchive();
+  if(!orState.savedId) orState.savedId = "or_"+Date.now()+"_"+Math.random().toString(16).slice(2,7);
+  const rec={ id:orState.savedId, number:orState.number||"", savedAt:new Date().toISOString(), sent:!!markSent, label:archiveLabel(orState), data:JSON.parse(JSON.stringify(orState)) };
+  const i=a.findIndex(x=>x.id===orState.savedId);
+  if(i>=0) a[i]=rec; else a.unshift(rec);
+  setArchive(a); renderArchive();
+}
+function renderArchive(){
+  const box=document.getElementById("orArchive"); const a=getArchive();
+  document.getElementById("orArchiveCount").textContent = a.length;
+  if(!a.length){ box.innerHTML='<div class="arch-empty">Aucun OR enregistré sur cet appareil.</div>'; return; }
+  box.innerHTML = a.map(r=>{
+    const dt=new Date(r.savedAt).toLocaleString("fr-FR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+    const num=r.number?("N° "+r.number):"(non envoyé)";
+    return `<div class="arch-item">
+      <div class="arch-info"><b>${(r.label.client||"—")}${r.label.immat?" · "+r.label.immat:""}</b>
+      <span>${num} · ${r.label.magasin||""} · enregistré le ${dt}${r.sent?" · envoyé ✓":""}</span></div>
+      <button class="arch-act" data-open="${r.id}">Ouvrir</button>
+      <button class="arch-act ghost" data-json="${r.id}">.json</button>
+      <button class="arch-act del" data-del="${r.id}" aria-label="Supprimer">×</button>
+    </div>`;
+  }).join("");
+  box.querySelectorAll("[data-open]").forEach(b=> b.addEventListener("click", ()=> openArchive(b.dataset.open)));
+  box.querySelectorAll("[data-json]").forEach(b=> b.addEventListener("click", ()=> exportArchive(b.dataset.json)));
+  box.querySelectorAll("[data-del]").forEach(b=> b.addEventListener("click", ()=> deleteArchive(b.dataset.del)));
+}
+function openArchive(id){
+  const r=getArchive().find(x=>x.id===id); if(!r) return;
+  orState = Object.assign({ fields:{}, vtype:null, fuel:null, impact:null, impactType:null, cg:false, resconforme:false, signatures:{}, damage:{}, number:"", savedId:"" }, JSON.parse(JSON.stringify(r.data)));
+  orState.savedId = r.id; orState.number = r.number || orState.number || "";
+  OR_FIELDS.forEach(fid=>{ const el=document.getElementById(fid); if(el) el.value = (orState.fields[fid]!=null?orState.fields[fid]:""); });
+  renderOR(); updateOrNum(); sigPads.forEach(p=> p.redraw());
+  document.getElementById("orArchive").classList.add("hide");
+  switchTab("or");
+  toast("OR rouvert — complétez la restitution si besoin","ok");
+}
+function exportArchive(id){
+  const r=getArchive().find(x=>x.id===id); if(!r) return;
+  const blob=new Blob([JSON.stringify(r,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob); const a=document.createElement("a");
+  a.href=url; a.download=(r.number||"OR")+"_"+(r.label.immat||"vehicule")+".json"; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),4000);
+}
+function deleteArchive(id){
+  if(!confirm("Supprimer cet OR de l'archive de cet appareil ?")) return;
+  setArchive(getArchive().filter(x=>x.id!==id)); renderArchive();
 }
 
 /* Synchronisation des champs communs entre l'onglet OR et l'onglet Contrôle */
@@ -1458,9 +1552,12 @@ async function makeORPdfBlob(){
   function kv(pairs){ doc.setFontSize(9.5); for(let idx=0;idx<pairs.length;idx+=2){ ensure(6); [pairs[idx],pairs[idx+1]].forEach((p,ci)=>{ if(!p)return; const x=L+ci*(W/2); doc.setFont("helvetica","bold"); doc.setTextColor(15,42,72); doc.text(p[0]+" :",x,y); const lw=doc.getTextWidth(p[0]+" : "); doc.setFont("helvetica","normal"); doc.setTextColor(50,55,62); doc.text(String(p[1]||"-"),x+lw,y); }); y+=6; } }
   function longText(label,value){ ensure(8); doc.setFont("helvetica","bold"); doc.setTextColor(15,42,72); doc.setFontSize(9.5); doc.text(label+" :",L,y); y+=4.6; doc.setFont("helvetica","normal"); doc.setTextColor(50,55,62); doc.splitTextToSize(value||"-",W).forEach(ln=>{ ensure(4.6); doc.text(ln,L,y); y+=4.6; }); y+=1.5; }
 
-  doc.setFont("helvetica","bold"); doc.setFontSize(19); doc.setTextColor(15,42,72); doc.text("NARBONNE ACCESSOIRES",L,y); y+=5.5;
-  doc.setFont("helvetica","bold"); doc.setFontSize(10); doc.setTextColor(29,158,117); doc.text("BON DE TRAVAUX",L,y);
-  doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor(130,140,150); doc.text("Édité le "+new Date().toLocaleDateString("fr-FR"),R,y,{align:"right"}); y+=2.5;
+  doc.setFont("helvetica","bold"); doc.setFontSize(19); doc.setTextColor(15,42,72); doc.text("NARBONNE ACCESSOIRES",L,y);
+  doc.setFont("helvetica","bold"); doc.setFontSize(11); doc.setTextColor(15,42,72);
+  doc.text((o.number||"N° à attribuer"),R,y,{align:"right"}); y+=5.5;
+  doc.setFont("helvetica","bold"); doc.setFontSize(10); doc.setTextColor(29,158,117); doc.text("BON DE TRAVAUX / ORDRE DE RÉPARATION",L,y);
+  doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor(130,140,150);
+  doc.text((f.or_magasin?f.or_magasin+" · ":"")+"Édité le "+new Date().toLocaleDateString("fr-FR"),R,y,{align:"right"}); y+=2.5;
   doc.setDrawColor(15,42,72); doc.setLineWidth(0.6); doc.line(L,y,R,y); y+=8;
 
   band("INFORMATIONS CLIENT");
@@ -1608,15 +1705,27 @@ document.getElementById("btnSend").addEventListener("click", async ()=>{
   if(!dm){ toast("Renseignez l'adresse DM dans Réglages ⚙","err"); openSettings(); return; }
   if(!CONFIG.APPS_SCRIPT_URL){ toast("URL Apps Script non configurée (voir CONFIG)","err"); return; }
   const clientEmail = (orState.fields.or_email||"").trim();
+  const magasin = orState.fields.or_magasin || state.infos.magasin || "";
   const btn=document.getElementById("btnSend"); btn.disabled=true; overlay(true);
   try{
+    // 1) Numéro d'OR : réservé une seule fois (réutilisé si l'OR est renvoyé après restitution)
+    if(!orState.number){
+      const rN = await fetch(CONFIG.APPS_SCRIPT_URL, { method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify({ token:CONFIG.SHARED_TOKEN, action:"reserve", magasin }) });
+      const oN = await rN.json();
+      if(oN && oN.ok && oN.number){ orState.number=oN.number; updateOrNum(); saveOR(); }
+      else throw new Error(oN&&oN.error||"Numéro non attribué");
+    }
+    // 2) PDF (le numéro y figure) + envoi
     const [orBlob, ctrlBlob] = await Promise.all([ makeORPdfBlob(), makePdfBlob() ]);
     const meta = {
-      magasin: orState.fields.or_magasin || state.infos.magasin || "",
+      number: orState.number,
+      magasin: magasin,
       immat: (orState.fields.or_immat || state.infos.immat || "").toUpperCase(),
       client: orState.fields.or_client || state.infos.client || "",
       vendeur: orState.fields.or_vendeur || state.infos.vendeur || "",
-      date: orState.fields.or_date || state.infos.date || ""
+      tech: orState.fields.or_tech || state.infos.tech || "",
+      date: orState.fields.or_date || state.infos.date || "",
+      resconforme: !!orState.resconforme
     };
     const payload = {
       token: CONFIG.SHARED_TOKEN,
@@ -1628,7 +1737,7 @@ document.getElementById("btnSend").addEventListener("click", async ()=>{
     };
     const res = await fetch(CONFIG.APPS_SCRIPT_URL, { method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(payload) });
     const out = await res.json();
-    if(out && out.ok){ toast(clientEmail ? "OR envoyé au client · feuille de liaison au DM ✓" : "Feuille de liaison envoyée au DM (e-mail client vide)","ok"); }
+    if(out && out.ok){ saveToArchive(true); toast((clientEmail ? "OR envoyé au client · feuille de liaison au DM" : "Feuille de liaison au DM (e-mail client vide)")+" · "+orState.number+" ✓","ok"); }
     else throw new Error(out&&out.error||"Réponse inattendue");
   }catch(e){ toast("Échec de l'envoi : "+e.message,"err"); }
   finally{ btn.disabled=false; overlay(false); }
