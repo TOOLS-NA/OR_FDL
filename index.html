@@ -227,6 +227,8 @@ body{
 .sigpad{width:100%;height:170px;display:block;touch-action:none;cursor:crosshair}
 .sig-clear{position:absolute;top:8px;right:8px;border:0;background:#eef2f6;color:var(--navy);font-family:var(--font);font-weight:700;font-size:12px;padding:6px 12px;border-radius:8px;cursor:pointer}
 .sig-hint{text-align:center;font-size:11px;color:var(--muted);margin-top:6px}
+.sig-block{margin-top:14px}
+.sig-block .sigpad{height:140px}
 .cg-view{display:inline-flex;align-items:center;gap:7px;background:none;border:0;color:var(--navy);font-family:var(--font);font-weight:700;font-size:13px;cursor:pointer;padding:2px 0 14px;text-decoration:underline}
 /* modale CG */
 .cg-modal{position:fixed;inset:0;background:rgba(15,42,72,.55);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:85;padding:16px}
@@ -496,17 +498,38 @@ body{
     </div>
 
     <div class="info">
-      <div class="section-title-mini">Signature du client</div>
+      <div class="section-title-mini">Réception — signatures</div>
       <label class="cg-check"><input type="checkbox" id="or_cg"> Le client reconnaît avoir pris connaissance des Conditions Générales de Réparations (jointes) et les accepte sans réserve.</label>
       <button class="cg-view" id="btnViewCG">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
         Consulter les conditions générales
       </button>
-      <div class="sigpad-wrap">
-        <canvas id="or_sig" class="sigpad"></canvas>
-        <button class="sig-clear" id="or_sigClear">Effacer</button>
+      <div class="sig-block">
+        <span class="mini-lbl">Signature du client</span>
+        <div class="sigpad-wrap"><canvas class="sigpad" data-sig="recClient"></canvas><button class="sig-clear" data-clear="recClient">Effacer</button></div>
       </div>
-      <div class="sig-hint">Faire signer le client dans le cadre ci-dessus</div>
+      <div class="sig-block">
+        <span class="mini-lbl">Signature du technicien atelier (TA)</span>
+        <div class="sigpad-wrap"><canvas class="sigpad" data-sig="recTA"></canvas><button class="sig-clear" data-clear="recTA">Effacer</button></div>
+      </div>
+    </div>
+
+    <div class="info">
+      <div class="section-title-mini">Restitution du véhicule</div>
+      <div class="info-grid">
+        <div class="field"><label>Date de restitution</label><input type="date" id="or_resdate"></div>
+        <div class="field"><label>Heure</label><input type="time" id="or_resheure"></div>
+      </div>
+      <label class="cg-check" style="margin-top:14px"><input type="checkbox" id="or_resconforme"> Véhicule restitué <b>conforme à l'intervention</b>.</label>
+      <div class="sig-block">
+        <span class="mini-lbl">Signature du client (restitution)</span>
+        <div class="sigpad-wrap"><canvas class="sigpad" data-sig="resClient"></canvas><button class="sig-clear" data-clear="resClient">Effacer</button></div>
+      </div>
+      <div class="sig-block">
+        <span class="mini-lbl">Signature du technicien atelier (restitution)</span>
+        <div class="sigpad-wrap"><canvas class="sigpad" data-sig="resTA"></canvas><button class="sig-clear" data-clear="resTA">Effacer</button></div>
+      </div>
+      <div class="sig-hint">La restitution peut être complétée plus tard, à la remise du véhicule.</div>
     </div>
   </div>
 
@@ -1272,8 +1295,8 @@ function switchTab(name){
 
 /* ================= ONGLET OR ================= */
 const LS_OR = "controle_atelier_or_v1";
-const OR_FIELDS = ["or_client","or_numclient","or_tel","or_email","or_magasin","or_date","or_tech","or_vendeur","or_km","or_immat","or_modele","or_forfait","or_desc","or_techadd","or_livraison","or_obs","or_carrosserie_cmt"];
-let orState = { fields:{}, vtype:null, fuel:null, impact:null, impactType:null, cg:false, signature:"", damage:{} };
+const OR_FIELDS = ["or_client","or_numclient","or_tel","or_email","or_magasin","or_date","or_tech","or_vendeur","or_km","or_immat","or_modele","or_forfait","or_desc","or_techadd","or_livraison","or_obs","or_carrosserie_cmt","or_resdate","or_resheure"];
+let orState = { fields:{}, vtype:null, fuel:null, impact:null, impactType:null, cg:false, resconforme:false, signatures:{}, damage:{} };
 
 const DAMAGE_STATES = [
   { l:"", hex:"#f6f8fa", rgb:[246,248,250] },
@@ -1308,7 +1331,10 @@ function renderDamage(){
   });
 }
 
-function loadOR(){ try{ const s=JSON.parse(localStorage.getItem(LS_OR)); if(s) orState=Object.assign(orState,s); }catch(e){} }
+function loadOR(){ try{ const s=JSON.parse(localStorage.getItem(LS_OR)); if(s) orState=Object.assign(orState,s); }catch(e){}
+  if(!orState.signatures) orState.signatures={};
+  if(orState.signature && !orState.signatures.recClient){ orState.signatures.recClient=orState.signature; } // migration ancien format
+}
 function persistOR(){
   orState.fields = {};
   OR_FIELDS.forEach(id=> orState.fields[id] = document.getElementById(id).value.trim());
@@ -1323,6 +1349,7 @@ function renderOR(){
   document.getElementById("or_impactType").classList.toggle("hide", orState.impact!=="oui");
   document.querySelectorAll("#or_impactType .opt").forEach(b=> b.classList.toggle("sel", b.dataset.imp===orState.impactType));
   document.getElementById("or_cg").checked = !!orState.cg;
+  document.getElementById("or_resconforme").checked = !!orState.resconforme;
   renderDamage();
 }
 function wireOR(){
@@ -1336,41 +1363,47 @@ function wireOR(){
   document.querySelectorAll("#or_impact button").forEach(b=> b.addEventListener("click", ()=>{ orState.impact = orState.impact===b.dataset.on?null:b.dataset.on; if(orState.impact!=="oui") orState.impactType=null; renderOR(); saveOR(); }));
   document.querySelectorAll("#or_impactType .opt").forEach(b=> b.addEventListener("click", ()=>{ orState.impactType = orState.impactType===b.dataset.imp?null:b.dataset.imp; renderOR(); saveOR(); }));
   document.getElementById("or_cg").addEventListener("change", (e)=>{ orState.cg=e.target.checked; saveOR(); });
+  document.getElementById("or_resconforme").addEventListener("change", (e)=>{ orState.resconforme=e.target.checked; saveOR(); });
   buildDamageMap();
 }
 
-/* signature tactile */
-let sigCtx=null, sigCanvas=null;
-function resizeSignature(){
-  if(!sigCanvas) return;
-  const rect=sigCanvas.getBoundingClientRect();
-  if(rect.width===0) return;
-  const ratio=window.devicePixelRatio||1;
-  const saved=orState.signature;
-  sigCanvas.width=rect.width*ratio; sigCanvas.height=rect.height*ratio;
-  sigCtx.setTransform(ratio,0,0,ratio,0,0);
-  sigCtx.lineWidth=2; sigCtx.lineCap="round"; sigCtx.lineJoin="round"; sigCtx.strokeStyle="#0F2A48";
-  if(saved){ const img=new Image(); img.onload=()=> sigCtx.drawImage(img,0,0,rect.width,rect.height); img.src=saved; }
-}
+/* signatures tactiles multiples (data-sig => orState.signatures[key]) */
+let sigPads=[];
+function resizeSignature(){ sigPads.forEach(p=> p.redraw()); }
 function initSignature(){
-  sigCanvas=document.getElementById("or_sig"); sigCtx=sigCanvas.getContext("2d");
-  let drawing=false, last=null;
-  const pos=(e)=>{ const r=sigCanvas.getBoundingClientRect(); const t=e.touches?e.touches[0]:e; return {x:t.clientX-r.left,y:t.clientY-r.top}; };
-  const start=(e)=>{ e.preventDefault(); drawing=true; last=pos(e); };
-  const move=(e)=>{ if(!drawing)return; e.preventDefault(); const p=pos(e); sigCtx.beginPath(); sigCtx.moveTo(last.x,last.y); sigCtx.lineTo(p.x,p.y); sigCtx.stroke(); last=p; };
-  const end=()=>{ if(!drawing)return; drawing=false; orState.signature=sigCanvas.toDataURL("image/png"); saveOR(); };
-  sigCanvas.addEventListener("mousedown",start); sigCanvas.addEventListener("mousemove",move); window.addEventListener("mouseup",end);
-  sigCanvas.addEventListener("touchstart",start,{passive:false}); sigCanvas.addEventListener("touchmove",move,{passive:false}); sigCanvas.addEventListener("touchend",end);
-  document.getElementById("or_sigClear").addEventListener("click", ()=>{ sigCtx.clearRect(0,0,sigCanvas.width,sigCanvas.height); orState.signature=""; saveOR(); });
-  resizeSignature();
+  sigPads=[];
+  document.querySelectorAll(".sigpad").forEach(canvas=>{
+    const key=canvas.dataset.sig, ctx=canvas.getContext("2d");
+    let drawing=false, last=null;
+    const pos=(e)=>{ const r=canvas.getBoundingClientRect(); const t=e.touches?e.touches[0]:e; return {x:t.clientX-r.left,y:t.clientY-r.top}; };
+    const setup=()=>{ ctx.lineWidth=2; ctx.lineCap="round"; ctx.lineJoin="round"; ctx.strokeStyle="#0F2A48"; };
+    const redraw=()=>{
+      const rect=canvas.getBoundingClientRect(); if(rect.width===0) return;
+      const ratio=window.devicePixelRatio||1;
+      canvas.width=rect.width*ratio; canvas.height=rect.height*ratio;
+      ctx.setTransform(ratio,0,0,ratio,0,0); setup();
+      const saved=orState.signatures[key];
+      if(saved){ const img=new Image(); img.onload=()=> ctx.drawImage(img,0,0,rect.width,rect.height); img.src=saved; }
+    };
+    const start=(e)=>{ e.preventDefault(); drawing=true; last=pos(e); };
+    const move=(e)=>{ if(!drawing)return; e.preventDefault(); const p=pos(e); ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p; };
+    const end=()=>{ if(!drawing)return; drawing=false; orState.signatures[key]=canvas.toDataURL("image/png"); saveOR(); };
+    canvas.addEventListener("mousedown",start); canvas.addEventListener("mousemove",move); window.addEventListener("mouseup",end);
+    canvas.addEventListener("touchstart",start,{passive:false}); canvas.addEventListener("touchmove",move,{passive:false}); canvas.addEventListener("touchend",end);
+    sigPads.push({key, redraw, clear:()=>{ const rect=canvas.getBoundingClientRect(); ctx.clearRect(0,0,canvas.width,canvas.height); orState.signatures[key]=""; saveOR(); }});
+    redraw();
+  });
+  document.querySelectorAll(".sig-clear").forEach(btn=>{
+    btn.addEventListener("click", ()=>{ const pad=sigPads.find(p=>p.key===btn.dataset.clear); if(pad) pad.clear(); });
+  });
   window.addEventListener("resize", resizeSignature);
 }
 function resetOR(){
-  orState={ fields:{}, vtype:null, fuel:null, impact:null, impactType:null, cg:false, signature:"", damage:{} };
+  orState={ fields:{}, vtype:null, fuel:null, impact:null, impactType:null, cg:false, resconforme:false, signatures:{}, damage:{} };
   OR_FIELDS.forEach(id=> document.getElementById(id).value="");
   document.getElementById("or_date").value=new Date().toISOString().slice(0,10);
   const setg=loadSettings(); if(setg.magasinDefault) document.getElementById("or_magasin").value=setg.magasinDefault;
-  if(sigCtx&&sigCanvas) sigCtx.clearRect(0,0,sigCanvas.width,sigCanvas.height);
+  sigPads.forEach(p=> p.redraw());
   persistOR(); renderOR();
 }
 function orFilename(){
@@ -1470,18 +1503,38 @@ async function makeORPdfBlob(){
     if((f.or_carrosserie_cmt||"").trim()) longText("Commentaires carrosserie", f.or_carrosserie_cmt);
   }
 
-  ensure(50);
-  band("SIGNATURE DU CLIENT");
+  // Paire de cadres signature côte à côte
+  function sigPair(labelG, sigG, labelD, sigD){
+    ensure(38);
+    const bw=(W-6)/2, bx1=L, bx2=L+bw+6, boxY=y+5, boxH=26;
+    doc.setFont("helvetica","bold"); doc.setFontSize(8); doc.setTextColor(15,42,72);
+    doc.text(labelG, bx1, y+3); doc.text(labelD, bx2, y+3);
+    doc.setDrawColor(200,208,216); doc.setLineWidth(0.3);
+    doc.rect(bx1,boxY,bw,boxH); doc.rect(bx2,boxY,bw,boxH);
+    if(sigG){ try{ doc.addImage(sigG,"PNG",bx1+2,boxY+2,bw-4,boxH-4); }catch(e){} }
+    if(sigD){ try{ doc.addImage(sigD,"PNG",bx2+2,boxY+2,bw-4,boxH-4); }catch(e){} }
+    y+=5+boxH+5;
+  }
+  const S=o.signatures||{};
+
+  ensure(48);
+  band("RÉCEPTION DU VÉHICULE");
   doc.setFont("helvetica","normal"); doc.setFontSize(8.5); doc.setTextColor(50,55,62);
   const cgLine=(o.cg?"[X] ":"[ ] ")+"Le client reconnaît avoir pris connaissance des Conditions Générales de Réparations (ci-jointes) et les accepte sans réserve.";
-  doc.splitTextToSize(cgLine,W).forEach(ln=>{ doc.text(ln,L,y); y+=4.2; });
-  y+=3;
-  doc.setFont("helvetica","bold"); doc.setTextColor(15,42,72); doc.setFontSize(9);
-  doc.text("Fait le "+new Date().toLocaleDateString("fr-FR"),L,y+4);
-  doc.text("Signature du client :",L+95,y);
-  doc.setDrawColor(200,208,216); doc.setLineWidth(0.3); doc.rect(L+95,y+2,85,28);
-  if(o.signature){ try{ doc.addImage(o.signature,"PNG",L+97,y+4,81,24); }catch(e){} }
-  y+=34;
+  doc.splitTextToSize(cgLine,W).forEach(ln=>{ ensure(4.4); doc.text(ln,L,y); y+=4.2; });
+  y+=2;
+  doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor(90,100,110);
+  doc.text("Fait le "+new Date().toLocaleDateString("fr-FR"),L,y); y+=3;
+  sigPair("Signature du client", S.recClient, "Signature du technicien atelier (TA)", S.recTA);
+
+  // ---- RESTITUTION ----
+  band("RESTITUTION DU VÉHICULE");
+  doc.setFontSize(9.5);
+  kv([["Date de restitution", f.or_resdate?fr(f.or_resdate):"-"],["Heure", f.or_resheure||"-"]]);
+  doc.setFont("helvetica","normal"); doc.setFontSize(8.5); doc.setTextColor(50,55,62);
+  const confLine=(o.resconforme?"[X] ":"[ ] ")+"Véhicule restitué conforme à l'intervention.";
+  ensure(5); doc.text(confLine,L,y); y+=5;
+  sigPair("Signature du client", S.resClient, "Signature du technicien atelier (TA)", S.resTA);
 
   // ---- PHOTOS RÉCEPTION ----
   const orPhotos = photosOR.get();
