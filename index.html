@@ -205,6 +205,9 @@ body{
 
 /* mini titres de sections OR */
 .section-title-mini{font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--teal);margin-bottom:12px}
+.field-client label{font-size:12px;color:var(--navy);font-weight:800}
+.field-client input{font-size:19px;font-weight:800;color:var(--navy);border-color:var(--navy);background:#fff}
+.field-client input::placeholder{font-weight:600;color:#9db0c4}
 .mini-lbl{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
 .field textarea{font-family:var(--font);font-size:15px;color:var(--ink);padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fbfcfd;width:100%;resize:vertical}
 .field textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(29,158,117,.14)}
@@ -406,7 +409,7 @@ body{
         <div class="field"><label>Vendeur</label><input type="text" id="or_vendeur" placeholder="Nom du vendeur" autocomplete="off"></div>
         <div class="field"><label>Véhicule</label><input type="text" id="or_modele" placeholder="Marque / modèle" autocomplete="off"></div>
         <div class="field"><label>Immatriculation</label><input type="text" id="or_immat" style="text-transform:uppercase" placeholder="AA-123-AA" autocomplete="off"></div>
-        <div class="field full"><label>Client</label><input type="text" id="or_client" placeholder="Nom du client" autocomplete="off"></div>
+        <div class="field full field-client"><label>Client</label><input type="text" id="or_client" placeholder="Nom du client" autocomplete="off"></div>
         <div class="field full"><label>E-mail client</label><input type="email" id="or_email" inputmode="email" placeholder="pour l'envoi des documents" autocomplete="off"></div>
       </div>
     </div>
@@ -435,6 +438,11 @@ body{
         <div class="field full"><label>Description / commentaires</label><textarea id="or_desc" rows="3"></textarea></div>
         <div class="field"><label>Livraison prévue</label><input type="date" id="or_livraison"></div>
       </div>
+    </div>
+
+    <div class="info">
+      <div class="section-title-mini">Produits / prestations / infos (technicien)</div>
+      <div class="field full"><textarea id="or_techadd" rows="4" placeholder="Produits, prestations ou informations complémentaires ajoutés par le technicien…"></textarea></div>
     </div>
 
     <div class="info">
@@ -624,7 +632,7 @@ const CONFIG = {
   // ▼▼▼ URL du déploiement Apps Script (Web App) ▼▼▼
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbzUq0dhs7Bt5SoQfzg2brdNFMCZqkaeI4qIp85Xl93ciL45zz5lKR2lXN5saQ7D1m3a/exec",
   SHARED_TOKEN: "na-orfdl-8c188aa7fd3f125fe15be651f5df873c",
-  ACCESS_CODE: "NARB-ATELIER-2026-27*",
+  ACCESS_CODE: "NARB-ATELIER",
   STORES: ["Angoulême", "Annecy", "Arpajon", "Aubagne", "Auch", "Béziers", "Bordeaux Nord", "Bordeaux Sud", "Caen", "Coignières", "Dax", "Dijon", "Grenoble", "La Rochelle", "Les Pennes-Mirabeau", "Lyon", "Lyon Outdoor", "Mâcon", "Mandelieu", "Montpellier", "Nantes", "Narbonne", "Pau", "Périgueux", "Perpignan", "Rennes", "Roncq", "Saint-Étienne", "Seclin", "Sens", "Sorgues", "St Alban", "Toulon", "Valence", "Valenciennes"]
 };
 
@@ -1264,7 +1272,7 @@ function switchTab(name){
 
 /* ================= ONGLET OR ================= */
 const LS_OR = "controle_atelier_or_v1";
-const OR_FIELDS = ["or_client","or_numclient","or_tel","or_email","or_magasin","or_date","or_tech","or_vendeur","or_km","or_immat","or_modele","or_forfait","or_desc","or_livraison","or_obs","or_carrosserie_cmt"];
+const OR_FIELDS = ["or_client","or_numclient","or_tel","or_email","or_magasin","or_date","or_tech","or_vendeur","or_km","or_immat","or_modele","or_forfait","or_desc","or_techadd","or_livraison","or_obs","or_carrosserie_cmt"];
 let orState = { fields:{}, vtype:null, fuel:null, impact:null, impactType:null, cg:false, signature:"", damage:{} };
 
 const DAMAGE_STATES = [
@@ -1423,12 +1431,16 @@ async function makeORPdfBlob(){
   doc.setDrawColor(15,42,72); doc.setLineWidth(0.6); doc.line(L,y,R,y); y+=8;
 
   band("INFORMATIONS CLIENT");
-  kv([["Client",f.or_client],["N° client",f.or_numclient],["Téléphone",f.or_tel],["E-mail",f.or_email]]); y+=2;
+  ensure(9); doc.setFont("helvetica","bold"); doc.setFontSize(15); doc.setTextColor(15,42,72);
+  doc.text((f.or_client||"-").toUpperCase(), L, y+1.5); y+=8.5;
+  kv([["N° client",f.or_numclient],["Téléphone",f.or_tel],["E-mail",f.or_email]]); y+=2;
   band("VÉHICULE");
   kv([["Magasin",f.or_magasin],["Date",fr(f.or_date)],["Kilométrage",f.or_km],["Immatriculation",(f.or_immat||"").toUpperCase()],["Type",o.vtype],["Marque / modèle",f.or_modele]]); y+=2;
   band("INTERVENTION");
   kv([["Forfait",f.or_forfait],["Technicien",f.or_tech],["Vendeur",f.or_vendeur],["Livraison prévue",fr(f.or_livraison)]]);
-  longText("Description / commentaires",f.or_desc); y+=1;
+  longText("Description / commentaires",f.or_desc);
+  if((f.or_techadd||"").trim()) longText("Produits / prestations / infos complémentaires",f.or_techadd);
+  y+=1;
   band("ÉTAT À LA RÉCEPTION");
   const imp = o.impact==="oui" ? ("Oui"+(o.impactType?" — "+o.impactType:"")) : (o.impact==="non"?"Non":"-");
   kv([["Impact pare-brise",imp],["Niveau carburant",o.fuel||"-"]]);
@@ -1546,20 +1558,24 @@ document.getElementById("btnSend").addEventListener("click", async ()=>{
   const btn=document.getElementById("btnSend"); btn.disabled=true; overlay(true);
   try{
     const [orBlob, ctrlBlob] = await Promise.all([ makeORPdfBlob(), makePdfBlob() ]);
-    const files = [
-      { filename: orFilename(),  b64: await blobToBase64(orBlob) },
-      { filename: pdfFilename(), b64: await blobToBase64(ctrlBlob) }
-    ];
     const meta = {
       magasin: orState.fields.or_magasin || state.infos.magasin || "",
       immat: (orState.fields.or_immat || state.infos.immat || "").toUpperCase(),
       client: orState.fields.or_client || state.infos.client || "",
+      vendeur: orState.fields.or_vendeur || state.infos.vendeur || "",
       date: orState.fields.or_date || state.infos.date || ""
     };
-    const payload = { token: CONFIG.SHARED_TOKEN, toClient: clientEmail, toDM: dm, files, meta };
+    const payload = {
+      token: CONFIG.SHARED_TOKEN,
+      toClient: clientEmail,   // reçoit UNIQUEMENT l'OR
+      toDM: dm,                // reçoit OR + feuille de liaison (interne)
+      or:   { filename: orFilename(),  b64: await blobToBase64(orBlob) },
+      ctrl: { filename: pdfFilename(), b64: await blobToBase64(ctrlBlob) },
+      meta
+    };
     const res = await fetch(CONFIG.APPS_SCRIPT_URL, { method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(payload) });
     const out = await res.json();
-    if(out && out.ok){ toast(clientEmail ? "Documents envoyés au client et au DM ✓" : "Documents envoyés au DM (e-mail client vide)","ok"); }
+    if(out && out.ok){ toast(clientEmail ? "OR envoyé au client · feuille de liaison au DM ✓" : "Feuille de liaison envoyée au DM (e-mail client vide)","ok"); }
     else throw new Error(out&&out.error||"Réponse inattendue");
   }catch(e){ toast("Échec de l'envoi : "+e.message,"err"); }
   finally{ btn.disabled=false; overlay(false); }
