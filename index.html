@@ -678,6 +678,10 @@ body{
       <label>Magasin par défaut</label>
       <select id="s_magasin"><option value="">— Aucun —</option></select>
     </div>
+    <button class="btn ghost" id="s_install" style="width:100%;margin-bottom:12px">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Installer l'application
+    </button>
     <div class="sheet-actions">
       <button class="btn ghost" id="s_cancel" style="flex:1">Annuler</button>
       <button class="btn primary" id="s_save" style="flex:1">Enregistrer</button>
@@ -1987,43 +1991,53 @@ if('serviceWorker' in navigator){
   window.addEventListener('load', ()=> navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }
 
-(function installFlow(){
+let deferredInstall=null;
+const isIOSdev = /iphone|ipad|ipod/i.test(navigator.userAgent);
+function isStandaloneMode(){ return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone===true; }
+
+// Capture TOUJOURS l'événement d'installabilité (même si la bannière a été fermée)
+window.addEventListener('beforeinstallprompt', (e)=>{
+  e.preventDefault(); deferredInstall=e;
+  const bar=document.getElementById('installbar'), hint=document.getElementById('ibHint');
+  if(bar && !isStandaloneMode() && localStorage.getItem('install_hidden')!=='1'){
+    if(hint) hint.textContent="Ajouter l'icône sur le bureau / l'écran d'accueil";
+    bar.classList.add('show');
+  }
+});
+window.addEventListener('appinstalled', ()=>{ deferredInstall=null; const bar=document.getElementById('installbar'); if(bar) bar.classList.remove('show'); });
+
+// Déclenche l'installation depuis n'importe où (bannière ou Réglages)
+async function installApp(){
+  if(deferredInstall){
+    deferredInstall.prompt();
+    try{ await deferredInstall.userChoice; }catch(e){}
+    deferredInstall=null;
+    const bar=document.getElementById('installbar'); if(bar) bar.classList.remove('show');
+    return;
+  }
+  if(isStandaloneMode()){ toast("L'application est déjà installée ✓","ok"); return; }
+  if(isIOSdev){ toast("Sur iPhone/iPad : bouton Partager ⎋ puis « Sur l'écran d'accueil »",""); return; }
+  toast("Installation non proposée par le navigateur ici (déjà installée, ou via le menu ⋮ → Installer)","");
+}
+
+(function installBar(){
   const bar=document.getElementById('installbar');
   const go=document.getElementById('ibGo');
   const x=document.getElementById('ibX');
   const hint=document.getElementById('ibHint');
-  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone===true;
-  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  let deferred=null;
-
-  if(isStandalone || localStorage.getItem('install_hidden')==='1') return;
-
+  if(!bar) return;
+  go.addEventListener('click', installApp);
   x.addEventListener('click', ()=>{ bar.classList.remove('show'); localStorage.setItem('install_hidden','1'); });
-
-  // Chrome / Edge / Android : prompt natif
-  window.addEventListener('beforeinstallprompt', (e)=>{
-    e.preventDefault(); deferred=e;
-    hint.textContent="Ajouter l'icône sur le bureau / l'écran d'accueil";
-    bar.classList.add('show');
-  });
-  go.addEventListener('click', async ()=>{
-    if(deferred){
-      deferred.prompt();
-      await deferred.userChoice;
-      deferred=null; bar.classList.remove('show');
-    } else if(isIOS){
-      toast("Appuyez sur Partager ⎋ puis « Sur l'écran d'accueil »", "");
-    }
-  });
-  window.addEventListener('appinstalled', ()=>{ bar.classList.remove('show'); });
-
-  // iOS Safari : pas de prompt natif → afficher la consigne
-  if(isIOS){
+  // iOS : pas de prompt natif → consigne, si non installée et non masquée
+  if(isIOSdev && !isStandaloneMode() && localStorage.getItem('install_hidden')!=='1'){
     hint.textContent="Partager ⎋ → « Sur l'écran d'accueil »";
     go.textContent="Comment ?";
     bar.classList.add('show');
   }
 })();
+
+// Bouton « Installer l'application » dans les Réglages (toujours disponible)
+(function(){ const b=document.getElementById('s_install'); if(b) b.addEventListener('click', installApp); })();
 </script>
 </body>
 </html>
