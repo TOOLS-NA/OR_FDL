@@ -1355,66 +1355,78 @@ const DMG_STATES = [
 ];
 /* Zones (grille 3×3) — l'étiquette AV-centre s'adapte au type */
 function zonesFor(type){
-  const avc = (type==="Caravane") ? "Face AV / Timon" : "Cabine / Pare-brise";
+  if(type==="Caravane"){
+    return [
+      {id:"av_g", l:"Angle AV G", x:60, y:46, w:56, h:78},
+      {id:"face_av", l:"Face AV / Timon", x:120,y:46, w:60, h:78},
+      {id:"av_d", l:"Angle AV D", x:184,y:46, w:56, h:78},
+      {id:"cote_g", l:"Côté G",   x:60, y:128,w:56, h:150},
+      {id:"toit", l:"Toit / Pavillon", x:120,y:128,w:60,h:150},
+      {id:"cote_d", l:"Côté D",   x:184,y:128,w:56, h:150},
+      {id:"ar_g", l:"Angle AR G", x:60, y:282,w:56, h:86},
+      {id:"face_ar", l:"Face AR", x:120,y:282,w:60, h:86},
+      {id:"ar_d", l:"Angle AR D", x:184,y:282,w:56, h:86}
+    ];
+  }
+  // Camping-car & Fourgon
   return [
-    {id:"av_g", l:"Angle AV G", x:56, y:44, w:64, h:126},
-    {id:"face_av", l:avc,       x:124,y:44, w:52, h:126},
-    {id:"av_d", l:"Angle AV D", x:180,y:44, w:64, h:126},
-    {id:"cote_g", l:"Côté G",   x:56, y:176,w:64, h:124},
-    {id:"toit", l:"Toit / Pavillon", x:124,y:176,w:52,h:124},
-    {id:"cote_d", l:"Côté D",   x:180,y:176,w:64, h:124},
-    {id:"ar_g", l:"Angle AR G", x:56, y:306,w:64, h:120},
-    {id:"face_ar", l:"Face AR", x:124,y:306,w:52, h:120},
-    {id:"ar_d", l:"Angle AR D", x:180,y:306,w:64, h:120}
+    {id:"pc_av", l:"Pare-choc AV", x:60, y:40, w:180, h:22, t:1},
+    {id:"av_g", l:"Angle AV G", x:60, y:66, w:56, h:58},
+    {id:"capot", l:"Capot",     x:120,y:66, w:60, h:27, t:1},
+    {id:"face_av", l:"Face avant", x:120,y:97, w:60, h:27, t:1},
+    {id:"av_d", l:"Angle AV D", x:184,y:66, w:56, h:58},
+    {id:"cote_g", l:"Côté G",   x:60, y:128,w:56, h:150},
+    {id:"toit", l:"Toit / Pavillon", x:120,y:128,w:60,h:150},
+    {id:"cote_d", l:"Côté D",   x:184,y:128,w:56, h:150},
+    {id:"ar_g", l:"Angle AR G", x:60, y:282,w:56, h:58},
+    {id:"face_ar", l:"Face AR", x:120,y:282,w:60, h:58},
+    {id:"ar_d", l:"Angle AR D", x:184,y:282,w:56, h:58},
+    {id:"pc_ar", l:"Pare-choc AR", x:60, y:344, w:180, h:22, t:1}
   ];
 }
-/* Décor silhouette (non cliquable) propre à chaque type */
+/* Décor silhouette (non cliquable) + contour, propre à chaque type */
 function outlineFor(type){
   const wheel='fill="#c7d0da"';
-  let s='';
-  // roues dans les gouttières latérales
-  s+=`<rect x="40" y="150" width="14" height="40" rx="6" ${wheel}/><rect x="246" y="150" width="14" height="40" rx="6" ${wheel}/>`;
-  s+=`<rect x="40" y="330" width="14" height="40" rx="6" ${wheel}/><rect x="246" y="330" width="14" height="40" rx="6" ${wheel}/>`;
+  let s=`<rect x="52" y="34" width="196" height="340" rx="20" fill="none" stroke="#0F2A48" stroke-width="2"/>`;
   if(type==="Caravane"){
-    // timon + attelage au-dessus, une seule ligne de roues au milieu
-    s=`<polygon points="150,8 132,40 168,40" fill="#c7d0da"/><circle cx="150" cy="10" r="5" fill="#9db0c4"/>`;
-    s+=`<rect x="40" y="238" width="14" height="44" rx="6" ${wheel}/><rect x="246" y="238" width="14" height="44" rx="6" ${wheel}/>`;
-  } else if(type==="Camping-car"){
-    // capucine (avancée au-dessus de la cabine)
-    s+=`<rect x="120" y="24" width="60" height="18" rx="6" fill="#d7dee6"/>`;
-  } else if(type==="Fourgon"){
-    // nez de cabine
-    s+=`<path d="M124 44 q-6 -12 8 -14 h36 q14 2 8 14 z" fill="#d7dee6"/>`;
+    s+=`<polygon points="150,6 132,36 168,36" fill="#c7d0da"/><circle cx="150" cy="8" r="5" fill="#9db0c4"/>`;
+    s+=`<rect x="40" y="210" width="14" height="44" rx="6" ${wheel}/><rect x="246" y="210" width="14" height="44" rx="6" ${wheel}/>`;
+  } else {
+    s+=`<rect x="40" y="148" width="14" height="40" rx="6" ${wheel}/><rect x="246" y="148" width="14" height="40" rx="6" ${wheel}/>`;
+    s+=`<rect x="40" y="298" width="14" height="40" rx="6" ${wheel}/><rect x="246" y="298" width="14" height="40" rx="6" ${wheel}/>`;
+    if(type==="Camping-car") s+=`<rect x="120" y="20" width="60" height="15" rx="5" fill="#d7dee6"/>`; // capucine
+    else if(type==="Fourgon") s+=`<path d="M120 34 q-4 -12 10 -13 h40 q14 1 10 13 z" fill="#d7dee6"/>`; // nez
   }
   return s;
 }
+function zoneTexts(z, nameFill, code, codeFill){
+  const cx=z.x+z.w/2, cy=z.y+z.h/2, nm=z.l.split(" / ")[0];
+  if(z.t){ // zone fine : nom et code centrés (superposés, l'un masque l'autre selon l'état)
+    return `<text class="zn-name" x="${cx}" y="${cy+3}" text-anchor="middle" font-size="8" font-weight="700" fill="${nameFill}" style="pointer-events:none">${nm}</text>
+     <text class="zc" x="${cx}" y="${cy+3.5}" text-anchor="middle" font-size="11" font-weight="800" fill="${codeFill}" style="pointer-events:none">${code}</text>`;
+  }
+  return `<text class="zn-name" x="${cx}" y="${cy-3}" text-anchor="middle" font-size="8.5" font-weight="700" fill="${nameFill}" style="pointer-events:none">${nm}</text>
+     <text class="zc" x="${cx}" y="${cy+12}" text-anchor="middle" font-size="12" font-weight="800" fill="${codeFill}" style="pointer-events:none">${code}</text>`;
+}
 function buildCroquisSVG(type){
-  const zones=zonesFor(type);
-  const zg=zones.map(z=>`<g class="zone" data-zone="${z.id}">
-     <rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="9" fill="#eef2f6" stroke="#cdd6df" stroke-width="1.5"/>
-     <text x="${z.x+z.w/2}" y="${z.y+z.h/2-4}" text-anchor="middle" font-size="9" font-weight="700" fill="#5a6a7a" style="pointer-events:none">${z.l.split(" / ")[0]}</text>
-     <text class="zc" x="${z.x+z.w/2}" y="${z.y+z.h/2+13}" text-anchor="middle" font-size="13" font-weight="800" fill="transparent" style="pointer-events:none"></text>
+  const zg=zonesFor(type).map(z=>`<g class="zone" data-zone="${z.id}" data-thin="${z.t?1:0}">
+     <rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="8" fill="#eef2f6" stroke="#cdd6df" stroke-width="1.5"/>
+     ${zoneTexts(z, "#5a6a7a", "", "transparent")}
    </g>`).join("");
-  return `<svg viewBox="0 0 300 460" xmlns="http://www.w3.org/2000/svg" aria-label="Croquis ${type}">
-     <rect x="52" y="38" width="196" height="394" rx="20" fill="none" stroke="#0F2A48" stroke-width="2"/>
-     ${outlineFor(type)}${zg}</svg>`;
+  return `<svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" aria-label="Croquis ${type}">${outlineFor(type)}${zg}</svg>`;
 }
 /* Croquis coloré selon l'état courant, pour le PDF */
 function buildCroquisSVGColored(type){
-  const zones=zonesFor(type);
-  const zg=zones.map(z=>{
+  const zg=zonesFor(type).map(z=>{
     const st=(orState.damage||{})[z.id]||0, S=DMG_STATES[st];
     const fill=st?S.hex:"#eef2f6", stroke=st?S.hex:"#cdd6df";
-    const nameCol=st&&!S.dark?"#ffffff":"#5a6a7a";
-    const codeCol=st?(S.dark?"#4a3c00":"#ffffff"):"transparent";
-    return `<g><rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="9" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>
-      <text x="${z.x+z.w/2}" y="${z.y+z.h/2-4}" text-anchor="middle" font-size="9" font-weight="700" fill="${nameCol}">${z.l.split(" / ")[0]}</text>
-      <text x="${z.x+z.w/2}" y="${z.y+z.h/2+13}" text-anchor="middle" font-size="13" font-weight="800" fill="${codeCol}">${S.code}</text></g>`;
+    let nameFill, codeFill, code=S.code;
+    if(z.t){ nameFill = st?"transparent":"#5a6a7a"; codeFill = st?(S.dark?"#4a3c00":"#fff"):"transparent"; }
+    else { nameFill = st&&!S.dark?"#fff":"#5a6a7a"; codeFill = st?(S.dark?"#4a3c00":"#fff"):"transparent"; }
+    return `<g><rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="8" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>
+      ${zoneTexts(z, nameFill, code, codeFill)}</g>`;
   }).join("");
-  return `<svg viewBox="0 0 300 460" xmlns="http://www.w3.org/2000/svg">
-     <rect x="0" y="0" width="300" height="460" fill="#ffffff"/>
-     <rect x="52" y="38" width="196" height="394" rx="20" fill="none" stroke="#0F2A48" stroke-width="2"/>
-     ${outlineFor(type)}${zg}</svg>`;
+  return `<svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="300" height="400" fill="#ffffff"/>${outlineFor(type)}${zg}</svg>`;
 }
 function buildDamageMap(){
   document.getElementById("dzLegend").innerHTML = DMG_STATES.slice(1).map(s=>`<span><i style="background:${s.hex};color:${s.dark?'#4a3c00':'#fff'}">${s.code.replace('T+P','T')}</i>${s.full.split(" · ")[0]} — ${s.full.split("· ")[1]||""}</span>`).join("");
@@ -1448,10 +1460,16 @@ function buildDamageUI(){
 function renderDamage(){
   // croquis
   document.querySelectorAll("#dzCroquis .zone").forEach(g=>{
-    const st=orState.damage[g.dataset.zone]||0, S=DMG_STATES[st];
+    const st=orState.damage[g.dataset.zone]||0, S=DMG_STATES[st], thin=g.dataset.thin==="1";
     const r=g.querySelector("rect"); r.setAttribute("fill", st?S.hex:"#eef2f6"); r.setAttribute("stroke", st?S.hex:"#cdd6df");
-    const nameT=g.querySelectorAll("text")[0]; nameT.setAttribute("fill", st&&!S.dark?"#ffffff":"#5a6a7a");
-    const zc=g.querySelector(".zc"); zc.textContent=S.code; zc.setAttribute("fill", st?(S.dark?"#4a3c00":"#ffffff"):"transparent");
+    const nameT=g.querySelector(".zn-name"), zc=g.querySelector(".zc");
+    if(thin){
+      if(st){ nameT.setAttribute("fill","transparent"); zc.textContent=S.code; zc.setAttribute("fill", S.dark?"#4a3c00":"#ffffff"); }
+      else { nameT.setAttribute("fill","#5a6a7a"); zc.textContent=""; zc.setAttribute("fill","transparent"); }
+    } else {
+      nameT.setAttribute("fill", st&&!S.dark?"#ffffff":"#5a6a7a");
+      zc.textContent=S.code; zc.setAttribute("fill", st?(S.dark?"#4a3c00":"#ffffff"):"transparent");
+    }
   });
   // grille
   document.querySelectorAll("#dzGrid .dz-row").forEach(row=>{
