@@ -1,5 +1,5 @@
 /* Service Worker — Contrôle Atelier Narbonne Accessoires */
-const CACHE = 'controle-atelier-v42';
+const CACHE = 'controle-atelier-v43';
 const ASSETS = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', e => {
