@@ -1465,7 +1465,22 @@ function persistOR(){
   OR_FIELDS.forEach(id=> orState.fields[id] = document.getElementById(id).value.trim());
   saveOR();
 }
-function saveOR(){ try{ localStorage.setItem(LS_OR, JSON.stringify(orState)); }catch(e){} }
+function saveOR(){ try{ localStorage.setItem(LS_OR, JSON.stringify(orState)); }catch(e){} scheduleAutoArchive(); }
+let _autoArchTimer=null;
+function scheduleAutoArchive(){ clearTimeout(_autoArchTimer); _autoArchTimer=setTimeout(autoArchive, 1200); }
+function autoArchive(){
+  try{
+    const f=orState.fields||{};
+    if(!((f.or_client||"").trim() || (f.or_immat||"").trim())) return; // pas assez d'infos : on n'archive pas
+    const a=getArchive();
+    if(!orState.savedId) orState.savedId="or_"+Date.now()+"_"+Math.random().toString(16).slice(2,7);
+    const i=a.findIndex(x=>x.id===orState.savedId);
+    const prevSent = i>=0 ? !!a[i].sent : false;               // on ne repasse jamais un OR envoyé en "non envoyé"
+    const rec={ id:orState.savedId, number:orState.number||(i>=0?(a[i].number||""):""), savedAt:new Date().toISOString(), sent:prevSent, label:archiveLabel(orState), data:JSON.parse(JSON.stringify(orState)) };
+    if(i>=0) a[i]=rec; else a.unshift(rec);
+    setArchive(a); renderArchive();
+  }catch(e){}
+}
 function renderOR(){
   OR_FIELDS.forEach(id=>{ if(orState.fields[id]!=null) document.getElementById(id).value = orState.fields[id]; });
   document.querySelectorAll("#or_vtype .vt").forEach(b=> b.classList.toggle("sel", b.dataset.vt===orState.vtype));
@@ -1524,6 +1539,7 @@ function initSignature(){
   window.addEventListener("resize", resizeSignature);
 }
 function resetOR(){
+  autoArchive(); // flush : sauvegarde l'OR courant dans "Mes OR" avant de repartir à vierge
   orState={ fields:{}, vtype:null, fuel:null, impact:null, impactType:null, cg:false, resconforme:false, signatures:{}, damage:{}, marks:[], number:"", savedId:"" };
   OR_FIELDS.forEach(id=> document.getElementById(id).value="");
   document.getElementById("or_date").value=new Date().toISOString().slice(0,10);
