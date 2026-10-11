@@ -1825,6 +1825,8 @@ document.getElementById("btnSend").addEventListener("click", async ()=>{
   const settings = loadSettings(); const dm = (settings.dmEmail||"").trim();
   if(!dm){ toast("Renseignez l'adresse DM dans Réglages ⚙","err"); openSettings(); return; }
   if(!CONFIG.APPS_SCRIPT_URL){ toast("URL Apps Script non configurée (voir CONFIG)","err"); return; }
+  if(!orState.cg){ toast("Le client doit accepter les conditions de réparation avant l'envoi","err"); document.getElementById("or_cg").focus(); return; }
+  if(!orState.signatures || !orState.signatures.recClient){ toast("La signature du client (réception) est obligatoire avant l'envoi","err"); return; }
   const clientEmail = (orState.fields.or_email||"").trim();
   const magasin = orState.fields.or_magasin || state.infos.magasin || "";
   const btn=document.getElementById("btnSend"); btn.disabled=true; overlay(true);
