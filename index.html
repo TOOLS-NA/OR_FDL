@@ -515,7 +515,7 @@ body{
       </div>
       <button class="dz-clear" id="dzClear">Effacer les marques</button>
       <div class="field full" style="margin-top:16px"><label>Commentaires carrosserie</label><textarea id="or_carrosserie_cmt" rows="2"></textarea></div>
-      <label class="cg-check" style="margin-top:12px"><input type="checkbox" id="or_voirpj"> Voir PJ (pièces jointes / photos annexes)</label>
+      <label class="cg-check" style="margin-top:12px"><input type="checkbox" id="or_voirpj"> Le Client abandonne au réparateur les pièces remplacées <span style="color:#6a7a8a;font-style:italic">(cf article 6 des Conditions Générales au verso)</span></label>
     </div>
 
     <div class="photos-card">
@@ -1771,8 +1771,9 @@ async function makeORPdfBlob(){
       y += 5;
     }
     if((f.or_carrosserie_cmt||"").trim()) longText("Commentaires carrosserie", f.or_carrosserie_cmt);
-    { ensure(5); doc.setFont("helvetica","normal"); doc.setFontSize(8.5); doc.setTextColor(50,55,62);
-      doc.text((o.voirpj?"[X] ":"[ ] ")+"Voir PJ (pièces jointes / photos annexes)", L, y); y+=5; }
+    { doc.setFont("helvetica","normal"); doc.setFontSize(8.5); doc.setTextColor(50,55,62);
+      const pjLine=(o.voirpj?"[X] ":"[ ] ")+"Le Client abandonne au réparateur les pièces remplacées (cf article 6 des Conditions Générales au verso).";
+      doc.splitTextToSize(pjLine, W).forEach(ln=>{ ensure(4.4); doc.text(ln, L, y); y+=4.2; }); y+=1.5; }
   }
 
   // Paire de cadres signature côte à côte
