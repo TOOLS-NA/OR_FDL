@@ -515,6 +515,7 @@ body{
       </div>
       <button class="dz-clear" id="dzClear">Effacer les marques</button>
       <div class="field full" style="margin-top:16px"><label>Commentaires carrosserie</label><textarea id="or_carrosserie_cmt" rows="2"></textarea></div>
+      <label class="cg-check" style="margin-top:12px"><input type="checkbox" id="or_voirpj"> Voir PJ (pièces jointes / photos annexes)</label>
     </div>
 
     <div class="photos-card">
@@ -539,7 +540,7 @@ body{
         Consulter les conditions générales
       </button>
       <div class="sig-block">
-        <span class="mini-lbl">Signature du client</span>
+        <span class="mini-lbl">Signature du client <b id="sigRecClientName" style="color:#0F2A48"></b></span>
         <div class="sigpad-wrap"><canvas class="sigpad" data-sig="recClient"></canvas><button class="sig-clear" data-clear="recClient">Effacer</button></div>
       </div>
       <div class="sig-block">
@@ -556,7 +557,7 @@ body{
       </div>
       <label class="cg-check" style="margin-top:14px"><input type="checkbox" id="or_resconforme"> Véhicule restitué <b>conforme à l'intervention</b>.</label>
       <div class="sig-block">
-        <span class="mini-lbl">Signature du client (restitution)</span>
+        <span class="mini-lbl">Signature du client (restitution) <b id="sigResClientName" style="color:#0F2A48"></b></span>
         <div class="sigpad-wrap"><canvas class="sigpad" data-sig="resClient"></canvas><button class="sig-clear" data-clear="resClient">Effacer</button></div>
       </div>
       <div class="sig-block">
@@ -645,7 +646,7 @@ body{
   </button>
   <button class="btn primary" id="btnSend">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-    Envoyer
+    <span id="btnSendLbl">Envoyer l'OR</span>
   </button>
 </div>
 
@@ -1390,6 +1391,8 @@ function switchTab(name){
   document.querySelectorAll(".tab").forEach(t=> t.classList.toggle("active", t.dataset.tab===name));
   document.getElementById("paneOR").classList.toggle("hide", name!=="or");
   document.getElementById("paneControle").classList.toggle("hide", name!=="controle");
+  const lbl=document.getElementById("btnSendLbl");
+  if(lbl) lbl.textContent = (name==="controle") ? "Envoyer la feuille (DM)" : "Envoyer l'OR";
   if(name==="or") resizeSignature();
 }
 
@@ -1402,7 +1405,7 @@ const VEHICULE_MARQUES = ["Adria","Affinity","Ahorn Camp","Arca","Auto-Sleepers"
 const PORTEURS = ["Fiat Ducato","Citroën Jumper","Peugeot Boxer","Opel Movano","Ford Transit","Ford Transit Custom","Mercedes-Benz Sprinter","Mercedes-Benz Vito","Volkswagen Crafter","Volkswagen Transporter","MAN TGE","Renault Master","Renault Trafic","Iveco Daily","Toyota Proace"];
 function fillDatalist(id, arr){ const dl=document.getElementById(id); if(dl) dl.innerHTML = (arr||[]).map(v=>`<option value="${String(v).replace(/"/g,'&quot;')}"></option>`).join(""); }
 function refreshStaffLists(){ const s=loadSettings(); fillDatalist("dlTechs", s.techs||[]); fillDatalist("dlVendeurs", s.vendeurs||[]); }
-let orState = { fields:{}, vtype:null, fuel:null, impact:null, impactType:null, cg:false, resconforme:false, signatures:{}, damage:{}, marks:[], number:"", savedId:"" };
+let orState = { fields:{}, vtype:null, fuel:null, impact:null, impactType:null, cg:false, voirpj:false, resconforme:false, signatures:{}, damage:{}, marks:[], number:"", savedId:"" };
 
 /* Sigles juridiques : RS / P / T+P / HS */
 const DMG_STATES = [
@@ -1463,6 +1466,7 @@ function loadOR(){ try{ const s=JSON.parse(localStorage.getItem(LS_OR)); if(s) o
 function persistOR(){
   orState.fields = {};
   OR_FIELDS.forEach(id=> orState.fields[id] = document.getElementById(id).value.trim());
+  updateSigNames();
   saveOR();
 }
 function saveOR(){ try{ localStorage.setItem(LS_OR, JSON.stringify(orState)); }catch(e){} scheduleAutoArchive(); }
@@ -1489,8 +1493,17 @@ function renderOR(){
   document.getElementById("or_impactType").classList.toggle("hide", orState.impact!=="oui");
   document.querySelectorAll("#or_impactType .opt").forEach(b=> b.classList.toggle("sel", b.dataset.imp===orState.impactType));
   document.getElementById("or_cg").checked = !!orState.cg;
+  document.getElementById("or_voirpj").checked = !!orState.voirpj;
   document.getElementById("or_resconforme").checked = !!orState.resconforme;
+  updateSigNames();
   renderDamage();
+}
+/* Nom du client reporté sous les signatures client (réception + restitution) */
+function updateSigNames(){
+  const nom=((orState.fields&&orState.fields.or_client)||"").trim();
+  const txt=nom?("— "+nom):"";
+  const a=document.getElementById("sigRecClientName"); if(a) a.textContent=txt;
+  const b=document.getElementById("sigResClientName"); if(b) b.textContent=txt;
 }
 function wireOR(){
   const magSel=document.getElementById("or_magasin");
@@ -1503,6 +1516,7 @@ function wireOR(){
   document.querySelectorAll("#or_impact button").forEach(b=> b.addEventListener("click", ()=>{ orState.impact = orState.impact===b.dataset.on?null:b.dataset.on; if(orState.impact!=="oui") orState.impactType=null; renderOR(); saveOR(); }));
   document.querySelectorAll("#or_impactType .opt").forEach(b=> b.addEventListener("click", ()=>{ orState.impactType = orState.impactType===b.dataset.imp?null:b.dataset.imp; renderOR(); saveOR(); }));
   document.getElementById("or_cg").addEventListener("change", (e)=>{ orState.cg=e.target.checked; saveOR(); });
+  document.getElementById("or_voirpj").addEventListener("change", (e)=>{ orState.voirpj=e.target.checked; saveOR(); });
   document.getElementById("or_resconforme").addEventListener("change", (e)=>{ orState.resconforme=e.target.checked; saveOR(); });
   buildDamageMap();
 }
@@ -1540,7 +1554,7 @@ function initSignature(){
 }
 function resetOR(){
   autoArchive(); // flush : sauvegarde l'OR courant dans "Mes OR" avant de repartir à vierge
-  orState={ fields:{}, vtype:null, fuel:null, impact:null, impactType:null, cg:false, resconforme:false, signatures:{}, damage:{}, marks:[], number:"", savedId:"" };
+  orState={ fields:{}, vtype:null, fuel:null, impact:null, impactType:null, cg:false, voirpj:false, resconforme:false, signatures:{}, damage:{}, marks:[], number:"", savedId:"" };
   OR_FIELDS.forEach(id=> document.getElementById(id).value="");
   document.getElementById("or_date").value=new Date().toISOString().slice(0,10);
   const setg=loadSettings(); if(setg.magasinDefault) document.getElementById("or_magasin").value=setg.magasinDefault;
@@ -1634,6 +1648,26 @@ function deleteArchive(id){
   setArchive(getArchive().filter(x=>x.id!==id)); renderArchive();
 }
 
+/* Immatriculation : format SIV automatique (AA-123-KJ) même si saisi sans tirets */
+function formatImmat(v){
+  const s=(v||"").toUpperCase().replace(/[^A-Z0-9]/g,"");
+  const m=s.match(/^([A-Z]{0,2})([0-9]{0,3})([A-Z]{0,2})/);
+  if(!m) return s;
+  return [m[1],m[2],m[3]].filter(Boolean).join("-");
+}
+function bindImmat(id, pairId){
+  const el=document.getElementById(id); if(!el) return;
+  const pair=pairId?document.getElementById(pairId):null;
+  const fmt=()=>{
+    const c=formatImmat(el.value);
+    if(el.value!==c){ el.value=c; try{ el.setSelectionRange(c.length,c.length); }catch(e){} }
+    if(pair && pair.value!==c) pair.value=c;
+    persistOR(); persist();
+  };
+  el.addEventListener("input", fmt);
+  el.addEventListener("change", fmt);
+}
+
 /* Synchronisation des champs communs entre l'onglet OR et l'onglet Contrôle */
 const SYNC_PAIRS = [["or_magasin","f_magasin"],["or_date","f_date"],["or_immat","f_immat"],["or_client","f_client"],["or_tech","f_tech"],["or_vendeur","f_vendeur"],["or_modele","f_vehicule"]];
 function setupSync(){
@@ -1649,6 +1683,8 @@ function setupSync(){
     if(ea.value && !eb.value) eb.value=ea.value;
     else if(eb.value && !ea.value) ea.value=eb.value;
   });
+  bindImmat("or_immat","f_immat");   // formatage SIV (enregistré après les listeners génériques → prioritaire)
+  bindImmat("f_immat","or_immat");
   persist(); persistOR();
 }
 
@@ -1735,11 +1771,13 @@ async function makeORPdfBlob(){
       y += 5;
     }
     if((f.or_carrosserie_cmt||"").trim()) longText("Commentaires carrosserie", f.or_carrosserie_cmt);
+    { ensure(5); doc.setFont("helvetica","normal"); doc.setFontSize(8.5); doc.setTextColor(50,55,62);
+      doc.text((o.voirpj?"[X] ":"[ ] ")+"Voir PJ (pièces jointes / photos annexes)", L, y); y+=5; }
   }
 
   // Paire de cadres signature côte à côte
-  function sigPair(labelG, sigG, labelD, sigD){
-    ensure(38);
+  function sigPair(labelG, sigG, labelD, sigD, nameG, nameD){
+    ensure(42);
     const bw=(W-6)/2, bx1=L, bx2=L+bw+6, boxY=y+5, boxH=26;
     doc.setFont("helvetica","bold"); doc.setFontSize(8); doc.setTextColor(15,42,72);
     doc.text(labelG, bx1, y+3); doc.text(labelD, bx2, y+3);
@@ -1747,7 +1785,11 @@ async function makeORPdfBlob(){
     doc.rect(bx1,boxY,bw,boxH); doc.rect(bx2,boxY,bw,boxH);
     if(sigG){ try{ doc.addImage(sigG,"PNG",bx1+2,boxY+2,bw-4,boxH-4); }catch(e){} }
     if(sigD){ try{ doc.addImage(sigD,"PNG",bx2+2,boxY+2,bw-4,boxH-4); }catch(e){} }
-    y+=5+boxH+5;
+    const ny=boxY+boxH+3.6;
+    doc.setFont("helvetica","normal"); doc.setFontSize(7.5); doc.setTextColor(90,100,110);
+    if(nameG) doc.text("Nom : "+nameG, bx1, ny);
+    if(nameD) doc.text("Nom : "+nameD, bx2, ny);
+    y+=5+boxH+((nameG||nameD)?8:5);
   }
   const S=o.signatures||{};
 
@@ -1759,7 +1801,7 @@ async function makeORPdfBlob(){
   y+=2;
   doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor(90,100,110);
   doc.text("Fait le "+new Date().toLocaleDateString("fr-FR"),L,y); y+=3;
-  sigPair("Signature du client", S.recClient, "Signature du technicien atelier (TA)", S.recTA);
+  sigPair("Signature du client", S.recClient, "Signature du technicien atelier (TA)", S.recTA, (f.or_client||"").toUpperCase(), (f.or_tech||"").toUpperCase());
 
   // ---- RESTITUTION ----
   band("RESTITUTION DU VÉHICULE");
@@ -1768,7 +1810,7 @@ async function makeORPdfBlob(){
   doc.setFont("helvetica","normal"); doc.setFontSize(8.5); doc.setTextColor(50,55,62);
   const confLine=(o.resconforme?"[X] ":"[ ] ")+"Véhicule restitué conforme à l'intervention.";
   ensure(5); doc.text(confLine,L,y); y+=5;
-  sigPair("Signature du client", S.resClient, "Signature du technicien atelier (TA)", S.resTA);
+  sigPair("Signature du client", S.resClient, "Signature du technicien atelier (TA)", S.resTA, (f.or_client||"").toUpperCase(), (f.or_tech||"").toUpperCase());
 
   // ---- PHOTOS RÉCEPTION ----
   const orPhotos = photosOR.get();
@@ -1836,7 +1878,21 @@ document.getElementById("btnPrint").addEventListener("click", async ()=>{
   }
 });
 
-document.getElementById("btnSend").addEventListener("click", async ()=>{
+function orMeta(magasin){
+  return {
+    number: orState.number || "",
+    magasin: magasin,
+    immat: (orState.fields.or_immat || state.infos.immat || "").toUpperCase(),
+    client: orState.fields.or_client || state.infos.client || "",
+    vendeur: orState.fields.or_vendeur || state.infos.vendeur || "",
+    tech: orState.fields.or_tech || state.infos.tech || "",
+    date: orState.fields.or_date || state.infos.date || "",
+    resconforme: !!orState.resconforme
+  };
+}
+
+/* ENVOI DE L'OR — uniquement l'ordre de réparation (client + DM). PAS le contrôle atelier. */
+async function sendOR(){
   persist(); persistOR();
   const settings = loadSettings(); const dm = (settings.dmEmail||"").trim();
   if(!dm){ toast("Renseignez l'adresse DM dans Réglages ⚙","err"); openSettings(); return; }
@@ -1847,40 +1903,54 @@ document.getElementById("btnSend").addEventListener("click", async ()=>{
   const magasin = orState.fields.or_magasin || state.infos.magasin || "";
   const btn=document.getElementById("btnSend"); btn.disabled=true; overlay(true);
   try{
-    // 1) Numéro d'OR : réservé une seule fois (réutilisé si l'OR est renvoyé après restitution)
+    // Numéro d'OR : réservé une seule fois (réutilisé si l'OR est renvoyé après restitution)
     if(!orState.number){
       const rN = await fetch(CONFIG.APPS_SCRIPT_URL, { method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify({ token:CONFIG.SHARED_TOKEN, action:"reserve", magasin }) });
       const oN = await rN.json();
       if(oN && oN.ok && oN.number){ orState.number=oN.number; updateOrNum(); saveOR(); }
       else throw new Error(oN&&oN.error||"Numéro non attribué");
     }
-    // 2) PDF (le numéro y figure) + envoi
-    const [orBlob, ctrlBlob] = await Promise.all([ makeORPdfBlob(), makePdfBlob() ]);
-    const meta = {
-      number: orState.number,
-      magasin: magasin,
-      immat: (orState.fields.or_immat || state.infos.immat || "").toUpperCase(),
-      client: orState.fields.or_client || state.infos.client || "",
-      vendeur: orState.fields.or_vendeur || state.infos.vendeur || "",
-      tech: orState.fields.or_tech || state.infos.tech || "",
-      date: orState.fields.or_date || state.infos.date || "",
-      resconforme: !!orState.resconforme
-    };
+    const orBlob = await makeORPdfBlob();
     const payload = {
       token: CONFIG.SHARED_TOKEN,
-      toClient: clientEmail,   // reçoit UNIQUEMENT l'OR
-      toDM: dm,                // reçoit OR + feuille de liaison (interne)
-      or:   { filename: orFilename(),  b64: await blobToBase64(orBlob) },
-      ctrl: { filename: pdfFilename(), b64: await blobToBase64(ctrlBlob) },
-      meta
+      toClient: clientEmail,   // reçoit l'OR
+      toDM: dm,                // reçoit l'OR (le contrôle atelier sera envoyé séparément)
+      or: { filename: orFilename(), b64: await blobToBase64(orBlob) },
+      meta: orMeta(magasin)
     };
     const res = await fetch(CONFIG.APPS_SCRIPT_URL, { method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(payload) });
     const out = await res.json();
-    if(out && out.ok){ saveToArchive(true); toast((clientEmail ? "OR envoyé au client · feuille de liaison au DM" : "Feuille de liaison au DM (e-mail client vide)")+" · "+orState.number+" ✓","ok"); }
+    if(out && out.ok){ saveToArchive(true); toast((clientEmail ? "OR envoyé au client et au DM" : "OR envoyé au DM (e-mail client vide)")+" · "+orState.number+" ✓","ok"); }
     else throw new Error(out&&out.error||"Réponse inattendue");
   }catch(e){ toast("Échec de l'envoi : "+e.message,"err"); }
   finally{ btn.disabled=false; overlay(false); }
-});
+}
+
+/* ENVOI DU CONTRÔLE ATELIER — feuille de liaison, au DM uniquement. */
+async function sendCtrl(){
+  persist(); persistOR();
+  const settings = loadSettings(); const dm = (settings.dmEmail||"").trim();
+  if(!dm){ toast("Renseignez l'adresse DM dans Réglages ⚙","err"); openSettings(); return; }
+  if(!CONFIG.APPS_SCRIPT_URL){ toast("URL Apps Script non configurée (voir CONFIG)","err"); return; }
+  const magasin = orState.fields.or_magasin || state.infos.magasin || "";
+  const btn=document.getElementById("btnSend"); btn.disabled=true; overlay(true);
+  try{
+    const ctrlBlob = await makePdfBlob();
+    const payload = {
+      token: CONFIG.SHARED_TOKEN,
+      toDM: dm,                // DM uniquement — jamais au client
+      ctrl: { filename: pdfFilename(), b64: await blobToBase64(ctrlBlob) },
+      meta: orMeta(magasin)
+    };
+    const res = await fetch(CONFIG.APPS_SCRIPT_URL, { method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(payload) });
+    const out = await res.json();
+    if(out && out.ok){ toast("Feuille de liaison envoyée au DM ✓","ok"); }
+    else throw new Error(out&&out.error||"Réponse inattendue");
+  }catch(e){ toast("Échec de l'envoi : "+e.message,"err"); }
+  finally{ btn.disabled=false; overlay(false); }
+}
+
+document.getElementById("btnSend").addEventListener("click", ()=>{ if(activeTab==="controle") sendCtrl(); else sendOR(); });
 
 function blobToBase64(blob){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result.split(",")[1]); r.onerror=rej; r.readAsDataURL(blob); }); }
 
